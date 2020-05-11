@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { Auth } from 'aws-amplify';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { Layout, Menu, notification } from 'antd';
-import { Icon } from '@ant-design/compatible';
+import { Layout, Menu, Icon, notification } from 'antd';
 
 /** App Theme */
 import { colors } from '../../Themes/Colors';

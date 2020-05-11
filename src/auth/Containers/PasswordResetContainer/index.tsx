@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { Redirect, RouteComponentProps } from 'react-router-dom';
 import { Auth } from 'aws-amplify';
-import { Form, Input, Button, notification, Popover, Spin, Row, Col } from 'antd';
-import { Icon } from '@ant-design/compatible';
+import { Form, Input, Icon, Button, notification, Popover, Spin, Row, Col } from 'antd';
 
 /** App theme */
 import { colors } from '../../Themes/Colors';
@@ -49,7 +48,11 @@ class PasswordResetContainer extends React.Component<Props, State> {
     callback();
   };
 
-  handleSubmit = (values: any) => {
+  handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+
+    this.props.form.validateFieldsAndScroll((err: Error, values: { password: string; code: string }) => {
+      if (!err) {
         let { password, code } = values;
         let username = this.props.location.search.split('=')[1];
 
@@ -78,6 +81,8 @@ class PasswordResetContainer extends React.Component<Props, State> {
 
         // show loader
         this.setState({ loading: true });
+      }
+    });
   };
 
   render() {
@@ -100,38 +105,46 @@ class PasswordResetContainer extends React.Component<Props, State> {
 
     return (
       <React.Fragment>
-        <FormWrapper onFinish={this.handleSubmit}>
+        <FormWrapper onSubmit={this.handleSubmit}>
           <div className="text-center">
             <p>Check your email for the confirmation code</p>
           </div>
-          <Form.Item name="code" rules={[
+          <Form.Item>
+            <Row>
+              <Col lg={24}>
+                {getFieldDecorator('code', {
+                  rules: [
                     {
                       required: true,
                       message: 'Please input your confirmation code!'
                     }
-                  ]}>
-            <Row>
-              <Col lg={24}>
+                  ]
+                })(
                   <Input
                     prefix={<Icon type="lock" style={{ color: colors.transparentBlack }} />}
                     placeholder="Enter your verification code"
                   />
+                )}
               </Col>
             </Row>
           </Form.Item>
 
-          <Form.Item name="password" rules={[
+          <Form.Item>
+            <Popover placement="right" title={title} content={passwordPolicyContent} trigger="focus">
+              {getFieldDecorator('password', {
+                rules: [
                   { required: true, message: 'Please input your Password!' },
                   {
                     validator: this.validateToNextPassword
                   }
-                ]}>
-            <Popover placement="right" title={title} content={passwordPolicyContent} trigger="focus">
+                ]
+              })(
                 <Input
                   prefix={<Icon type="lock" style={{ color: colors.transparentBlack }} />}
                   type="password"
                   placeholder="New Password"
                 />
+              )}
             </Popover>
           </Form.Item>
 
@@ -180,4 +193,4 @@ class PasswordResetContainer extends React.Component<Props, State> {
   }
 }
 
-export default PasswordResetContainer;
+export default Form.create()(PasswordResetContainer);

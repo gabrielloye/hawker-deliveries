@@ -18,7 +18,6 @@ class AppRouter extends React.Component {
       <Router>
         <React.Fragment>
           <PrivateRoute exact={true} path="/dashboard" component={DashBoardContainer} />
-          <Route exact={true} path="/" component={LoginContainer} />
           <Route exact={true} path="/login" component={LoginContainer} />
           <Route exact={true} path="/signup" component={SignUpContainer} />
           <Route exact={true} path="/verify-code" component={ConfirmEmailContainer} />

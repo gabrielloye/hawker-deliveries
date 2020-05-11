@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { Auth } from 'aws-amplify';
-import { Form, Input, Button, notification, Popover, Spin, Col, Row } from 'antd';
-import { Icon } from '@ant-design/compatible';
+import { Form, Input, Icon, Button, notification, Popover, Spin, Col, Row } from 'antd';
 
 /** Presentational */
 import FormWrapper from '../../Styled/FormWrapper';
@@ -86,47 +85,52 @@ class SignUpContainer extends React.Component<Props, State> {
     }
   };
 
-  handleSubmit = (values: any) => {
+  handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
 
-    let { fname, lname, password, email, phoneNumber } = values;
+    this.props.form.validateFieldsAndScroll((err: Error, values: UserFormData) => {
+      if (!err) {
+        let { fname, lname, password, email, phoneNumber } = values;
 
-    // show loader
-    this.setState({ loading: true });
+        // show loader
+        this.setState({ loading: true });
 
-    Auth.signUp({
-      username: email,
-      password,
-      attributes: {
-        email,
-        name: `${fname} ${lname}`,
-        phone_number: phoneNumber
-      }
-    })
-      .then(() => {
-        notification.success({
-          message: 'Succesfully signed up user!',
-          description: 'Account created successfully, Redirecting you in a few!',
-          placement: 'topRight',
-          duration: 1.5,
-          onClose: () => {
-            this.setState({ redirect: true });
+        Auth.signUp({
+          username: email,
+          password,
+          attributes: {
+            email,
+            name: `${fname} ${lname}`,
+            phone_number: phoneNumber
           }
-        });
+        })
+          .then(() => {
+            notification.success({
+              message: 'Succesfully signed up user!',
+              description: 'Account created successfully, Redirecting you in a few!',
+              placement: 'topRight',
+              duration: 1.5,
+              onClose: () => {
+                this.setState({ redirect: true });
+              }
+            });
 
-        this.setState({ email });
-      })
-      .catch(err => {
-        notification.error({
-          message: 'Error',
-          description: 'Error signing up user',
-          placement: 'topRight',
-          duration: 1.5
-        });
+            this.setState({ email });
+          })
+          .catch(err => {
+            notification.error({
+              message: 'Error',
+              description: 'Error signing up user',
+              placement: 'topRight',
+              duration: 1.5
+            });
 
-        this.setState({
-          loading: false
-        });
-      });
+            this.setState({
+              loading: false
+            });
+          });
+      }
+    });
   };
 
   handleConfirmBlur = (event: React.FormEvent<HTMLInputElement>) => {
@@ -175,6 +179,7 @@ class SignUpContainer extends React.Component<Props, State> {
   };
 
   render() {
+    const { getFieldDecorator } = this.props.form;
     const { redirect, loading } = this.state;
 
     const title = 'Password Policy';
@@ -193,46 +198,91 @@ class SignUpContainer extends React.Component<Props, State> {
 
     return (
       <React.Fragment>
-        <FormWrapper onFinish={this.handleSubmit}>
-          <Form.Item name='fname' rules={[{ required: true }, { message: "Please input your first name!" }]}>
+        <FormWrapper onSubmit={this.handleSubmit}>
+          <Form.Item>
+            {getFieldDecorator('fname', {
+              rules: [
+                {
+                  required: true,
+                  message: 'Please input your first name!'
+                }
+              ]
+            })(
               <Input
                 prefix={<Icon type="user" style={{ color: colors.transparentBlack }} />}
                 placeholder="First Name"
               />
+            )}
           </Form.Item>
-          <Form.Item name='lname' rules={[{ required: true }, { message: "Please input your last name!" }]}>
+          <Form.Item>
+            {getFieldDecorator('lname', {
+              rules: [
+                {
+                  required: true,
+                  message: 'Please input your last name!'
+                }
+              ]
+            })(
               <Input prefix={<Icon type="user" style={{ color: colors.transparentBlack }} />} placeholder="Last Name" />
+            )}
           </Form.Item>
-          <Form.Item name="email" rules={[{ required: true }, { message: "Please input your email!" }]}>
-          <Input prefix={<Icon type="user" style={{ color: colors.transparentBlack }} />} placeholder="Email" />
+          <Form.Item>
+            {getFieldDecorator('email', {
+              rules: [{ required: true, message: 'Please input your email!' }]
+            })(<Input prefix={<Icon type="user" style={{ color: colors.transparentBlack }} />} placeholder="Email" />)}
           </Form.Item>
-          <Form.Item name="phoneNumber" rules={[{ required: true }, { message: "Please input your phone number!" }]}>
-          <Input
-            prefix={<Icon type="phone" style={{ color: colors.transparentBlack }} />}
-            placeholder="Phone Number"/>
+          <Form.Item>
+            {getFieldDecorator('phoneNumber', {
+              rules: [
+                {
+                  required: true,
+                  message: 'Please input your phone number!'
+                }
+              ]
+            })(
+              <Input
+                prefix={<Icon type="phone" style={{ color: colors.transparentBlack }} />}
+                placeholder="Phone Number"
+              />
+            )}
           </Form.Item>
-          <Form.Item name="password" rules={[{ required: true, message: 'Please input your Password!' }, { validator: this.validateToNextPassword }]}>
+          <Form.Item>
             <Popover placement="right" title={title} content={passwordPolicyContent} trigger="focus">
-            <Input
-              prefix={<Icon type="lock" style={{ color: colors.transparentBlack }} />}
-              type="password"
-              placeholder="Password"
-            />
+              {getFieldDecorator('password', {
+                rules: [
+                  { required: true, message: 'Please input your Password!' },
+                  {
+                    validator: this.validateToNextPassword
+                  }
+                ]
+              })(
+                <Input
+                  prefix={<Icon type="lock" style={{ color: colors.transparentBlack }} />}
+                  type="password"
+                  placeholder="Password"
+                />
+              )}
             </Popover>
           </Form.Item>
-          <Form.Item name="confirm" rules={[{
+          <Form.Item>
+            {getFieldDecorator('confirm', {
+              rules: [
+                {
                   required: true,
                   message: 'Please confirm your password!'
                 },
                 {
                   validator: this.compareToFirstPassword
-                }]}>
-          <Input
-            prefix={<Icon type="lock" style={{ color: colors.transparentBlack }} />}
-            type="password"
-            placeholder="Confirm Password"
-            onBlur={this.handleConfirmBlur}
-          />
+                }
+              ]
+            })(
+              <Input
+                prefix={<Icon type="lock" style={{ color: colors.transparentBlack }} />}
+                type="password"
+                placeholder="Confirm Password"
+                onBlur={this.handleConfirmBlur}
+              />
+            )}
           </Form.Item>
 
           <Form.Item className="text-center">
@@ -261,4 +311,4 @@ class SignUpContainer extends React.Component<Props, State> {
   }
 }
 
-export default SignUpContainer;
+export default Form.create()(SignUpContainer);

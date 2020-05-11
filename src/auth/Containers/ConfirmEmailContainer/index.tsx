@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Redirect, RouteComponentProps } from 'react-router-dom';
-import { Spin, Button, Form, notification, Input, Col } from 'antd';
-import { Icon } from '@ant-design/compatible';
+import { Spin, Icon, Button, Form, notification, Input, Col } from 'antd';
 
 // amplify
 import { Auth } from 'aws-amplify';
@@ -36,7 +35,8 @@ class ConfirmEmailContainer extends React.Component<RouteComponentProps, State> 
     }
   }
 
-  handleSubmit = (event: any) => {
+  handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
 
     const { confirmationCode } = this.state;
 
@@ -125,7 +125,7 @@ class ConfirmEmailContainer extends React.Component<RouteComponentProps, State> 
 
     return (
       <FullWidthWrapper align="center">
-        <EmailConfirmFormWrapper onFinish={this.handleSubmit}>
+        <EmailConfirmFormWrapper onSubmit={this.handleSubmit}>
           <Col md={24} lg={18}>
             <div className="full-width">
               <h2>Check your email</h2>

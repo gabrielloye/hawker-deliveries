@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Auth } from 'aws-amplify';
-import { Form, Spin, Input, Button, notification, Col, Row } from 'antd';
-import { Icon } from '@ant-design/compatible';
+import { Form, Icon, Spin, Input, Button, notification, Col, Row } from 'antd';
 
 /** Presentational */
 import FormWrapper from '../../Styled/FormWrapper';
@@ -26,72 +25,87 @@ class LoginContainer extends React.Component<Props, State> {
     loading: false
   };
 
-  handleSubmit = (values: any) => {
-    let { username, password } = values;
+  handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
 
-    this.setState({ loading: true });
+    this.props.form.validateFields((err: Error, values: { username: string; password: string }) => {
+      if (!err) {
+        let { username, password } = values;
 
-    Auth.signIn(username, password)
-      .then(user => {
-        const { history, location } = this.props;
-        const from = location.state || {
-          from: {
-            pathname: '/dashboard'
-          }
-        };
+        this.setState({ loading: true });
 
-        localStorage.setItem(AUTH_USER_TOKEN_KEY, user.signInUserSession.accessToken.jwtToken);
+        Auth.signIn(username, password)
+          .then(user => {
+            const { history, location } = this.props;
+            const from = location.state || {
+              from: {
+                pathname: '/dashboard'
+              }
+            };
 
-        notification.success({
-          message: 'Succesfully logged in!',
-          description: 'Logged in successfully, Redirecting you in a few!',
-          placement: 'topRight',
-          duration: 1.5
-        });
+            localStorage.setItem(AUTH_USER_TOKEN_KEY, user.signInUserSession.accessToken.jwtToken);
 
-        history.push(from);
-      })
-      .catch(err => {
-        notification.error({
-          message: 'Error',
-          description: err.message,
-          placement: 'topRight'
-        });
+            notification.success({
+              message: 'Succesfully logged in!',
+              description: 'Logged in successfully, Redirecting you in a few!',
+              placement: 'topRight',
+              duration: 1.5
+            });
 
-        console.log(err);
+            history.push(from);
+          })
+          .catch(err => {
+            notification.error({
+              message: 'Error',
+              description: err.message,
+              placement: 'topRight'
+            });
 
-        this.setState({ loading: false });
+            console.log(err);
+
+            this.setState({ loading: false });
+          });
+      }
     });
   };
 
   render() {
+    const { getFieldDecorator } = this.props.form;
     const { loading } = this.state;
 
     return (
       <React.Fragment>
-        <FormWrapper onFinish={this.handleSubmit} className="login-form">
-          <Form.Item name="username" rules={[
+        <FormWrapper onSubmit={this.handleSubmit} className="login-form">
+          <Form.Item>
+            {getFieldDecorator('username', {
+              rules: [
                 {
                   required: true,
                   message: 'Please input your username!'
                 }
-              ]}>
+              ]
+            })(
               <Input prefix={<Icon type="user" style={{ color: colors.transparentBlack }} />} placeholder="Username" />
+            )}
           </Form.Item>
-          <Form.Item name="password" rules={[
+          <Form.Item>
+            {getFieldDecorator('password', {
+              rules: [
                 {
                   required: true,
                   message: 'Please input your password!'
                 }
-              ]}>
+              ]
+            })(
               <Input
                 prefix={<Icon type="lock" style={{ color: colors.transparentBlack }} />}
                 type="password"
                 placeholder="Password"
               />
+            )}
           </Form.Item>
           <Form.Item className="text-center">
-            <Row gutter={16}>
+            <Row type="flex" gutter={16}>
               <Col lg={24}>
                 <Link style={{ float: 'right' }} className="login-form-forgot" to="/forgot-password">
                   Forgot password
@@ -119,4 +133,4 @@ class LoginContainer extends React.Component<Props, State> {
   }
 }
 
-export default LoginContainer;
+export default Form.create()(LoginContainer);

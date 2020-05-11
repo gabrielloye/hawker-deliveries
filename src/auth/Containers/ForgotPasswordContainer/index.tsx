@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { Auth } from 'aws-amplify';
-import { Form, Spin, Input, Button, notification, Row, Col } from 'antd';
-import { Icon } from '@ant-design/compatible';
+import { Form, Icon, Spin, Input, Button, notification, Row, Col } from 'antd';
 
 /** Presentational */
 import FormWrapper from '../../Styled/FormWrapper';
@@ -27,50 +26,61 @@ class ForgotPasswordContainer extends React.Component<Props, State> {
     loading: false
   };
 
-  handleSubmit = (values: any) => {
-    let { username } = values;
+  handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
 
-    this.setState({
-      loading: true,
-      username
+    this.props.form.validateFields((err: { message: string }, values: { username: string }) => {
+      if (!err) {
+        let { username } = values;
+
+        this.setState({
+          loading: true,
+          username
+        });
+
+        Auth.forgotPassword(username)
+          .then(data => {
+            notification.success({
+              message: 'Redirecting you in a few!',
+              description: 'Account confirmed successfully!',
+              placement: 'topRight',
+              duration: 1.5,
+              onClose: () => {
+                this.setState({ redirect: true });
+              }
+            });
+          })
+          .catch(err => {
+            notification.error({
+              message: 'User confirmation failed',
+              description: err.message,
+              placement: 'topRight',
+              duration: 1.5
+            });
+            this.setState({ loading: false });
+          });
+      }
     });
-
-    Auth.forgotPassword(username)
-      .then(data => {
-        notification.success({
-          message: 'Redirecting you in a few!',
-          description: 'Account confirmed successfully!',
-          placement: 'topRight',
-          duration: 1.5,
-          onClose: () => {
-            this.setState({ redirect: true });
-          }
-        });
-      })
-      .catch(err => {
-        notification.error({
-          message: 'User confirmation failed',
-          description: err.message,
-          placement: 'topRight',
-          duration: 1.5
-        });
-        this.setState({ loading: false });
-      });
   };
 
   render() {
+    const { getFieldDecorator } = this.props.form;
     const { loading, redirect, username } = this.state;
 
     return (
       <React.Fragment>
-        <FormWrapper onFinish={this.handleSubmit} className="login-form">
-          <Form.Item name='username' rules={[
+        <FormWrapper onSubmit={this.handleSubmit} className="login-form">
+          <Form.Item>
+            {getFieldDecorator('username', {
+              rules: [
                 {
                   required: true,
                   message: 'Please input your username!'
                 }
-              ]}>
+              ]
+            })(
               <Input prefix={<Icon type="user" style={{ color: colors.transparentBlack }} />} placeholder="Username" />
+            )}
           </Form.Item>
           <Form.Item className="text-center">
             <Row>
@@ -102,4 +112,4 @@ class ForgotPasswordContainer extends React.Component<Props, State> {
   }
 }
 
-export default ForgotPasswordContainer;
+export default Form.create()(ForgotPasswordContainer);
