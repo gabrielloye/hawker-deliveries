@@ -1,0 +1,9 @@
+{
+	"auth": {
+		"hawkercognitoresource": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": []
+		}
+	}
+}

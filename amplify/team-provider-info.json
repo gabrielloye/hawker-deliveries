@@ -1,0 +1,20 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-hawkerdeliveries-dev-224814-authRole",
+            "UnauthRoleArn": "arn:aws:iam::423202023851:role/amplify-hawkerdeliveries-dev-224814-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::423202023851:role/amplify-hawkerdeliveries-dev-224814-authRole",
+            "Region": "ap-southeast-1",
+            "DeploymentBucketName": "amplify-hawkerdeliveries-dev-224814-deployment",
+            "UnauthRoleName": "amplify-hawkerdeliveries-dev-224814-unauthRole",
+            "StackName": "amplify-hawkerdeliveries-dev-224814",
+            "StackId": "arn:aws:cloudformation:ap-southeast-1:423202023851:stack/amplify-hawkerdeliveries-dev-224814/72639dd0-9396-11ea-98f3-02f584878410",
+            "AmplifyAppId": "dlszv4wpq0sye"
+        },
+        "categories": {
+            "auth": {
+                "hawkercognitoresource": {}
+            }
+        }
+    }
+}
