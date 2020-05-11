@@ -8,6 +8,8 @@ import SignUpContainer from '../auth/Containers/SignUpContainer';
 import ConfirmEmailContainer from '../auth/Containers/ConfirmEmailContainer';
 import ForgotPasswordContainer from '../auth/Containers/ForgotPasswordContainer';
 import PasswordResetContainer from '../auth/Containers/PasswordResetContainer';
+import LandingPage from '../views/landing/landing';
+import Main from '../views/main/main';
 
 /** private route component */
 import PrivateRoute from './private-route';
@@ -17,6 +19,8 @@ class AppRouter extends React.Component {
     return (
       <Router>
         <React.Fragment>
+          <Route exact={true} path="/" component={LandingPage} />
+          <Route path="/main/:date" render={(props) => <Main {...props}/>}/>
           <PrivateRoute exact={true} path="/dashboard" component={DashBoardContainer} />
           <Route exact={true} path="/login" component={LoginContainer} />
           <Route exact={true} path="/signup" component={SignUpContainer} />

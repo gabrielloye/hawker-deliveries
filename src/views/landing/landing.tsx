@@ -19,8 +19,9 @@ class LandingPage extends Component {
             </Header>
             <Menu borderless compact inverted>
               <Menu.Item active>Home</Menu.Item>
-              <Menu.Item>Hawkers</Menu.Item>
-              <Menu.Item>Contact</Menu.Item>
+              <Menu.Item as="a" href="/">Hawkers</Menu.Item>
+              <Menu.Item as="a" href="/login">Log-in</Menu.Item>
+              <Menu.Item as="a" href="/">Contact</Menu.Item>
             </Menu>
           </Container>
           <Container className="content">
