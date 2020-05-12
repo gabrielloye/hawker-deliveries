@@ -34,14 +34,10 @@ class LoginContainer extends React.Component<Props, State> {
 
         this.setState({ loading: true });
 
-        Auth.signIn(username, password)
+        Auth.signIn("+" + String(username), password)
           .then(user => {
             const { history, location } = this.props;
-            const from = location.state || {
-              from: {
-                pathname: '/dashboard'
-              }
-            };
+            const from = '/'
 
             localStorage.setItem(AUTH_USER_TOKEN_KEY, user.signInUserSession.accessToken.jwtToken);
 

@@ -18,6 +18,7 @@ type State = {
   redirect: boolean;
   loading: boolean;
   email: string;
+  phoneNumber: number;
 };
 
 type UserFormData = {
@@ -50,7 +51,8 @@ class SignUpContainer extends React.Component<Props, State> {
     confirmDirty: false,
     redirect: false,
     loading: false,
-    email: ''
+    email: '',
+    phoneNumber: 0
   };
 
   /**
@@ -91,17 +93,15 @@ class SignUpContainer extends React.Component<Props, State> {
     this.props.form.validateFieldsAndScroll((err: Error, values: UserFormData) => {
       if (!err) {
         let { fname, lname, password, email, phoneNumber } = values;
-
         // show loader
         this.setState({ loading: true });
-
         Auth.signUp({
-          username: email,
+          username: "+" + String(phoneNumber),
           password,
           attributes: {
             email,
             name: `${fname} ${lname}`,
-            phone_number: phoneNumber
+            phone_number: "+" + String(phoneNumber)
           }
         })
           .then(() => {
@@ -109,20 +109,21 @@ class SignUpContainer extends React.Component<Props, State> {
               message: 'Succesfully signed up user!',
               description: 'Account created successfully, Redirecting you in a few!',
               placement: 'topRight',
-              duration: 1.5,
+              duration: 3,
               onClose: () => {
                 this.setState({ redirect: true });
               }
             });
-
             this.setState({ email });
+            this.setState({ phoneNumber })
           })
           .catch(err => {
+            console.log(err)
             notification.error({
               message: 'Error',
               description: 'Error signing up user',
               placement: 'topRight',
-              duration: 1.5
+              duration: 20
             });
 
             this.setState({
@@ -241,7 +242,7 @@ class SignUpContainer extends React.Component<Props, State> {
               ]
             })(
               <Input
-                prefix={<Icon type="phone" style={{ color: colors.transparentBlack }} />}
+                prefix={<Icon type="phone" style={{ color: colors.transparentBlack }} /> }
                 placeholder="Phone Number"
               />
             )}
@@ -302,7 +303,7 @@ class SignUpContainer extends React.Component<Props, State> {
           <Redirect
             to={{
               pathname: '/verify-code',
-              search: `?email=${this.state.email}`
+              search: `?phone=+${this.state.phoneNumber}`
             }}
           />
         )}

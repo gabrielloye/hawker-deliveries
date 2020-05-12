@@ -35,8 +35,7 @@ class Datepicker extends Component {
           numberOfMonths={1}
           isOutsideRange={day =>
           !isInclusivelyAfterDay(day, moment()) ||
-          isInclusivelyAfterDay(day, moment().add(4, 'days'))
-        }>
+          isInclusivelyAfterDay(day, moment().add(4, 'days'))}>
         </SingleDatePicker>
         <Dropdown
           button
@@ -54,7 +53,7 @@ class Datepicker extends Component {
 
 const optionsStyle = {
   borderRadius: "1em",
-  padding: "1em",
+  padding: "0em",
   display: "flex",
   justifyContent: "space-around"
 }

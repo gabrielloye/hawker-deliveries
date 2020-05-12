@@ -13,6 +13,7 @@ import Main from '../views/main/main';
 
 /** private route component */
 import PrivateRoute from './private-route';
+import LoggedinRoute from './loggedin-route';
 
 class AppRouter extends React.Component {
   render() {
@@ -22,11 +23,11 @@ class AppRouter extends React.Component {
           <Route exact={true} path="/" component={LandingPage} />
           <Route path="/main/:date" render={(props) => <Main {...props}/>}/>
           <PrivateRoute exact={true} path="/dashboard" component={DashBoardContainer} />
-          <Route exact={true} path="/login" component={LoginContainer} />
-          <Route exact={true} path="/signup" component={SignUpContainer} />
-          <Route exact={true} path="/verify-code" component={ConfirmEmailContainer} />
-          <Route exact={true} path="/reset-password" component={PasswordResetContainer} />
-          <Route exact={true} path="/forgot-password" component={ForgotPasswordContainer} />
+          <LoggedinRoute exact={true} path="/login" component={LoginContainer} />
+          <LoggedinRoute exact={true} path="/signup" component={SignUpContainer} />
+          <LoggedinRoute exact={true} path="/verify-code" component={ConfirmEmailContainer} />
+          <LoggedinRoute exact={true} path="/reset-password" component={PasswordResetContainer} />
+          <LoggedinRoute exact={true} path="/forgot-password" component={ForgotPasswordContainer} />
         </React.Fragment>
       </Router>
     );

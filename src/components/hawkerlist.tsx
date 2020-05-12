@@ -16,7 +16,7 @@ const mapProductsToItems = (products: Array<Product>) =>
       childKey: id,
       image,
       header: name,
-      meta: `$${min_price} ~ $${max_price}`,
+      meta: `$${min_price.toFixed(2)} ~ $${max_price.toFixed(2)}`,
       fluid: true,
       href: `/product?id=${id}`
     }

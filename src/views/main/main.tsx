@@ -10,6 +10,14 @@ import HawkerList from '../../components/hawkerlist'
 
 import moment from 'moment';
 
+/** Helpers */
+import { validateToken } from '../../auth/Utils/Helpers';
+
+/** Constants */
+import { AUTH_USER_TOKEN_KEY } from '../../auth/Utils/constants';
+
+import { Auth } from 'aws-amplify';
+
 const products = [
     {
       name: "Da Xi Hainanese Chicken Rice",
@@ -67,6 +75,14 @@ class Main extends Component<Props, State> {
   };
 
   render() {
+    const checkUserAuth = validateToken(localStorage.getItem(AUTH_USER_TOKEN_KEY));
+    if (checkUserAuth) {
+      Auth.currentAuthenticatedUser()
+        .then((res) => {
+          console.log(res)
+        })
+    }
+    
     return (
       <div className="App">
         <Grid padded className="tablet computer only">
@@ -84,9 +100,7 @@ class Main extends Component<Props, State> {
               <Menu.Item as="a" href="#root">
                 Contact
               </Menu.Item> */}
-              <Menu.Item as="a" href="/login">
-                Login
-              </Menu.Item>
+              <Menu.Item as="a" href={checkUserAuth ? "/dashboard" : "/login"}>{checkUserAuth ? "Account" : "Login"}</Menu.Item>
               <Menu.Item href="cart">
                 <Icon name="cart" /> Cart
               </Menu.Item>
@@ -127,8 +141,8 @@ class Main extends Component<Props, State> {
               <Menu.Item as="a" href="#root">
                 Contact
               </Menu.Item>
-              <Menu.Item as="a" href="login">
-                Login
+              <Menu.Item as="a" href={checkUserAuth ? "/dashboard" : "/login"}>
+                {checkUserAuth ? "Account" : "Login"}
               </Menu.Item>
             </Menu>
           </Menu>

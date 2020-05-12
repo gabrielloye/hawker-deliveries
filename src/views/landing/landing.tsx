@@ -7,9 +7,16 @@ import Datepicker from '../../components/datepicker';
 
 import "./landing.css";
 
+/** Helpers */
+import { validateToken } from '../../auth/Utils/Helpers';
+
+/** Constants */
+import { AUTH_USER_TOKEN_KEY } from '../../auth/Utils/constants';
+
 class LandingPage extends Component {
 
   render() {
+    const checkUserAuth = validateToken(localStorage.getItem(AUTH_USER_TOKEN_KEY));
     return (
       <div className="App">
         <Segment inverted vertical textAlign="center">
@@ -20,7 +27,7 @@ class LandingPage extends Component {
             <Menu borderless compact inverted>
               <Menu.Item active>Home</Menu.Item>
               <Menu.Item as="a" href="/">Hawkers</Menu.Item>
-              <Menu.Item as="a" href="/login">Log-in</Menu.Item>
+              <Menu.Item as="a" href={checkUserAuth ? "/dashboard" : "/login"}>{checkUserAuth ? "Account" : "Login"}</Menu.Item>
               <Menu.Item as="a" href="/">Contact</Menu.Item>
             </Menu>
           </Container>
