@@ -10,7 +10,6 @@ import './main.css';
 
 import HawkerList from '../../components/hawkerlist'
 
-import moment from 'moment';
 import { CartItem, CartContext } from '../../components/cartcontext';
 import Menubar from "../../components/menubar";
 import Store from "../store/store";
@@ -52,144 +51,53 @@ type State = {};
 
 type Props = {
     match: {
-        params: {
-            date: string
-        }
+      path: string;
+      url: string;
+      params: {
+          date: string
+      }
     }
 }
 
 class Main extends Component<Props, State> {
   state = {
     cart : new Array<CartItem>(),
-    modifyCart: (item : CartItem, isAdd: boolean) => {}
-  };
-
-  modifyCart = (item : CartItem, isAdd : boolean) => {
-    let newCart = this.state.cart;
-    if (isAdd) {
-      newCart.push(item);
-    } else {
-      for (let i = 0; i < newCart.length; i++) {
-        if (newCart[i].name === item.name) {
-          newCart.splice(i, 1);
+    modifyCart: (item : CartItem, isAdd : boolean) => {
+      let newCart = this.state.cart;
+      if (isAdd) {
+        newCart.push(item);
+      } else {
+        for (let i = 0; i < newCart.length; i++) {
+          if (newCart[i].name === item.name) {
+            newCart.splice(i, 1);
+          }
         }
       }
+      this.setState({
+        cart: newCart
+      })
     }
-    this.setState({
-      cart: newCart,
-      modifyCart: this.modifyCart
-    })
-  }
+  };
 
   render() {
-<<<<<<< HEAD
-    const checkUserAuth = validateToken(localStorage.getItem(AUTH_USER_TOKEN_KEY));
-    if (checkUserAuth) {
-      Auth.currentAuthenticatedUser()
-        .then((res) => {
-          console.log(res)
-        })
-    }
-    
-    return (
-      <div className="App">
-        <Grid padded className="tablet computer only">
-          <Menu borderless fluid inverted size="huge">
-            <Container>
-              <Menu.Item header as="a" href="/">
-                Hawker Deliveries
-              </Menu.Item>
-              <Menu.Item active as="a" href="/" position="right">
-                Home
-              </Menu.Item>
-              {/* <Menu.Item as="a" href="#root">
-                About
-              </Menu.Item>
-              <Menu.Item as="a" href="#root">
-                Contact
-              </Menu.Item> */}
-              <Menu.Item as="a" href={checkUserAuth ? "/dashboard" : "/login"}>{checkUserAuth ? "Account" : "Login"}</Menu.Item>
-              <Menu.Item href="cart">
-                <Icon name="cart" /> Cart
-              </Menu.Item>
-            </Container>
-          </Menu>
-        </Grid>
-        <Grid padded className="mobile only">
-          <Menu borderless fluid inverted size="huge">
-            <Menu.Item header as="a" href="#root">
-              Hawker Deliveries
-            </Menu.Item>
-            <Menu.Menu position="right">
-              <Menu.Item>
-                <Button
-                  icon
-                  inverted
-                  basic
-                  toggle
-                  onClick={this.handleToggleDropdownMenu}
-                >
-                  <Icon name="content" />
-                </Button>
-              </Menu.Item>
-            </Menu.Menu>
-            <Menu
-              borderless
-              fluid
-              inverted
-              vertical
-              style={this.state.dropdownMenuStyle}
-            >
-              <Menu.Item active as="a" href="#root">
-                Home
-              </Menu.Item>
-              <Menu.Item as="a" href="#root">
-                About
-              </Menu.Item>
-              <Menu.Item as="a" href="#root">
-                Contact
-              </Menu.Item>
-              <Menu.Item as="a" href={checkUserAuth ? "/dashboard" : "/login"}>
-                {checkUserAuth ? "Account" : "Login"}
-              </Menu.Item>
-            </Menu>
-          </Menu>
-        </Grid>
-        <Container text textAlign="center">
-          <Header size="huge">Tanglin Halt Market</Header>
-          <p className="lead">
-            These are the stalls available for {moment(this.props.match.params.date, "DDMMYYYY").format("Do MMMM YYYY")} Lunch
-          </p>
-          <HawkerList products={products}></HawkerList>
-        </Container>
-=======
-    this.setState({
-      modifyCart: this.modifyCart
-    });
+    console.log(this.props.match)
     return (
       <div className="App">
         <Menubar></Menubar>
         <Router>
         <CartContext.Provider value ={this.state}>
           <Switch>
-            <Route path="/" exact>
-              <Container text textAlign="center">
-                <Header size="huge">Tanglin Halt Market</Header>
-                <p className="lead">
-                  These are the stalls available for {moment(this.props.match.params.date, "DDMMYYYY").format("Do MMMM YYYY")} Lunch
-                </p>
-                <HawkerList products={products}></HawkerList>
-              </Container>
-            </Route>
-            <Route path="/product/:productId" render={(props) => <Store {...props}/>}/>
-            <Route path="/cart">
+            <Container>
+              <Route path={`${this.props.match.path}`} exact render={(props) => <HawkerList {...props} products={products}/>}/>
+            </Container>
+            <Route path={`${this.props.match.path}/product/:productId`} render={(props) => <Store {...props}/>}/>
+            <Route path={`${this.props.match.path}/cart`}>
               <CartPage/>
             </Route>
           </Switch>
           </CartContext.Provider>
         </Router>
         
->>>>>>> c9f10030ea6d80b2a8ba5c1dc52d9de872769b10
       </div>
     );
   }

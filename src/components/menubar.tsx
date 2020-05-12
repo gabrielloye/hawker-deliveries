@@ -11,30 +11,11 @@ import { CartContext } from './cartcontext';
 import { CartItem } from './cartcontext';
 
 class Menubar extends Component {
-    constructor() {
-        super();
-        this.state = {
-          cart: [],
-          modifyCart: this.modifyCart
-        };
-      }
-    
-      modifyCart = (item, isAdd) => {
-        let newCart = this.state.cart;
-        if (isAdd) {
-          newCart.push(item);
-        } else {
-          for (let i = 0; i < newCart.length; i++) {
-            if (newCart[i].name === item.name) {
-              newCart.splice(i, 1);
-            }
-          }
-        }
-        this.setState({
-          cart: newCart,
-          modifyCart: this.modifyCart
-        })
-      }
+  state = {
+    dropdownMenuStyle: {
+        display: "none"
+    }
+  };
     
   handleToggleDropdownMenu = () => {
     let newState = Object.assign({}, this.state);

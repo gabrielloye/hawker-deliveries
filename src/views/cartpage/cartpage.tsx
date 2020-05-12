@@ -4,7 +4,7 @@ import "semantic-ui-css/semantic.min.css";
 
 import { Button, Container, Grid, Header, Icon, Menu } from "semantic-ui-react";
 
-import './cart.css';
+import './cartpage.css';
 
 import Menubar from "../../components/menubar";
 
@@ -17,7 +17,6 @@ class Cart extends Component {
   render() {
       return (
         <div className="App">
-          <Menubar></Menubar>
           <Container text textAlign="center">
               <CartContext.Consumer>
                 {({cart, modifyCart}) => (

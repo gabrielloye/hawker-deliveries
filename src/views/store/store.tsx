@@ -75,9 +75,9 @@ class Store extends Component<Props, State> {
     };
   
     render() {
+      console.log("AAAA")
       return (
         <div className="App">
-          <Menubar></Menubar>
           <Container text textAlign="center">
           <Header size="huge">{this.state.store.name}</Header>
           <p className="lead">
