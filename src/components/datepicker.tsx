@@ -1,7 +1,7 @@
 import 'react-dates/initialize';
 import React, {Component} from "react";
 import moment, {Moment} from 'moment';
-import { Button, Dropdown } from "semantic-ui-react";
+import { Button, Dropdown, Container } from "semantic-ui-react";
 import { Link } from 'react-router-dom';
 import { SingleDatePicker, isInclusivelyAfterDay } from 'react-dates';
 
@@ -27,7 +27,10 @@ class Datepicker extends Component {
     return (
       <div style={optionsStyle}>
         <SingleDatePicker
+          
           id="1"
+          orientation= "horizontal"
+          anchorDirection = "right"
           date={this.state.date}
           onDateChange={(date) => this.setState({ date })}
           focused={this.state.focused}
@@ -38,6 +41,7 @@ class Datepicker extends Component {
           isInclusivelyAfterDay(day, moment().add(4, 'days'))}>
         </SingleDatePicker>
         <Dropdown
+          style={{margin:"1em 0"}}
           button
           className="huge"
           selection
@@ -55,7 +59,9 @@ const optionsStyle = {
   borderRadius: "1em",
   padding: "0em",
   display: "flex",
-  justifyContent: "space-around"
+  flexFlow: "row wrap",
+  justifyContent: "space-around",
+  alignItems: "center"
 }
 
 export default Datepicker

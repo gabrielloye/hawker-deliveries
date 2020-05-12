@@ -39,16 +39,15 @@ type Props = {
 
 class HawkerList extends React.Component<Props, State> {
   render() {
-    console.log(this.props.match)
     return (
       <React.Fragment>
-      <Container text textAlign="center">
-        <Header size="huge">Tanglin Halt Market</Header>
-        <p className="lead">
-          These are the stalls available for {moment(this.props.match.params.date, "DDMMYYYY").format("Do MMMM YYYY")} Lunch
-        </p>
-      </Container>
-      <Card.Group items={mapProductsToItems(this.props.products, this.props.match.url)} itemsPerRow="2" stackable />
+        <Container text textAlign="center">
+          <Header size="huge">Tanglin Halt Market</Header>
+          <p className="lead">
+            These are the stalls available for {moment(this.props.match.params.date, "DDMMYYYY").format("Do MMMM YYYY")} Lunch
+          </p>
+          <Card.Group items={mapProductsToItems(this.props.products, this.props.match.url)} itemsPerRow="2" stackable />
+        </Container>
       </React.Fragment>
     );
   }

@@ -20,6 +20,7 @@ type Props = {
 class FoodList extends React.Component<Props> {
     displayListPosts = () =>
     this.props.store.map((el : FoodItem) => (
+<<<<<<< HEAD
       <Card
           image={ el.image }
           header={ el.name }
@@ -28,6 +29,27 @@ class FoodList extends React.Component<Props> {
           extra={ <ProductQuantity item={el} quantity={0}></ProductQuantity> }
           fluid={ true }
       />
+=======
+      <div className="column">
+        <div className="ui fluid card">
+          <div className="ui large image">
+            <img className="ui image" src={el.image}/>
+          </div>
+          <div className="content">
+            <a className="header">{ el.name }</a>
+            <div className="meta">
+              <span className="date">{ `$${el.price.toFixed(2)}` }</span>
+            </div>
+            <div className="description">
+             { el.description }
+            </div>
+          </div>
+          <div className="extra content">
+           <ProductQuantity item={el} quantity={0}></ProductQuantity>
+          </div>
+        </div>
+      </div>
+>>>>>>> 6f8a7d694349243c102cc17de70c71583e7e6713
   ));
 
   render() {

@@ -17,15 +17,14 @@ class CartList extends React.Component<Props> {
         <div className="content">
           <a className="header">{ el.name }</a>
           <div className="meta">
-            <span className="date">{ el.price }</span>
+            <span className="date">{ `$${el.price.toFixed(2)}` }</span>
           </div>
           <div className="description">
             { el.description }
           </div>
         </div>
         <div className="extra content">
-            <div className="label">Quantity</div>
-            <strong>{ el.quantity }</strong>
+            <div className="label">Quantity: <strong>{ el.quantity }</strong></div>
             <CartContext.Consumer>
                 {({cart, modifyCart}) => (
                     <button onClick={() => {modifyCart(el, false);}}>
@@ -39,7 +38,12 @@ class CartList extends React.Component<Props> {
   ));
 
   render() {
-    return (<div className="ui three column grid">{ this.displayListPosts() }</div>)
+    if (this.props.cartItems.length > 0)
+    {
+      return (<div className="ui three column grid">{ this.displayListPosts() }</div>)
+    } else {
+      return (<h1>No cart items</h1>)
+    }
   }
 }
 

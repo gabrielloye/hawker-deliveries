@@ -10,7 +10,21 @@ import { CartContext } from './cartcontext';
 
 import { CartItem } from './cartcontext';
 
-class Menubar extends Component {
+/** Helpers */
+import { validateToken } from '../auth/Utils/Helpers';
+
+/** Constants */
+import { AUTH_USER_TOKEN_KEY } from '../auth/Utils/constants';
+
+import { Auth } from 'aws-amplify';
+
+type State = {};
+
+type Props = {
+    pathName: string;
+}
+
+class Menubar extends Component<Props, State> {
   state = {
     dropdownMenuStyle: {
         display: "none"
@@ -39,6 +53,13 @@ class Menubar extends Component {
   };
 
   render() {
+    const checkUserAuth = validateToken(localStorage.getItem(AUTH_USER_TOKEN_KEY));
+    // if (checkUserAuth) {
+    //   Auth.currentAuthenticatedUser()
+    //     .then((res) => {
+    //       console.log(res)
+    //     })
+    // }
     return (
       <div>
         <Grid padded className="tablet computer only">
@@ -49,23 +70,14 @@ class Menubar extends Component {
                   Hawker Deliveries
                 </Menu.Item>
               </Link>
-              <Link to="/">
+              <Link to={this.props.pathName}>
                 <Menu.Item active as="a">
                   Home
                 </Menu.Item>
               </Link>
-              <Link to="#root">
-                <Menu.Item as="a">
-                  About
-                </Menu.Item>
-              </Link>
-              <Link to="#root">
-                <Menu.Item as="a">
-                  Contact
-                </Menu.Item>
-              </Link>
-              <Link to="/cart">
-                <Menu.Item position="right">
+              <Menu.Item position="right" as="a" href={checkUserAuth ? "/dashboard" : "/login"}>{checkUserAuth ? "Account" : "Login"}</Menu.Item>
+              <Link to={`${this.props.pathName}/cart`}>
+                <Menu.Item>
                 <Icon name="cart" />
                   <CartContext.Consumer>
                     {({cart, modifyCart}) => ( 

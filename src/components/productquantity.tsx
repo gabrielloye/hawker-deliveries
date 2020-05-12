@@ -71,7 +71,7 @@ class ProductQuantity extends Component<Props, State> {
             onClick={ this.decQuantity }>
                 &#8722;
             </Button>
-            <strong>{this.state.quantity}</strong>
+            <strong> {this.state.quantity}  </strong>
             <Button
             icon
             basic
@@ -81,6 +81,7 @@ class ProductQuantity extends Component<Props, State> {
               &#43;
             </Button>
           </div>
+          <br/>
           <CartContext.Consumer>
           {({cart, modifyCart}) => (
               <Button
