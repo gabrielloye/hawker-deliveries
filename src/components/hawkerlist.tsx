@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, Image } from 'semantic-ui-react'
-import { Button, Container, Grid, Header, Icon, Menu } from "semantic-ui-react";
+import { Container, Grid, Header, Icon, Menu } from "semantic-ui-react";
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 
 interface Product {
@@ -38,6 +39,19 @@ type Props = {
 }
 
 class HawkerList extends React.Component<Props, State> {
+
+  renderCards = () =>
+    this.props.products.map(({id, name, image, min_price, max_price}) => (
+      <Card
+        as={Link}
+        to={`${this.props.match.url}/product/${id}`}
+        childKey={id}
+        image={image}
+        header={name}
+        meta={`$${min_price.toFixed(2)} ~ $${max_price.toFixed(2)}`}
+        fluid={true}/>
+    ))
+
   render() {
     return (
       <React.Fragment>
@@ -46,7 +60,9 @@ class HawkerList extends React.Component<Props, State> {
           <p className="lead">
             These are the stalls available for {moment(this.props.match.params.date, "DDMMYYYY").format("Do MMMM YYYY")} Lunch
           </p>
-          <Card.Group items={mapProductsToItems(this.props.products, this.props.match.url)} itemsPerRow="2" stackable />
+          <Card.Group itemsPerRow="2" stackable>
+            {this.renderCards()}
+          </Card.Group>
         </Container>
       </React.Fragment>
     );
