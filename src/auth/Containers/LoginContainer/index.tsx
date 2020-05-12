@@ -76,6 +76,9 @@ class LoginContainer extends React.Component<Props, State> {
     return (
       <React.Fragment>
         <FormWrapper onSubmit={this.handleSubmit} className="login-form">
+          <div style={homeStyle}>
+            <Link to="/"><Icon type="home"/> Home</Link>
+          </div>
           <Form.Item>
             {getFieldDecorator('username', {
               rules: [
@@ -108,7 +111,7 @@ class LoginContainer extends React.Component<Props, State> {
             <Row type="flex" gutter={16}>
               <Col lg={24}>
                 <Link style={{ float: 'right' }} className="login-form-forgot" to="/forgot-password">
-                  Forgot password
+                  Forgot password?
                 </Link>
               </Col>
               <Col lg={24}>
@@ -123,7 +126,7 @@ class LoginContainer extends React.Component<Props, State> {
                 </Button>
               </Col>
               <Col lg={24}>
-                Or <Link to="/signup">register now!</Link>
+                Or <Link to="/signup">Register now!</Link>
               </Col>
             </Row>
           </Form.Item>
@@ -131,6 +134,10 @@ class LoginContainer extends React.Component<Props, State> {
       </React.Fragment>
     );
   }
+}
+
+const homeStyle = {
+  paddingBottom: "1em"
 }
 
 export default Form.create()(LoginContainer);

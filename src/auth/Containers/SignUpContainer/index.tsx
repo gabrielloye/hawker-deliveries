@@ -143,7 +143,7 @@ class SignUpContainer extends React.Component<Props, State> {
     const { form } = this.props;
 
     if (value && value !== form.getFieldValue('password')) {
-      callback('Two passwords that you enter is inconsistent!');
+      callback('The two passwords that you enter is inconsistent!');
     } else {
       callback();
     }
@@ -293,7 +293,7 @@ class SignUpContainer extends React.Component<Props, State> {
                 </Button>
               </Col>
               <Col lg={24}>
-                Or <Link to="/login">login to your account!</Link>
+                Or <Link to="/login">Login to your account!</Link>
               </Col>
             </Row>
           </Form.Item>

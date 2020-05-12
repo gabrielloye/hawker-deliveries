@@ -75,22 +75,19 @@ class Main extends Component<Props, State> {
               <Menu.Item header as="a" href="/">
                 Hawker Deliveries
               </Menu.Item>
-              <Menu.Item active as="a" href="/">
+              <Menu.Item active as="a" href="/" position="right">
                 Home
               </Menu.Item>
-              <Menu.Item as="a" href="#root">
+              {/* <Menu.Item as="a" href="#root">
                 About
               </Menu.Item>
               <Menu.Item as="a" href="#root">
                 Contact
-              </Menu.Item>
-              <Menu.Item as="a" href="/login" position="right">
+              </Menu.Item> */}
+              <Menu.Item as="a" href="/login">
                 Login
               </Menu.Item>
-              <Menu.Item as="a" href="/signup" position="right">
-                Sign-up
-              </Menu.Item>
-              <Menu.Item href="cart" position="right">
+              <Menu.Item href="cart">
                 <Icon name="cart" /> Cart
               </Menu.Item>
             </Container>
@@ -139,7 +136,7 @@ class Main extends Component<Props, State> {
         <Container text textAlign="center">
           <Header size="huge">Tanglin Halt Market</Header>
           <p className="lead">
-            These are the stalls available for {moment(this.props.match.params.date, "DDMMYYYY").format("Do MMMM YYYY")}
+            These are the stalls available for {moment(this.props.match.params.date, "DDMMYYYY").format("Do MMMM YYYY")} Lunch
           </p>
           <HawkerList products={products}></HawkerList>
         </Container>
