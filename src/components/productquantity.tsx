@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 
+import CSS from 'csstype';
+
 import "semantic-ui-css/semantic.min.css";
 
 import { Button, Container, Grid, Header, Icon, Menu } from 'semantic-ui-react';
@@ -14,6 +16,10 @@ type State = {}
 type Props = {
     item: FoodItem;
     quantity: number;
+}
+
+const pStyle: CSS.Properties = {
+  marginLeft: '0.6em'
 }
 
 class ProductQuantity extends Component<Props, State> {
@@ -76,7 +82,8 @@ class ProductQuantity extends Component<Props, State> {
             icon
             basic
             toggle
-            disabled={this.state.isMaxQuantity}
+            style={pStyle}
+            disabled={this.state.isMaxQuantity}           
             onClick={ this.addQuantity }>
               &#43;
             </Button>

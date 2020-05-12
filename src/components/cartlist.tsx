@@ -1,5 +1,7 @@
 import React from "react";
-import ProductQuantity from "./productquantity";
+import { Card, Image } from 'semantic-ui-react'
+import { Button, Header } from "semantic-ui-react";
+
 import { CartContext, CartItem } from "./cartcontext";
 
 type Props = {
@@ -9,38 +11,39 @@ type Props = {
 class CartList extends React.Component<Props> {
     displayListPosts = () =>
     this.props.cartItems.map((el) => (
-        <div className="column">
-        <div className="ui fluid card">
-        <div className="image">
-          <img src={el.image}/>
+      <Card
+      image={ el.image }
+      header={ el.name }
+      meta= { `$${el.price.toFixed(2)}` }
+      extra={ 
+        <Card.Content extra>
+        <div className="label">
+          Quantity: <strong>{ el.quantity }</strong>
         </div>
-        <div className="content">
-          <a className="header">{ el.name }</a>
-          <div className="meta">
-            <span className="date">{ `$${el.price.toFixed(2)}` }</span>
-          </div>
-          <div className="description">
-            { el.description }
-          </div>
-        </div>
-        <div className="extra content">
-            <div className="label">Quantity: <strong>{ el.quantity }</strong></div>
             <CartContext.Consumer>
                 {({cart, modifyCart}) => (
-                    <button onClick={() => {modifyCart(el, false);}}>
+                    <Button onClick={() => {modifyCart(el, false);}}>
                             Remove from Cart
-                    </button>
+                    </Button>
                 )}
           </CartContext.Consumer>
-        </div>
-      </div>
-      </div>
+          </Card.Content>
+       }
+      fluid={ true }
+    />
   ));
 
   render() {
     if (this.props.cartItems.length > 0)
     {
-      return (<div className="ui three column grid">{ this.displayListPosts() }</div>)
+      return (
+        <React.Fragment>
+          <Header size="huge">Cart</Header>
+          <Card.Group itemsPerRow="2" stackable>
+            { this.displayListPosts() }
+          </Card.Group>
+        </React.Fragment>
+      )
     } else {
       return (<h1>No cart items</h1>)
     }
