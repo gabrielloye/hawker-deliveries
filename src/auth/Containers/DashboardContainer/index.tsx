@@ -60,7 +60,7 @@ const DashBoardContainer: React.SFC<RouteComponentProps> = props => {
           }}
         >
           <div className="text-center">
-            <h1>Hello world</h1>
+            <h1>Account dashboard underconstruction</h1>
           </div>
         </Layout.Content>
       </Layout>

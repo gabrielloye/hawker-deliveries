@@ -18,11 +18,11 @@ class Cart extends Component {
       return (
         <div className="App">
           <Container text textAlign="center">
-              <CartContext.Consumer>
-                {({cart, modifyCart}) => (
-                  <CartList cartItems={cart}></CartList>
-                )}
-              </CartContext.Consumer>
+            <CartContext.Consumer>
+              {({cart, modifyCart}) => (
+                <CartList cartItems={cart}></CartList>
+              )}
+            </CartContext.Consumer>
         </Container> 
       </div>
       );

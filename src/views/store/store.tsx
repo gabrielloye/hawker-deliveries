@@ -24,7 +24,7 @@ const stores : storeInfo[] = [
           {
               id: "1",
               name: "Roasted Chicken Rice",
-              image: "https://www.thespruceeats.com/thmb/vwIkJwmNwy55CJDYd11enCK5VB0=/960x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/hainanese-chicken-rice-very-detailed-recipe-3030408-hero-0a742f08c72044e999202a44e30a1ea7.jpg",
+              image: "https://i.pinimg.com/originals/e5/d6/85/e5d685f5e24f9837e7dd22e2f8e1c617.jpg",
               price: 3.50,
               description: "Fragrant chicken rice with roasted chicken"
           },
@@ -38,7 +38,7 @@ const stores : storeInfo[] = [
         {
           id: "3",
           name: "Thai Lemon Chicken Rice",
-          image: "https://www.thespruceeats.com/thmb/vwIkJwmNwy55CJDYd11enCK5VB0=/960x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/hainanese-chicken-rice-very-detailed-recipe-3030408-hero-0a742f08c72044e999202a44e30a1ea7.jpg",
+          image: "https://burpple.imgix.net/foods/2ebbb4a1a5e741b771f61620518_original.?w=645&dpr=1&fit=crop&q=80&auto=format",
           price: 4.50,
           description: "Fragrant chicken rice with roasted chicken"
       },
@@ -75,7 +75,6 @@ class Store extends Component<Props, State> {
     };
   
     render() {
-      console.log("AAAA")
       return (
         <div className="App">
           <Container text textAlign="center">

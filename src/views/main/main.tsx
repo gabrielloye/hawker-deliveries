@@ -15,14 +15,6 @@ import Menubar from "../../components/menubar";
 import Store from "../store/store";
 import CartPage from "../cartpage/cartpage";
 
-/** Helpers */
-import { validateToken } from '../../auth/Utils/Helpers';
-
-/** Constants */
-import { AUTH_USER_TOKEN_KEY } from '../../auth/Utils/constants';
-
-import { Auth } from 'aws-amplify';
-
 const products = [
     {
       name: "Da Xi Hainanese Chicken Rice",
@@ -80,24 +72,18 @@ class Main extends Component<Props, State> {
   };
 
   render() {
-    console.log(this.props.match)
     return (
       <div className="App">
-        <Menubar></Menubar>
-        <Router>
         <CartContext.Provider value ={this.state}>
-          <Switch>
-            <Container>
-              <Route path={`${this.props.match.path}`} exact render={(props) => <HawkerList {...props} products={products}/>}/>
-            </Container>
-            <Route path={`${this.props.match.path}/product/:productId`} render={(props) => <Store {...props}/>}/>
-            <Route path={`${this.props.match.path}/cart`}>
-              <CartPage/>
-            </Route>
-          </Switch>
-          </CartContext.Provider>
-        </Router>
-        
+          <Menubar pathName={this.props.match.url}></Menubar>
+          <Container>
+            <Route path={`${this.props.match.path}`} exact render={(props) => <HawkerList {...props} products={products}/>}/>
+          </Container>
+          <Route path={`${this.props.match.path}/product/:productId`} render={(props) => <Store {...props}/>}/>
+          <Route path={`${this.props.match.path}/cart`}>
+            <CartPage/>
+          </Route>
+        </CartContext.Provider>
       </div>
     );
   }
