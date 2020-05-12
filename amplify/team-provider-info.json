@@ -16,5 +16,23 @@
                 "hawkercognitoresource": {}
             }
         }
+    },
+    "sampledev": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-hawkerdeliveries-sampledev-152857-authRole",
+            "UnauthRoleArn": "arn:aws:iam::423202023851:role/amplify-hawkerdeliveries-sampledev-152857-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::423202023851:role/amplify-hawkerdeliveries-sampledev-152857-authRole",
+            "Region": "ap-southeast-1",
+            "DeploymentBucketName": "amplify-hawkerdeliveries-sampledev-152857-deployment",
+            "UnauthRoleName": "amplify-hawkerdeliveries-sampledev-152857-unauthRole",
+            "StackName": "amplify-hawkerdeliveries-sampledev-152857",
+            "StackId": "arn:aws:cloudformation:ap-southeast-1:423202023851:stack/amplify-hawkerdeliveries-sampledev-152857/40c98910-9422-11ea-bbe9-0a2bfeee7532",
+            "AmplifyAppId": "dlszv4wpq0sye"
+        },
+        "categories": {
+            "auth": {
+                "hawkercognitoresource": {}
+            }
+        }
     }
 }

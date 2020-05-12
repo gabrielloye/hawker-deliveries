@@ -78,13 +78,11 @@ class Store extends Component<Props, State> {
       console.log("AAAA")
       return (
         <div className="App">
-          <Container text textAlign="center">
-          <Header size="huge">{this.state.store.name}</Header>
-          <p className="lead">
-            { this.state.store.address }
-          </p>
-          <FoodList store={this.state.store.itemList}></FoodList>
-        </Container> 
+          <FoodList 
+            name={this.state.store.name} 
+            address={this.state.store.address}
+            store={this.state.store.itemList}
+          />
       </div>
       );
     }

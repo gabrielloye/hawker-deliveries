@@ -1,4 +1,6 @@
 import React from 'react';
+import { Card, Image } from 'semantic-ui-react'
+import { Button, Container, Grid, Header, Icon, Menu } from "semantic-ui-react";
 import ProductQuantity from './productquantity';
 
 export interface FoodItem {
@@ -10,35 +12,38 @@ export interface FoodItem {
 }
 
 type Props = {
+    name: string;
+    address: string;
     store: Array<FoodItem>;
 }
 
 class FoodList extends React.Component<Props> {
     displayListPosts = () =>
     this.props.store.map((el : FoodItem) => (
-        <div className="column">
-        <div className="ui fluid card">
-        <div className="image">
-          <img src={el.image}/>
-        </div>
-        <div className="content">
-          <a className="header">{ el.name }</a>
-          <div className="meta">
-            <span className="date">{ el.price }</span>
-          </div>
-          <div className="description">
-            { el.description }
-          </div>
-        </div>
-        <div className="extra content">
-          <ProductQuantity item={el} quantity={0}></ProductQuantity>
-        </div>
-      </div>
-      </div>
+      <Card
+          image={ el.image }
+          header={ el.name }
+          meta={ el.price }
+          description={el.description}
+          extra={ <ProductQuantity item={el} quantity={0}></ProductQuantity> }
+          fluid={ true }
+      />
   ));
 
   render() {
-    return (<div className="ui three column grid">{ this.displayListPosts() }</div>)
+    return (
+      <React.Fragment>
+        <Container text textAlign="center">
+          <Header size="huge">{this.props.name}</Header>
+          <p className="lead">
+            { this.props.address }
+          </p>
+          <Card.Group itemsPerRow="2" stackable>
+            { this.displayListPosts() }
+          </Card.Group>
+        </Container> 
+      </React.Fragment>
+    )
   }
 }
 
