@@ -2,6 +2,8 @@ import React, { Component } from "react";
 
 import "semantic-ui-css/semantic.min.css";
 
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
 import { Button, Container, Grid, Header, Icon, Menu } from "semantic-ui-react";
 
 import './main.css';
@@ -9,6 +11,10 @@ import './main.css';
 import HawkerList from '../../components/hawkerlist'
 
 import moment from 'moment';
+import { CartItem, CartContext } from '../../components/cartcontext';
+import Menubar from "../../components/menubar";
+import Store from "../store/store";
+import CartPage from "../cartpage/cartpage";
 
 /** Helpers */
 import { validateToken } from '../../auth/Utils/Helpers';
@@ -42,11 +48,7 @@ const products = [
     }
   ]
 
-type State = {
-    dropdownMenuStyle: {
-        display: string;
-    }
-};
+type State = {};
 
 type Props = {
     match: {
@@ -58,23 +60,29 @@ type Props = {
 
 class Main extends Component<Props, State> {
   state = {
-    dropdownMenuStyle: {
-      display: "none"
-    }
+    cart : new Array<CartItem>(),
+    modifyCart: (item : CartItem, isAdd: boolean) => {}
   };
 
-  handleToggleDropdownMenu = () => {
-    let newState = Object.assign({}, this.state);
-    if (newState.dropdownMenuStyle.display === "none") {
-      newState.dropdownMenuStyle = { display: "flex" };
+  modifyCart = (item : CartItem, isAdd : boolean) => {
+    let newCart = this.state.cart;
+    if (isAdd) {
+      newCart.push(item);
     } else {
-      newState.dropdownMenuStyle = { display: "none" };
+      for (let i = 0; i < newCart.length; i++) {
+        if (newCart[i].name === item.name) {
+          newCart.splice(i, 1);
+        }
+      }
     }
-
-    this.setState(newState);
-  };
+    this.setState({
+      cart: newCart,
+      modifyCart: this.modifyCart
+    })
+  }
 
   render() {
+<<<<<<< HEAD
     const checkUserAuth = validateToken(localStorage.getItem(AUTH_USER_TOKEN_KEY));
     if (checkUserAuth) {
       Auth.currentAuthenticatedUser()
@@ -154,6 +162,34 @@ class Main extends Component<Props, State> {
           </p>
           <HawkerList products={products}></HawkerList>
         </Container>
+=======
+    this.setState({
+      modifyCart: this.modifyCart
+    });
+    return (
+      <div className="App">
+        <Menubar></Menubar>
+        <Router>
+        <CartContext.Provider value ={this.state}>
+          <Switch>
+            <Route path="/" exact>
+              <Container text textAlign="center">
+                <Header size="huge">Tanglin Halt Market</Header>
+                <p className="lead">
+                  These are the stalls available for {moment(this.props.match.params.date, "DDMMYYYY").format("Do MMMM YYYY")} Lunch
+                </p>
+                <HawkerList products={products}></HawkerList>
+              </Container>
+            </Route>
+            <Route path="/product/:productId" render={(props) => <Store {...props}/>}/>
+            <Route path="/cart">
+              <CartPage/>
+            </Route>
+          </Switch>
+          </CartContext.Provider>
+        </Router>
+        
+>>>>>>> c9f10030ea6d80b2a8ba5c1dc52d9de872769b10
       </div>
     );
   }
