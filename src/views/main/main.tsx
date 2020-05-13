@@ -56,14 +56,19 @@ class Main extends Component<Props, State> {
     cart : new Array<CartItem>(),
     modifyCart: (item : CartItem, isAdd : boolean) => {
       let newCart = this.state.cart;
-      if (isAdd) {
-        newCart.push(item);
-      } else {
-        for (let i = 0; i < newCart.length; i++) {
-          if (newCart[i].name === item.name) {
-            newCart.splice(i, 1);
+      let isExists = false;
+      for (let i = 0; i < newCart.length; i++) {
+        if (newCart[i].name === item.name) {
+          if (isAdd) {
+            isExists = true;
+            newCart[i].quantity += item.quantity;
+          } else {
+              newCart.splice(i, 1);
           }
         }
+      }
+      if (isAdd && !isExists) {
+        newCart.push(item);
       }
       this.setState({
         cart: newCart
