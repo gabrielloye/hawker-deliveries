@@ -72,11 +72,13 @@ class Main extends Component<Props, State> {
       if (isAdd && !isExists) {
         newCart.push(item);
       }
+      localStorage.setItem('cart', JSON.stringify(newCart));
       this.setState({
         cart: newCart
       })
     }
   };
+
   componentDidMount() {
     axios.post('https://5ppl4eeg57.execute-api.ap-southeast-1.amazonaws.com/dev')
       .then(res => {
@@ -84,7 +86,13 @@ class Main extends Component<Props, State> {
       })
       .catch(error => {
         console.log(error)
-      })
+    })
+    let cartString = localStorage.getItem('cart') || '';
+    if (cartString.length != 0) {
+      this.setState({
+        cart: JSON.parse(cartString)
+      });
+    }
   }
 
   render() {
@@ -97,7 +105,7 @@ class Main extends Component<Props, State> {
           </Container>
           <Route path={`${this.props.match.path}/product/:productId`} render={(props) => <Store {...props}/>}/>
           <Route path={`${this.props.match.path}/cart`}>
-            <CartPage/>
+            <CartPage pathName={this.props.match.url}/>
           </Route>
         </CartContext.Provider>
       </div>

@@ -121,7 +121,7 @@ class ProductQuantity extends Component<Props, State> {
                 Add To Cart
               </Button>}>
             <Segment style={{ left: '40%', position: 'fixed', bottom: '5%', zIndex: 1000 }}>
-              <Header>Item has successfully been added to card</Header>
+              <Header>Item has successfully been added to cart</Header>
               <p>{this.state.prevQuantity} {this.props.item.name} has been added to cart</p>
             </Segment>
           </TransitionablePortal>

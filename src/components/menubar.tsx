@@ -77,7 +77,7 @@ class Menubar extends Component<Props, State> {
               </Link>
               <Menu.Item position="right" as="a" href={checkUserAuth ? "/dashboard" : "/login"}>{checkUserAuth ? "Account" : "Login"}</Menu.Item>
               <Link to={`${this.props.pathName}/cart`}>
-                <Menu.Item>
+                <Menu.Item as="a">
                 <Icon name="cart" />
                   <CartContext.Consumer>
                     {({cart, modifyCart}) => ( 

@@ -38,7 +38,7 @@ class CartList extends React.Component<Props> {
     {
       return (
         <React.Fragment>
-          <Header size="huge">Cart</Header>
+          <Header size="huge" style={{ paddingBottom: '2vh' }}>Cart</Header>
           <Card.Group itemsPerRow="2" stackable>
             { this.displayListPosts() }
           </Card.Group>
