@@ -10,6 +10,8 @@ import './main.css';
 
 import HawkerList from '../../components/hawkerlist'
 
+import axios from 'axios';
+
 import { CartItem, CartContext } from '../../components/cartcontext';
 import Menubar from "../../components/menubar";
 import Store from "../store/store";
@@ -75,6 +77,15 @@ class Main extends Component<Props, State> {
       })
     }
   };
+  componentDidMount() {
+    axios.post('https://5ppl4eeg57.execute-api.ap-southeast-1.amazonaws.com/dev')
+      .then(res => {
+        console.log(res)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }
 
   render() {
     return (
