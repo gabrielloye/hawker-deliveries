@@ -4,7 +4,7 @@ import "semantic-ui-css/semantic.min.css";
 
 import { Link } from 'react-router-dom';
 
-import { Button, Container, Grid, Header, Icon, Menu } from 'semantic-ui-react';
+import { Button, Container, Grid, Icon, Menu } from 'semantic-ui-react';
 
 import { CartContext } from './cartcontext';
 
@@ -71,7 +71,7 @@ class Menubar extends Component<Props, State> {
                 </Menu.Item>
               </Link>
               <Link to={this.props.pathName}>
-                <Menu.Item active as="a">
+                <Menu.Item as="a">
                   Home
                 </Menu.Item>
               </Link>
@@ -91,7 +91,7 @@ class Menubar extends Component<Props, State> {
         </Grid>
         <Grid padded className="mobile only">
           <Menu borderless fluid inverted size="huge">
-            <Menu.Item header as="a" href="#root">
+            <Menu.Item header as="a" href="/">
               Hawker Deliveries
             </Menu.Item>
             <Menu.Menu position="right">
@@ -114,15 +114,24 @@ class Menubar extends Component<Props, State> {
               vertical
               style={this.state.dropdownMenuStyle}
             >
-              <Menu.Item active as="a" href="#root">
-                Home
+              <Link to={this.props.pathName}>
+                <Menu.Item as="a">
+                  Home
+                </Menu.Item>
+              </Link>
+              <Menu.Item as="a" href={checkUserAuth ? "/dashboard" : "/login"}>
+                {checkUserAuth ? "Account" : "Login"}
               </Menu.Item>
-              <Menu.Item as="a" href="#root">
-                Cart
-              </Menu.Item>
-              <Menu.Item as="a" href="#root">
-                Contact
-              </Menu.Item>
+              <Link to={`${this.props.pathName}/cart`}>
+                <Menu.Item as="a">
+                
+                  <CartContext.Consumer>
+                    {({cart, modifyCart}) => ( 
+                      <p><Icon name="cart"/> Cart ({this.cartSum(cart)})  </p>
+                    )}
+                  </CartContext.Consumer>
+                </Menu.Item>
+              </Link>
             </Menu>
           </Menu>
         </Grid>

@@ -27,7 +27,6 @@ class Datepicker extends Component {
     return (
       <div style={optionsStyle}>
         <SingleDatePicker
-          
           id="1"
           orientation= "horizontal"
           anchorDirection = "right"
@@ -38,7 +37,8 @@ class Datepicker extends Component {
           numberOfMonths={1}
           isOutsideRange={day =>
           !isInclusivelyAfterDay(day, moment()) ||
-          isInclusivelyAfterDay(day, moment().add(4, 'days'))}>
+          isInclusivelyAfterDay(day, moment().add(4, 'days'))}
+          displayFormat="DD/MM/YYYY">
         </SingleDatePicker>
         <Dropdown
           style={{margin:"1em 0"}}

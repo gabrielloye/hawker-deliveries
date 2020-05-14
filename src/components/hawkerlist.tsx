@@ -1,8 +1,14 @@
+import 'react-dates/initialize';
 import React from "react";
-import { Card, Image } from 'semantic-ui-react'
-import { Container, Grid, Header, Icon, Menu } from "semantic-ui-react";
-import { Link } from 'react-router-dom';
-import moment from 'moment';
+import { Card } from 'semantic-ui-react'
+import { Container, Header, Transition } from "semantic-ui-react";
+import { Link, RouteComponentProps } from 'react-router-dom';
+import moment, { Moment } from 'moment';
+import { SingleDatePicker, isInclusivelyAfterDay } from 'react-dates';
+
+import axios from 'axios';
+
+import 'react-dates/lib/css/_datepicker.css';
 
 interface Product {
     id: string;
@@ -12,24 +18,14 @@ interface Product {
     max_price: number;
 }
 
-const mapProductsToItems = (products: Array<Product>, path: string) =>
-  products.map(({ id, name, image, min_price, max_price }) => {
+type State = {
+  products: Array<Product>;
+  focused: boolean | null;
+  date: Moment;
+  visible: boolean
+}
 
-    return {
-      childKey: id,
-      image,
-      header: name,
-      meta: `$${min_price.toFixed(2)} ~ $${max_price.toFixed(2)}`,
-      fluid: true,
-      href: `${path}/product/${id}`
-    }
-  })
-
-type State = {}
-
-type Props = {
-    products: Array<Product>;
-    
+type Props = RouteComponentProps & {
     match: {
       url: string
       params: {
@@ -39,32 +35,89 @@ type Props = {
 }
 
 class HawkerList extends React.Component<Props, State> {
+  state={
+    focused: false,
+    date: moment(this.props.match.params.date, "DDMMYYYY"),
+    products: [],
+    visible: false
+  }
 
-  renderCards = () =>
-    this.props.products.map(({id, name, image, min_price, max_price}) => (
+  componentDidMount() {
+    this.fetchProducts(this.state.date).then( (res: any) => {
+      const products: Product[] = res['data']['products']
+      this.setState({ products })
+      this.setState({ visible: true})
+    })
+  }
+
+  renderCards = () =>{
+    if (this.state.products!==[]) {
+      return this.state.products.map((product: Product) => (
       <Card
         as={Link}
-        to={`${this.props.match.url}/product/${id}`}
-        childKey={id}
-        image={image}
-        header={name}
-        meta={`$${min_price.toFixed(2)} ~ $${max_price.toFixed(2)}`}
+        to={`${this.props.match.url}/product/${product.id}`}
+        childKey={product.id}
+        image={product.image}
+        header={product.name}
+        meta={`$${product.min_price.toFixed(2)} ~ $${product.max_price.toFixed(2)}`}
         fluid={true}/>
-    ))
+    ))} else {
+      return <p>Orders are not available for this date</p>
+    }
+    }
+  fetchProducts = (date: Moment) => {
+    const promise: Promise<Product[]> = axios.get("https://hb65mr6g85.execute-api.ap-southeast-1.amazonaws.com/dev/main/"+date.format("DDMMYYYY"))
+    return promise
+  }
+
+  dateChange = (date: Moment) => {
+    if(this.state.date.format("DDMMYYYY")!==date.format("DDMMYYYY")) {
+      this.props.history.push(`/main/${date.format("DDMMYYYY")}`)
+      this.setState({ date })
+      this.setState({visible: false})
+      this.fetchProducts(date).then( (res: any) => {
+        const products: Product[] = res['data']['products']
+        this.setState({ products })
+        this.setState({visible: true})
+      })
+    }
+  }
 
   render() {
+
     return (
-      <React.Fragment>
+      <div>
         <Container text textAlign="center">
           <Header size="huge">Tanglin Halt Market</Header>
           <p className="lead">
-            These are the stalls available for {moment(this.props.match.params.date, "DDMMYYYY").format("Do MMMM YYYY")} Lunch
+            These are the stalls available for Lunch on: 
+          <SingleDatePicker
+            id="2"
+            orientation= "horizontal"
+            anchorDirection = "right"
+            date={this.state.date}
+            onDateChange={(date)=>{if(date){this.dateChange(date)}}}
+            focused={this.state.focused}
+            onFocusChange={({ focused }) => this.setState({ focused })}
+            numberOfMonths={1}
+            isOutsideRange={day =>
+            !isInclusivelyAfterDay(day, moment()) ||
+            isInclusivelyAfterDay(day, moment().add(4, 'days'))}
+            displayFormat="DD/MM/YYYY"
+            small={true}> 
+          </SingleDatePicker>
           </p>
-          <Card.Group itemsPerRow="2" stackable>
-            {this.renderCards()}
-          </Card.Group>
+          
+          <Transition visible={this.state.visible} animation='scale' duration={500}>
+          <div>
+          { this.state && this.state.products &&
+           <Card.Group itemsPerRow="2" stackable>
+           {this.renderCards()}
+         </Card.Group>}
+          </div>
+          </Transition>
         </Container>
-      </React.Fragment>
+      </div>
     );
   }
 }

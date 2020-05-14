@@ -2,9 +2,9 @@ import React, { Component } from "react";
 
 import "semantic-ui-css/semantic.min.css";
 
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 
-import { Button, Container, Grid, Header, Icon, Menu } from "semantic-ui-react";
+import { Container } from "semantic-ui-react";
 
 import './main.css';
 
@@ -16,30 +16,6 @@ import { CartItem, CartContext } from '../../components/cartcontext';
 import Menubar from "../../components/menubar";
 import Store from "../store/store";
 import CartPage from "../cartpage/cartpage";
-
-const products = [
-    {
-      name: "Da Xi Hainanese Chicken Rice",
-      id: "1",
-      image: "https://www.thespruceeats.com/thmb/vwIkJwmNwy55CJDYd11enCK5VB0=/960x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/hainanese-chicken-rice-very-detailed-recipe-3030408-hero-0a742f08c72044e999202a44e30a1ea7.jpg",
-      min_price: 3.50,
-      max_price: 5.00
-    },
-    {
-      name: "Ta Lu Prawn Noodles Stall",
-      id: "2",
-      image: "https://cdn.shortpixel.ai/client/to_webp,q_glossy,ret_img,w_450,h_300/https://danielfooddiary.com/wp-content/uploads/2019/05/prawnnoodles1.jpg",
-      min_price: 5,
-      max_price: 6
-    },
-    {
-      name: "Wei Yi Laksa",
-      id: "3",
-      image: "https://i2.wp.com/eatwhattonight.com/wp-content/uploads/2015/12/Laksa4.jpg?resize=1024%2C680&ssl=1",
-      min_price: 4.50,
-      max_price: 6
-    }
-  ]
 
 type State = {};
 
@@ -80,19 +56,19 @@ class Main extends Component<Props, State> {
   };
 
   componentDidMount() {
-    axios.post('https://5ppl4eeg57.execute-api.ap-southeast-1.amazonaws.com/dev')
-      .then(res => {
-        console.log(res)
-      })
-      .catch(error => {
-        console.log(error)
-    })
-    let cartString = localStorage.getItem('cart') || '';
-    if (cartString.length != 0) {
-      this.setState({
-        cart: JSON.parse(cartString)
-      });
-    }
+    // axios.post('https://5ppl4eeg57.execute-api.ap-southeast-1.amazonaws.com/dev')
+    //   .then(res => {
+    //     console.log(res)
+    //   })
+    //   .catch(error => {
+    //     console.log(error)
+    // })
+    // let cartString = localStorage.getItem('cart') || '';
+    // if (cartString.length != 0) {
+    //   this.setState({
+    //     cart: JSON.parse(cartString)
+    //   });
+    // }
   }
 
   render() {
@@ -101,10 +77,10 @@ class Main extends Component<Props, State> {
         <CartContext.Provider value ={this.state}>
           <Menubar pathName={this.props.match.url}></Menubar>
           <Container>
-            <Route path={`${this.props.match.path}`} exact render={(props) => <HawkerList {...props} products={products}/>}/>
+            <Route exact path={`${this.props.match.path}`} render={(props) => <HawkerList {...props}/>}/>
           </Container>
-          <Route path={`${this.props.match.path}/product/:productId`} render={(props) => <Store {...props}/>}/>
-          <Route path={`${this.props.match.path}/cart`}>
+          <Route exact path={`${this.props.match.url}/product/:productId`} render={(props) => <Store {...props}/>}/>
+          <Route path={`${this.props.match.url}/cart`}>
             <CartPage pathName={this.props.match.url}/>
           </Route>
         </CartContext.Provider>
