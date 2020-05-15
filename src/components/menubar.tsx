@@ -10,6 +10,8 @@ import { CartContext } from './cartcontext';
 
 import { CartItem } from './cartcontext';
 
+import moment from 'moment';
+
 /** Helpers */
 import { validateToken } from '../auth/Utils/Helpers';
 
@@ -21,7 +23,12 @@ import { Auth } from 'aws-amplify';
 type State = {};
 
 type Props = {
-    pathName: string;
+  pathName: string;
+  match: {
+    params: {
+      date: string;
+    }
+  }
 }
 
 class Menubar extends Component<Props, State> {
@@ -53,6 +60,7 @@ class Menubar extends Component<Props, State> {
   };
 
   render() {
+    const pathName = moment(this.props.match.params.date, "DDMMYYYY").isValid() ? this.props.pathName : "/main"
     const checkUserAuth = validateToken(localStorage.getItem(AUTH_USER_TOKEN_KEY));
     // if (checkUserAuth) {
     //   Auth.currentAuthenticatedUser()
@@ -70,13 +78,17 @@ class Menubar extends Component<Props, State> {
                   Hawker Deliveries
                 </Menu.Item>
               </Link>
-              <Link to={this.props.pathName}>
+              <Link to={pathName}>
                 <Menu.Item as="a">
                   Home
                 </Menu.Item>
               </Link>
-              <Menu.Item position="right" as="a" href={checkUserAuth ? "/dashboard" : "/login"}>{checkUserAuth ? "Account" : "Login"}</Menu.Item>
-              <Link to={`${this.props.pathName}/cart`}>
+              <Menu.Item position="right" as="a">
+                <Link to={checkUserAuth ? `${pathName}/dashboard` : "/login"}>
+                  {checkUserAuth ? "Account" : "Login"}
+                </Link>
+              </Menu.Item>        
+              <Link to={`${pathName}/cart`}>
                 <Menu.Item as="a">
                 <Icon name="cart" />
                   <CartContext.Consumer>
@@ -114,17 +126,16 @@ class Menubar extends Component<Props, State> {
               vertical
               style={this.state.dropdownMenuStyle}
             >
-              <Link to={this.props.pathName}>
+              <Link to={pathName}>
                 <Menu.Item as="a">
                   Home
                 </Menu.Item>
               </Link>
-              <Menu.Item as="a" href={checkUserAuth ? "/dashboard" : "/login"}>
-                {checkUserAuth ? "Account" : "Login"}
-              </Menu.Item>
-              <Link to={`${this.props.pathName}/cart`}>
+              <Link to={checkUserAuth ? `${pathName}/dashboard` : "/login"}>
+                <Menu.Item as="a">{checkUserAuth ? "Account" : "Login"}</Menu.Item>        
+              </Link>
+              <Link to={`${pathName}/cart`}>
                 <Menu.Item as="a">
-                
                   <CartContext.Consumer>
                     {({cart, modifyCart}) => ( 
                       <p><Icon name="cart"/> Cart ({this.cartSum(cart)})  </p>

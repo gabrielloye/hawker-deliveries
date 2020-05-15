@@ -51,7 +51,7 @@ class Cart extends Component<Props> {
                 <Menu.Item position='right'>
                   <Button
                     toggle
-                    disabled={this.totalCost(cart) == 0}
+                    disabled={this.totalCost(cart) === 0}
                   >
                     <Link to={`${this.props.pathName}/checkout`} style={{ color: 'black' }}>
                       Checkout

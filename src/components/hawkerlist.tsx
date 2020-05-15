@@ -21,7 +21,7 @@ interface Product {
 type State = {
   products: Array<Product>;
   focused: boolean | null;
-  date: Moment;
+  date: Moment| null;
   visible: boolean
 }
 
@@ -43,16 +43,20 @@ class HawkerList extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    this.fetchProducts(this.state.date).then( (res: any) => {
-      const products: Product[] = res['data']['products']
-      this.setState({ products })
-      this.setState({ visible: true})
-    })
+    if (this.state.date.isValid()){
+      this.fetchProducts(this.state.date).then( (res: any) => {
+        const products: Product[] = res['data']['products']
+        this.setState({ products })
+        this.setState({ visible: true})
+      })
+    } else {
+      this.props.history.push('/')
+    }
   }
 
   renderCards = () =>{
-    if (this.state.products!==[]) {
-      return this.state.products.map((product: Product) => (
+    if (this.state.products.length !== 0) {
+      const cards = this.state.products.map((product: Product) => (
       <Card
         as={Link}
         to={`${this.props.match.url}/product/${product.id}`}
@@ -61,17 +65,19 @@ class HawkerList extends React.Component<Props, State> {
         header={product.name}
         meta={`$${product.min_price.toFixed(2)} ~ $${product.max_price.toFixed(2)}`}
         fluid={true}/>
-    ))} else {
+    ))
+      return <Card.Group itemsPerRow="2" stackable>{cards}</Card.Group>
+    } else {
       return <p>Orders are not available for this date</p>
     }
-    }
+  }
   fetchProducts = (date: Moment) => {
     const promise: Promise<Product[]> = axios.get("https://hb65mr6g85.execute-api.ap-southeast-1.amazonaws.com/dev/main/"+date.format("DDMMYYYY"))
     return promise
   }
 
   dateChange = (date: Moment) => {
-    if(this.state.date.format("DDMMYYYY")!==date.format("DDMMYYYY")) {
+    if(this.state.date===null || this.state.date.format("DDMMYYYY")!==date.format("DDMMYYYY")) {
       this.props.history.push(`/main/${date.format("DDMMYYYY")}`)
       this.setState({ date })
       this.setState({visible: false})
@@ -110,10 +116,7 @@ class HawkerList extends React.Component<Props, State> {
           
           <Transition visible={this.state.visible} animation='scale' duration={500}>
           <div>
-          { this.state && this.state.products &&
-           <Card.Group itemsPerRow="2" stackable>
            {this.renderCards()}
-         </Card.Group>}
           </div>
           </Transition>
         </Container>

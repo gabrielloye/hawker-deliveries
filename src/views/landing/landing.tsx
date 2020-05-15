@@ -26,7 +26,7 @@ class LandingPage extends Component {
             </Header>
             <Menu borderless compact inverted>
               <Menu.Item active>Home</Menu.Item>
-              <Menu.Item as="a" href={checkUserAuth ? "/dashboard" : "/login"}>{checkUserAuth ? "Account" : "Login"}</Menu.Item>
+              <Menu.Item as="a" href={checkUserAuth ? "/main/dashboard" : "/login"}>{checkUserAuth ? "Account" : "Login"}</Menu.Item>
               <Menu.Item as="a" href="/">Contact</Menu.Item>
             </Menu>
           </Container>
@@ -39,8 +39,8 @@ class LandingPage extends Component {
           </Container>
           <Segment inverted vertical as="footer">
             by{" "}
-            <a href="https://github.com/semantic-ui-forest">
-              @CAPT Hawker Delivery
+            <a href="">
+              @Hawker Deliveries
             </a>
           </Segment>
         </Segment>
