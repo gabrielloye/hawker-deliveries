@@ -10,7 +10,7 @@ import './main.css';
 
 import HawkerList from '../../components/hawkerlist'
 
-import axios from 'axios';
+import API from '../../components/axiosapi';
 
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 
@@ -19,6 +19,7 @@ import Menubar from "../../components/menubar";
 import Store from "../store/store";
 import CartPage from "../cartpage/cartpage";
 import Dashboard from "../dashboard/dashboard";
+import Checkout from "../checkout/checkout";
 
 type State = {};
 
@@ -94,6 +95,7 @@ class Main extends Component<Props, State> {
             <Route exact path={`${this.props.match.path}`} render={(props) => <HawkerList {...props}/>}/>
           </Container>
           </Switch>
+          <Route path={`${this.props.match.path}/checkout`} render={(props) => <Checkout {...props}/>}/>
         </CartContext.Provider>
       </div>
     );
