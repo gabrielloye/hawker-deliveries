@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 /** Container components */
 import DashBoardContainer from '../auth/Containers/DashboardContainer';
@@ -19,16 +19,20 @@ class AppRouter extends React.Component {
   render() {
     return (
       <Router>
-        <React.Fragment>
+        <div>
+          <Switch>
           <Route exact={true} path="/" component={LandingPage} />
+
           <Route path="/main/:date" render={(props) => <Main {...props}/>}/>
+
           <PrivateRoute exact={true} path="/dashboard" component={DashBoardContainer} />
           <LoggedinRoute exact={true} path="/login" component={LoginContainer} />
           <LoggedinRoute exact={true} path="/signup" component={SignUpContainer} />
           <LoggedinRoute exact={true} path="/verify-code" component={ConfirmEmailContainer} />
           <LoggedinRoute exact={true} path="/reset-password" component={PasswordResetContainer} />
           <LoggedinRoute exact={true} path="/forgot-password" component={ForgotPasswordContainer} />
-        </React.Fragment>
+          </Switch>
+        </div>
       </Router>
     );
   }

@@ -12,6 +12,7 @@
     "@types/react-dates": "^17.1.10",
     "@types/react-dom": "^16.9.8",
     "@types/react-router-dom": "^5.1.5",
+    "@types/react-transition-group": "^4.2.4",
     "@types/styled-components": "^5.1.0",
     "antd": "^3.25.2",
     "aws-amplify": "^3.0.10",

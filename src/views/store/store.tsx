@@ -94,4 +94,4 @@ class Store extends Component<Props, State> {
   }
 }
   
-  export default Store;
+export default Store;
