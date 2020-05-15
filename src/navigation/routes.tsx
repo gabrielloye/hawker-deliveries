@@ -20,17 +20,6 @@ class AppRouter extends React.Component {
       <Router>
         <div>
           <AnimatedSwitch></AnimatedSwitch>
-          {/* <Switch>
-          <Route exact={true} path="/" component={LandingPage} />
-          <Route exact path="/main" render={(props) => <Main {...props}/>}/>
-          <Route path="/main/:date" render={(props) => <Main {...props}/>}/>
-
-          <LoggedinRoute exact={true} path="/login" component={LoginContainer} />
-          <LoggedinRoute exact={true} path="/signup" component={SignUpContainer} />
-          <LoggedinRoute exact={true} path="/verify-code" component={ConfirmEmailContainer} />
-          <LoggedinRoute exact={true} path="/reset-password" component={PasswordResetContainer} />
-          <LoggedinRoute exact={true} path="/forgot-password" component={ForgotPasswordContainer} />
-          </Switch> */}
         </div>
       </Router>
     );
@@ -42,7 +31,7 @@ const AnimatedSwitch = withRouter(({ location}) => (
     <TransitionGroup className="transition-group">
       <CSSTransition
         key={location.key}
-        timeout={{ enter: 500, exit: 500 }}
+        timeout={{ enter: 1000, exit: 500 }}
         classNames="fade">
         <section className="route-section">
           <Switch location={location}>
@@ -64,12 +53,12 @@ const AnimatedSwitch = withRouter(({ location}) => (
 
 const Wrapper = styled.div`
   .fade-enter {
-    opacity: 0;
+    opacity: 0.01;
   }
 
   .fade-enter.fade-enter-active {
     opacity: 1;
-    transition: opacity 500ms ease-in;
+    transition: opacity 1000ms ease-in 1000ms;
   }
 
   .fade-exit {
@@ -77,7 +66,7 @@ const Wrapper = styled.div`
   }
 
   .fade-exit.fade-exit-active {
-    opacity: 0;
+    opacity: 0.01;
     transition: opacity 500ms ease-out;
   }
 

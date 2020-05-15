@@ -67,12 +67,12 @@ class Main extends Component<Props, State> {
     //   .catch(error => {
     //     console.log(error)
     // })
-    // let cartString = localStorage.getItem('cart') || '';
-    // if (cartString.length != 0) {
-    //   this.setState({
-    //     cart: JSON.parse(cartString)
-    //   });
-    // }
+    let cartString = localStorage.getItem('cart') || '';
+    if (cartString.length != 0) {
+      this.setState({
+        cart: JSON.parse(cartString)
+      });
+    }
   }
 
   render() {
