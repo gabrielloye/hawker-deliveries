@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, Image } from 'semantic-ui-react'
 import { Tab, Label, Button, Container, Grid, Header, Icon, Menu } from "semantic-ui-react";
 import ProductQuantity from './productquantity';
+import SimpleSlider from './abouthawker'
 
 export interface FoodItem {
     id: string;
@@ -28,16 +29,23 @@ class FoodList extends React.Component<Props> {
     },
     {
       menuItem: { key: 'about', icon: 'info', content: "About"},
-      render: () => <Tab.Pane>Located near the Chinatown/CBD region, the owners of the stall are Mr & Mrs Ng (whose daughter is one of us, a CAPTain from Phoenix!!!) who have been selling their Prawn Mee for almost 10 years 🦐 
-      <br/>The soup has been boiled for many hours to ensure maximum yumminess! Do try it for yourself 🤩☺️🍜🍤
-      <ul>
-        <li>
-          "Soup" orders will have the soup separated in a packet by the side
-        </li>
-        <li>
-          "Dry" orders will still receive a packet of soup to be enjoyed at the side; but with a special sauce mix added to the 'dry' version of the noodles
-        </li>
-      </ul>
+      render: () => <Tab.Pane>
+        <Container>
+          <SimpleSlider></SimpleSlider>
+        </Container>
+        <Container>
+        Located near the Chinatown/CBD region, the owners of the stall are Mr & Mrs Ng (whose daughter is one of us, a CAPTain from Phoenix!!!) who have been selling their Prawn Mee for almost 10 years 🦐 
+        <br/>The soup has been boiled for many hours to ensure maximum yumminess! Do try it for yourself 🤩☺️🍜🍤
+        <ul>
+          <li>
+            "Soup" orders will have the soup separated in a packet by the side
+          </li>
+          <li>
+            "Dry" orders will still receive a packet of soup to be enjoyed at the side; but with a special sauce mix added to the 'dry' version of the noodles
+          </li>
+        </ul>
+        </Container>
+        
       </Tab.Pane>
     },
     {
