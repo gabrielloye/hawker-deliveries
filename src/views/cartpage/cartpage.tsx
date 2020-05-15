@@ -4,13 +4,15 @@ import "semantic-ui-css/semantic.min.css";
 
 import { Link } from 'react-router-dom';
 
-import { Button, Container, Menu, Sticky } from "semantic-ui-react";
+import { Responsive, Button, Container, Menu, Sticky } from "semantic-ui-react";
 
 import './cartpage.css';
 
 import CartList from "../../components/cartlist";
 
 import { CartContext, CartItem } from '../../components/cartcontext';
+
+import { authURL } from '../../components/sandboxoauth';
 
 type Props = {
   pathName: string;
@@ -31,14 +33,12 @@ class Cart extends Component<Props> {
   render() {
     return (
       <Container text style={{ height: `100vh` }} textAlign="center">
-        <Container style={{ paddingBottom: '10vh' }}>
           <CartContext.Consumer>
             {({ cart, modifyCart }) => (
               <CartList cartItems={cart}></CartList>
             )}
           </CartContext.Consumer>
-        </Container>
-        <Sticky style={{ position: 'fixed', bottom: 0, width: '100vh' }} context={this.contextRef}>
+        <Sticky style={{ position: 'fixed', bottom: 0, width: '100%', maxWidth: '100vh' }} context={this.contextRef}>
 
           <CartContext.Consumer>
             {({ cart, modifyCart }) => (
@@ -52,10 +52,12 @@ class Cart extends Component<Props> {
                   <Button
                     toggle
                     disabled={this.totalCost(cart) == 0}
+                    style={{ color: 'black' }}
+                    href={authURL}
                   >
-                    <Link to={`${this.props.pathName}/checkout`} style={{ color: 'black' }}>
+                    {/* <Link to={`https://www.dbs.com/sandbox/api/sg/v1/oauth/authorize?client_id=ec6761aee5b943f4909c1186304ea894&redirect_uri=https%3A%2F%2Flocalhost:3000%2Fmain%2F15052020%2cart&scope=Read&response_type=code&state=0399`} style={{ color: 'black' }}> */}
                       Checkout
-                      </Link>
+                    {/* </Link> */}
                   </Button>
                 </Menu.Item>
               </Menu>

@@ -12,6 +12,7 @@ class CartList extends React.Component<Props> {
     displayListPosts = () =>
     this.props.cartItems.map((el) => (
       <Card
+      childKey={ el.name }
       image={ el.image }
       header={ el.name }
       meta= { `$${el.price.toFixed(2)}` }

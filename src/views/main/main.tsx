@@ -10,12 +10,13 @@ import './main.css';
 
 import HawkerList from '../../components/hawkerlist'
 
-import axios from 'axios';
+import API from '../../components/axiosapi';
 
 import { CartItem, CartContext } from '../../components/cartcontext';
 import Menubar from "../../components/menubar";
 import Store from "../store/store";
 import CartPage from "../cartpage/cartpage";
+import Checkout from "../checkout/checkout";
 
 const products = [
     {
@@ -80,13 +81,13 @@ class Main extends Component<Props, State> {
   };
 
   componentDidMount() {
-    axios.post('https://5ppl4eeg57.execute-api.ap-southeast-1.amazonaws.com/dev')
-      .then(res => {
-        console.log(res)
-      })
-      .catch(error => {
-        console.log(error)
-    })
+    // API.post(`/`)
+    //   .then(res => {
+    //     console.log(res)
+    //   })
+    //   .catch(error => {
+    //     console.log(error)
+    // })
     let cartString = localStorage.getItem('cart') || '';
     if (cartString.length != 0) {
       this.setState({
@@ -107,6 +108,7 @@ class Main extends Component<Props, State> {
           <Route path={`${this.props.match.path}/cart`}>
             <CartPage pathName={this.props.match.url}/>
           </Route>
+          <Route path={`${this.props.match.path}/checkout`} render={(props) => <Checkout {...props}/>}/>
         </CartContext.Provider>
       </div>
     );

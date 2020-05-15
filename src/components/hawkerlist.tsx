@@ -40,6 +40,10 @@ type Props = {
 
 class HawkerList extends React.Component<Props, State> {
 
+  getHawkerList = () => {
+    
+  }
+
   renderCards = () =>
     this.props.products.map(({id, name, image, min_price, max_price}) => (
       <Card
