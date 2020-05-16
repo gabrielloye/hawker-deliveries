@@ -12,7 +12,7 @@ import HawkerList from '../../components/hawkerlist'
 
 import API from '../../components/axiosapi';
 
-import { TransitionGroup, CSSTransition } from "react-transition-group";
+import PrivateRoute from '../../navigation/private-route'
 
 import { CartItem, CartContext } from '../../components/cartcontext';
 import Menubar from "../../components/menubar";
@@ -85,12 +85,8 @@ class Main extends Component<Props, State> {
           <Route path={`${this.props.match.url}/cart`}>
             <CartPage pathName={this.props.match.url}/>
           </Route>
-          <Route exact path='/main/dashboard'>
-            <Dashboard></Dashboard>
-          </Route>
-          <Route exact path={`${this.props.match.url}/dashboard`}>
-            <Dashboard></Dashboard>
-          </Route>
+          <PrivateRoute exact path='/main/dashboard' component={Dashboard}/>
+          <PrivateRoute exact path={`${this.props.match.url}/dashboard`} component={Dashboard} />
           <Container>
             <Route exact path={`${this.props.match.path}`} render={(props) => <HawkerList {...props}/>}/>
           </Container>

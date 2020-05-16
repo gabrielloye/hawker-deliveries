@@ -74,7 +74,7 @@ class FoodList extends React.Component<Props> {
           <p className="lead">
             { this.props.address }
           </p>
-          <Tab menu={{ attached: false, tabular: false }} panes={this.renderTabPanes()}/>
+          <Tab menu={{ attached: false, tabular: false, widths: 3 }} panes={this.renderTabPanes()}/>
         </Container> 
       </React.Fragment>
     )

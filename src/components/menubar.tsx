@@ -103,9 +103,11 @@ class Menubar extends Component<Props, State> {
         </Grid>
         <Grid padded className="mobile only">
           <Menu borderless fluid inverted size="huge">
-            <Menu.Item header as="a" href="/">
-              Hawker Deliveries
-            </Menu.Item>
+            <Link to="/">
+              <Menu.Item header as="a">
+                Hawker Deliveries
+              </Menu.Item>
+            </Link>              
             <Menu.Menu position="right">
               <Menu.Item>
                 <Button

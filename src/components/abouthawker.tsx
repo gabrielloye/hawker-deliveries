@@ -1,6 +1,8 @@
 import React from "react";
 import Slider from "react-slick";
 
+import {Image} from 'semantic-ui-react';
+
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./slick-theme.css"
@@ -18,13 +20,13 @@ class SimpleSlider extends React.Component {
     <div style={divStyle}>
         <Slider {...settings}>
         <div>
-          <img src="https://hawker-images.s3-ap-southeast-1.amazonaws.com/dummyimages/2ebbb4a1a5e741b771f61620518_original_.jpg"/>
+          <Image rounded centered fluid src="https://hawker-images.s3-ap-southeast-1.amazonaws.com/dummyimages/2ebbb4a1a5e741b771f61620518_original_.jpg"/>
         </div>
         <div>
-          <img src="https://hawker-images.s3-ap-southeast-1.amazonaws.com/dummyimages/chickenrice_566x424_fillbg_1b71b0de73.jpg"/>
+          <Image rounded centered fluid src="https://hawker-images.s3-ap-southeast-1.amazonaws.com/dummyimages/chickenrice_566x424_fillbg_1b71b0de73.jpg"/>
         </div>
         <div>
-          <img src="https://hawker-images.s3-ap-southeast-1.amazonaws.com/dummyimages/e5d685f5e24f9837e7dd22e2f8e1c617.jpg"/>
+          <Image rounded centered fluid src="https://hawker-images.s3-ap-southeast-1.amazonaws.com/dummyimages/e5d685f5e24f9837e7dd22e2f8e1c617.jpg"/>
         </div>
       </Slider>
     </div>

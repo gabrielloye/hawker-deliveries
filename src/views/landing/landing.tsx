@@ -1,5 +1,7 @@
 import React, { Component, useState } from "react";
 
+import { Link } from 'react-router-dom'
+
 import { Container, Header, Menu, Segment } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 
@@ -26,8 +28,12 @@ class LandingPage extends Component {
             </Header>
             <Menu borderless compact inverted>
               <Menu.Item active>Home</Menu.Item>
-              <Menu.Item as="a" href={checkUserAuth ? "/main/dashboard" : "/login"}>{checkUserAuth ? "Account" : "Login"}</Menu.Item>
-              <Menu.Item as="a" href="/">Contact</Menu.Item>
+              <Link to={checkUserAuth ? "/main/dashboard" : "/login"}>
+                <Menu.Item as="a">{checkUserAuth ? "Account" : "Login"}</Menu.Item>
+              </Link>
+              <Link to="/">
+                <Menu.Item as="a">Contact</Menu.Item>
+              </Link>
             </Menu>
           </Container>
           <Container className="content">
