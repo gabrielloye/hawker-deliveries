@@ -39,3 +39,16 @@ body {
   .ui.inverted.menu .active.item {
     background-color: #080808;
   }
+
+.bottombar {
+  position: fixed;
+   bottom: 0;
+   width: inherit;
+}
+
+@media only screen
+and (max-width : 600px){
+  .bottombar {
+    width: 100%
+  }
+}

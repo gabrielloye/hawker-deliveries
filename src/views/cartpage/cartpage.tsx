@@ -32,13 +32,13 @@ class Cart extends Component<Props> {
 
   render() {
     return (
-      <Container text style={{ height: `100vh` }} textAlign="center">
+      <Container text style={{ minHeight: `100vh` }} textAlign="center">
           <CartContext.Consumer>
             {({ cart, modifyCart }) => (
               <CartList cartItems={cart}></CartList>
             )}
           </CartContext.Consumer>
-        <Sticky style={{ position: 'fixed', bottom: 0, width: '100%', maxWidth: '100vh' }} context={this.contextRef}>
+        <Sticky className="bottombar" context={this.contextRef}>
 
           <CartContext.Consumer>
             {({ cart, modifyCart }) => (

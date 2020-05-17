@@ -52,6 +52,7 @@ class HawkerList extends React.Component<Props, State> {
 
   renderCards = () =>{
     if (this.state.products!==[]) {
+      console.log("Here")
       return this.state.products.map((product: Product) => (
       <Card
         as={Link}
