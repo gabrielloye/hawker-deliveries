@@ -81,8 +81,8 @@ class Main extends Component<Props, State> {
         <CartContext.Provider value ={this.state}>
           <Menubar pathName={this.props.match.url} {...this.props}></Menubar>
           <Switch>
-          <Route exact path={`${this.props.match.url}/product/:productId`} render={(props) => <Store {...props}/>}/>
-          <Route path={`${this.props.match.url}/cart`}>
+          <Route exact path={`${this.props.match.path}/product/:productId`} render={(props) => <Store {...props}/>}/>
+          <Route path={`${this.props.match.path}/cart`}>
             <CartPage pathName={this.props.match.url}/>
           </Route>
           <PrivateRoute exact path='/main/dashboard' component={Dashboard}/>

@@ -69,7 +69,8 @@ type State = {
 type Props = {
   match: {
     params: {
-        productId: number
+        productId: number,
+        date: string
     }
   }
 }
@@ -80,6 +81,10 @@ class Store extends Component<Props, State> {
     //store: stores[this.props.match.params.productId - 1],
     store: stores[0]
   };
+
+  componentDidMount() {
+    console.log(this.props.match)
+  }
 
   render() {
     return (
