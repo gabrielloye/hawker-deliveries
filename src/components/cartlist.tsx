@@ -40,7 +40,7 @@ class CartList extends React.Component<Props> {
       return (
         <React.Fragment>
           <Header size="huge" style={{ paddingBottom: '2vh' }}>Cart</Header>
-          <Card.Group itemsPerRow="2" stackable style={{paddingBottom: '20%'}}>
+          <Card.Group itemsPerRow="2" stackable style={{paddingBottom: '15%'}}>
             { this.displayListPosts() }
           </Card.Group>
         </React.Fragment>
