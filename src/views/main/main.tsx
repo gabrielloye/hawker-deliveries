@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import "semantic-ui-css/semantic.min.css";
 
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 import { Container } from "semantic-ui-react";
 
@@ -12,10 +12,13 @@ import HawkerList from '../../components/hawkerlist'
 
 import API from '../../components/axiosapi';
 
+import PrivateRoute from '../../navigation/private-route'
+
 import { CartItem, CartContext } from '../../components/cartcontext';
 import Menubar from "../../components/menubar";
 import Store from "../store/store";
 import CartPage from "../cartpage/cartpage";
+import Dashboard from "../dashboard/dashboard";
 import Checkout from "../checkout/checkout";
 
 type State = {};
@@ -64,26 +67,30 @@ class Main extends Component<Props, State> {
     //   .catch(error => {
     //     console.log(error)
     // })
-    // let cartString = localStorage.getItem('cart') || '';
-    // if (cartString.length != 0) {
-    //   this.setState({
-    //     cart: JSON.parse(cartString)
-    //   });
-    // }
+    let cartString = localStorage.getItem('cart') || '';
+    if (cartString.length != 0) {
+      this.setState({
+        cart: JSON.parse(cartString)
+      });
+    }
   }
 
   render() {
     return (
       <div className="App">
         <CartContext.Provider value ={this.state}>
-          <Menubar pathName={this.props.match.url}></Menubar>
+          <Menubar pathName={this.props.match.url} {...this.props}></Menubar>
+          <Switch>
+          <Route exact path={`${this.props.match.path}/product/:productId`} render={(props) => <Store {...props}/>}/>
+          <Route path={`${this.props.match.path}/cart`}>
+            <CartPage pathName={this.props.match.url}/>
+          </Route>
+          <PrivateRoute exact path='/main/dashboard' component={Dashboard}/>
+          <PrivateRoute exact path={`${this.props.match.url}/dashboard`} component={Dashboard} />
           <Container>
             <Route exact path={`${this.props.match.path}`} render={(props) => <HawkerList {...props}/>}/>
           </Container>
-          <Route exact path={`${this.props.match.url}/product/:productId`} render={(props) => <Store {...props}/>}/>
-          <Route path={`${this.props.match.url}/cart`}>
-            <CartPage pathName={this.props.match.url}/>
-          </Route>
+          </Switch>
           <Route path={`${this.props.match.path}/checkout`} render={(props) => <Checkout {...props}/>}/>
         </CartContext.Provider>
       </div>

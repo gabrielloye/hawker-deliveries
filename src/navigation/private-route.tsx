@@ -9,7 +9,6 @@ import { AUTH_USER_TOKEN_KEY } from '../auth/Utils/constants';
 
 const PrivateRoute = ({ component: Component, ...rest }: any & { component: any }) => {
   const checkUserAuth = validateToken(localStorage.getItem(AUTH_USER_TOKEN_KEY));
-
   return (
     <Route
       {...rest}

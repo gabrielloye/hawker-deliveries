@@ -84,7 +84,7 @@ class LoginContainer extends React.Component<Props, State> {
                 }
               ]
             })(
-              <Input prefix={<Icon type="user" style={{ color: colors.transparentBlack }} />} placeholder="Username" />
+              <Input prefix={<Icon type="user" style={{ color: colors.transparentBlack }} />} placeholder="Phone number" />
             )}
           </Form.Item>
           <Form.Item>
