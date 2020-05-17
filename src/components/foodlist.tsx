@@ -13,8 +13,6 @@ export interface FoodItem {
 }
 
 type Props = {
-    name: string;
-    address: string;
     store: Array<FoodItem>;
 }
 
@@ -55,28 +53,23 @@ class FoodList extends React.Component<Props> {
   ]
 
   displayListPosts = () =>
-    this.props.store.map((el : FoodItem) => (
-      <Card
-        image={ el.image }
-        header={ el.name }
-        meta= { `$${el.price.toFixed(2)}` }
-        description={el.description}
-        extra={ <ProductQuantity item={el} quantity={0}></ProductQuantity> }
-        fluid={ true }
-      />
-    ));
+    this.props.store.map((el : FoodItem) => {
+      const image = el.image!=="" ? el.image : "https://hawker-images.s3-ap-southeast-1.amazonaws.com/generic_images/placeholder.png"
+      return (
+        <Card
+          image={ image }
+          header={ el.name }
+          meta= { `$${el.price.toFixed(2)}` }
+          description={el.description}
+          extra={ <ProductQuantity item={el} quantity={0}></ProductQuantity> }
+          fluid={ true }
+        />
+      )
+    });
 
   render() {
     return (
-      <React.Fragment>
-        <Container text textAlign="center">
-          <Header size="huge">{this.props.name}</Header>
-          <p className="lead">
-            { this.props.address }
-          </p>
-          <Tab menu={{ attached: false, tabular: false, widths: 3 }} panes={this.renderTabPanes()}/>
-        </Container> 
-      </React.Fragment>
+      <Tab menu={{ attached: false, tabular: false, widths: 3 }} panes={this.renderTabPanes()}/>
     )
   }
 }

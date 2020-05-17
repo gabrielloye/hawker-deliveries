@@ -134,7 +134,7 @@ class HawkerList extends React.Component<Props, State> {
   }
 
   fetchListing = (date: Moment) => {
-    const promise: Promise<Listing> = axios.get("https://hb65mr6g85.execute-api.ap-southeast-1.amazonaws.com/dev/listings/"+date.format("DDMMYYYY"))
+    const promise: Promise<any> = axios.get("https://hb65mr6g85.execute-api.ap-southeast-1.amazonaws.com/dev/listings/"+date.format("DDMMYYYY"))
     return promise
   }
 

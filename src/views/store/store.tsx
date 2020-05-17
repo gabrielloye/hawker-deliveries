@@ -2,68 +2,20 @@ import React, { Component } from 'react';
 
 import "semantic-ui-css/semantic.min.css";
 
-import { Label, Menu, Tab } from 'semantic-ui-react';
-
+import axios from 'axios';
 import './store.css';
 import FoodList, { FoodItem } from "../../components/foodlist";
-
-interface storeInfo {
-  name : string;
-  address : string;
-  about : string;
-  itemList : Array<FoodItem>;
-}
-
-const stores : storeInfo[] = [
-  {
-    name: "Da Xi Hainanese Chicken Rice",
-    address: "21 Tanglin Road",
-    about: "Traditional chicken rice shop",
-    itemList: [
-        {
-            id: "1",
-            name: "Roasted Chicken Rice",
-            image: "https://hawker-images.s3-ap-southeast-1.amazonaws.com/dummyimages/e5d685f5e24f9837e7dd22e2f8e1c617.jpg",
-            price: 3.50,
-            description: "Fragrant chicken rice with roasted chicken"
-        },
-        {
-          id: "2",
-          name: "Steamed Chicken Rice",
-          image: "https://hawker-images.s3-ap-southeast-1.amazonaws.com/dummyimages/chickenrice_566x424_fillbg_1b71b0de73.jpg",
-          price: 4.00,
-          description: "Fragrant chicken rice with roasted chicken"
-      },
-      {
-        id: "3",
-        name: "Thai Lemon Chicken Rice",
-        image: "https://hawker-images.s3-ap-southeast-1.amazonaws.com/dummyimages/2ebbb4a1a5e741b771f61620518_original_.jpg",
-        price: 4.50,
-        description: "Fragrant chicken rice with roasted chicken"
-    },
-    ]
-  },
-  {
-    name: "Ta Lu Prawn Noodles Stall",
-    address: "21 Tanglin Road",
-    about: "Traditional chicken rice shop",
-    itemList: []
-  },
-  {
-    name: "Wei Yi Laksa",
-    address: "21 Tanglin Road",
-    about: "Traditional chicken rice shop",
-    itemList: []
-  }
-]
+import { Container, Header, Loader } from 'semantic-ui-react';
 
 type State = {
-  store: {
-    name: string,
-    address: string,
-    about: string,
-    itemList: Array<any>
-  }
+  name: string,
+  image: string,
+  stallId: string,
+  stallNo: string,
+  type: string[],
+  food: any[],
+  contact: any,
+  about: any
 }
 
 type Props = {
@@ -78,24 +30,50 @@ type Props = {
 
 class Store extends Component<Props, State> {
   state = {
-    //store: stores[this.props.match.params.productId - 1],
-    store: stores[0]
+    name: "",
+    image: "",
+    stallId: "",
+    stallNo: "",
+    type: [],
+    food: [],
+    contact: {},
+    about: {}
   };
 
   componentDidMount() {
-    console.log(this.props.match)
+    const promise: Promise<any> = axios.get(`https://hb65mr6g85.execute-api.ap-southeast-1.amazonaws.com/dev/listings/${this.props.match.params.date}/stall/${this.props.match.params.productId}`)
+    promise.then((res) => {
+      const data = res['data']
+      console.log(data)
+      this.setState({
+        name: data['name'],
+        image: data['image'],
+        stallId: data['stallId'],
+        stallNo: data['stallNo'],
+        type: data['type'],
+        food: data['food'],
+        contact: data['contact'],
+        about: data['about']
+      })
+    })
   }
 
   render() {
-    return (
-      <div className="App">
-        <FoodList 
-          name={this.state.store.name} 
-          address={this.state.store.address}
-          store={this.state.store.itemList}
-        />
-    </div>
-    );
+    if (this.state.name) {
+      return (
+        <div className="App">
+          <Container text textAlign="center">
+            <Header size="huge">{this.state.name}</Header>
+            <p className="lead">
+              #{ this.state.stallNo }
+            </p>
+            <FoodList store={this.state.food}/>
+          </Container>
+      </div>
+      );
+    } else {
+      return <Loader active>Loading</Loader>
+    }
   }
 }
   
