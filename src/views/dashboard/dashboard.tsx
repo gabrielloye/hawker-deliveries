@@ -5,14 +5,14 @@ import moment from 'moment';
 import { AUTH_USER_TOKEN_KEY } from '../../auth/Utils/constants';
 import { Auth } from "aws-amplify";
 import { notification } from "antd";
+import API from '../../components/axiosapi';
 import "semantic-ui-css/semantic.min.css";
 
 type Order = {
     date: string,
-    name: string,
-    code: string,
-    total_cost: number,
-    items: any[]
+    meal: string,
+    totalPrice: number,
+    cart: any[]
 }
 
 type state = {
@@ -28,7 +28,7 @@ type state = {
 
 export default class Dashboard extends Component<RouteComponentProps, state> {
     state = {
-        activeItem: "summary",
+        activeItem: "orders",
         render: false,
         name: "",
         user_id: "",
@@ -45,7 +45,7 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
                 name: res['name'],
                 user_id: res['sub'],
                 email: res['email'],
-                phone_number: res['phone_number'].substring(1,)
+                phone_number: res['phone_number']
             })
             this.fetchOrders(res['sub'])
         })
@@ -53,63 +53,18 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
 
     fetchOrders(userId: string) {
         // Fetch orders for userId and set state here
-        const pastOrders = [
-            {
-                "date": "15052020",
-                "name": "Tanglin Halt Market",
-                "code": "THM",
-                "total_cost": 6.7,
-                "items": [
-                    {
-                        "name": "Ice Milo",
-                        "price": 1.7
-                    },
-                    {
-                        "name": "Prawn Noodle",
-                        "price": 5
-                    }
-                ]
-            },
-            {
-                "date": "14052020",
-                "name": "Telok Blangah Rise Market & Food Centre",
-                "code": "TBR",
-                "total_cost": 4.4,
-                "items": [
-                    {
-                        "name": "Tea w Milk",
-                        "price": 0.9
-                    },
-                    {
-                        "name": "Steamed Chicken Rice",
-                        "price": 3.5
-                    }
-                ]
-            }
-        ]
-        const currentOrders = [
-            {
-                "date": moment().format("DDMMYYYY"),
-                "name": "Tanglin Halt Market",
-                "code": "THM",
-                "total_cost": 1.9,
-                "items": [
-                    {
-                        "name": "Coffee 'O'",
-                        "price": 0.7
-                    },
-                    {
-                        "name": "Fried Bee Hoon",
-                        "price": 1.2
-                    }
-                ]
-            }
-        ]
-        this.setState({
-            render: true,
-            pastOrders,
-            currentOrders
-        })
+        API.post('/transactions/user', {
+            "awsId": this.state.user_id
+        }).then(res => {
+            const transactions = res['data']['transactions']
+            const pastOrders = transactions.filter((transaction: any) => transaction.paid)
+            const currentOrders = transactions.filter((transaction: any) => !transaction.paid)
+            this.setState({
+                render: true,
+                pastOrders,
+                currentOrders
+            })
+        })        
     }
 
     handleItemClick = (e: any, { name }: any) => this.setState({ activeItem: name })
@@ -128,20 +83,47 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
 
     renderSummaryContent() {
         if(this.state.render) {
+            const getTotalItems = () => {
+                let sum = 0
+                let order: Order
+                for (order of this.state.pastOrders) {
+                    sum += order['cart'].length;
+                }
+                for (order of this.state.currentOrders) {
+                    sum += order['cart'].length;
+                }
+                return sum
+            }
+            const getUniqueHawkers = () => {
+                const set = new Set()
+                let order: Order
+                let item
+                for (order of this.state.pastOrders) {
+                    for (item of order['cart']) {
+                        set.add(item['stallId'])
+                    };
+                }
+                for (order of this.state.currentOrders) {
+                    for (item of order['cart']) {
+                        set.add(item['stallId'])
+                    };
+                }
+                return set.size
+            }
             return (
                 <div>
                     <h2>Orders Summary</h2>
                     <Statistic.Group size="large">
                         <Statistic>
-                            <Statistic.Value>0</Statistic.Value>
+                            <Statistic.Value>{getTotalItems()}</Statistic.Value>
                             <Statistic.Label>Items ordered</Statistic.Label>
                         </Statistic>
                         <Statistic>
-                            <Statistic.Value>0</Statistic.Value>
+                            <Statistic.Value>{this.state.pastOrders.length + this.state.currentOrders.length}</Statistic.Value>
                             <Statistic.Label>Orders placed</Statistic.Label>
                         </Statistic>
                         <Statistic>
-                            <Statistic.Value>0</Statistic.Value>
+                            <Statistic.Value>{getUniqueHawkers()}</Statistic.Value>
                             <Statistic.Label>Hawker Stalls</Statistic.Label>
                         </Statistic>
                         <Statistic>
@@ -183,24 +165,27 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
     }
 
     ordersList(orders: Order[]) {
+        const Capitalize = (str: string) => {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
         return (
             <List relaxed animated selection>
                 {orders.map((order: Order) => (
                     <Modal size="small" trigger={
                     <List.Item>
                         <List.Content floated='right'>
-                            ${order['total_cost'].toFixed(2)}
+                            ${order['totalPrice'].toFixed(2)}
                         </List.Content>
                         <List.Content>
                             <List.Header>{moment(order['date'], "DDMMYYYY").format("DD-MM-YYYY")}</List.Header>
-                            {order['name']}
+                            {Capitalize(order['meal'])}
                         </List.Content>
                     </List.Item>} closeIcon>
                         <Modal.Header>Order on {moment(order['date'], "DDMMYYYY").format("DD-MM-YYYY")}</Modal.Header>
                         <Modal.Content>
                             
                             <List ordered>
-                                {order['items'].map((item) => (
+                                {order['cart'].map((item) => (
                                     <List.Item>
                                         <List.Content floated='right'>
                                             ${item['price'].toFixed(2)}
@@ -215,7 +200,7 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
                             <List>
                                 <List.Item>
                                     <List.Content floated="right">
-                                        ${order['total_cost'].toFixed(2)}
+                                        ${order['totalPrice'].toFixed(2)}
                                     </List.Content>
                                     <List.Content>
                                         Total Cost:
@@ -234,13 +219,17 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
             return (
                 <div>
                     <Divider horizontal>
-                        <Header as='h2'>Current Orders</Header>
+                        <Header as='h2'>Pending Orders</Header>
                     </Divider>
-                    {this.ordersList(this.state.currentOrders)}
+                    {this.state.currentOrders.length>0?
+                        this.ordersList(this.state.currentOrders):
+                        <Header as='h3'>There are no pending orders</Header>}
                     <Divider horizontal>
                         <Header as='h2'>Past Orders</Header>
                     </Divider>
-                    {this.ordersList(this.state.pastOrders)}
+                    {this.state.pastOrders.length>0?
+                        this.ordersList(this.state.pastOrders):
+                        <Header as='h3'>You have no past orders</Header>}
                 </div>
             )
         } else {
@@ -258,12 +247,12 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
                     <Grid.Column width={2}>
                         <Menu vertical fluid tabular>
                             <Menu.Item
-                                name="summary"
-                                active={this.state.activeItem === 'summary'}
-                                onClick={this.handleItemClick}/>
-                            <Menu.Item
                                 name="orders"
                                 active={this.state.activeItem === 'orders'}
+                                onClick={this.handleItemClick}/>
+                            <Menu.Item
+                                name="summary"
+                                active={this.state.activeItem === 'summary'}
                                 onClick={this.handleItemClick}/>
                             <Menu.Item
                                 name="logout"
@@ -280,12 +269,12 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
                     <Grid.Column width={16}>
                         <Menu pointing fluid>
                             <Menu.Item
-                                name="summary"
-                                active={this.state.activeItem === 'summary'}
-                                onClick={this.handleItemClick}/>
-                            <Menu.Item
                                 name="orders"
                                 active={this.state.activeItem === 'orders'}
+                                onClick={this.handleItemClick}/>
+                            <Menu.Item
+                                name="summary"
+                                active={this.state.activeItem === 'summary'}
                                 onClick={this.handleItemClick}/>
                             <Menu.Item
                                 position="right"

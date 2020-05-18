@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Auth } from 'aws-amplify';
-import { Form, Icon, Spin, Input, Button, notification, Col, Row } from 'antd';
+import { Select, Form, Icon, Spin, Input, Button, notification, Col, Row } from 'antd';
 
 /** Presentational */
 import FormWrapper from '../../Styled/FormWrapper';
@@ -11,6 +11,8 @@ import { colors } from '../../Themes/Colors';
 
 /** App constants */
 import { AUTH_USER_TOKEN_KEY } from '../../Utils/constants';
+
+const { Option } = Select;
 
 type Props = RouteComponentProps & {
   form: any;
@@ -28,13 +30,14 @@ class LoginContainer extends React.Component<Props, State> {
   handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    this.props.form.validateFields((err: Error, values: { username: string; password: string }) => {
+    this.props.form.validateFields((err: Error, values: { username: string; password: string, prefix: string }) => {
+      console.log(values)
       if (!err) {
-        let { username, password } = values;
+        let { username, password, prefix } = values;
 
         this.setState({ loading: true });
 
-        Auth.signIn("+" + String(username), password)
+        Auth.signIn(prefix + String(username), password)
           .then(user => {
             const { history, location } = this.props;
             const from = '/'
@@ -69,6 +72,15 @@ class LoginContainer extends React.Component<Props, State> {
     const { getFieldDecorator } = this.props.form;
     const { loading } = this.state;
 
+    const prefixSelector = getFieldDecorator('prefix', {
+      initialValue: '+65',
+    })(
+      <Select style={{ width: 70 }}>
+        <Option value="+65">+65</Option>
+        <Option value="+">+</Option>
+      </Select>,
+    );
+
     return (
       <React.Fragment>
         <FormWrapper onSubmit={this.handleSubmit} className="login-form">
@@ -80,11 +92,14 @@ class LoginContainer extends React.Component<Props, State> {
               rules: [
                 {
                   required: true,
-                  message: 'Please input your username!'
+                  message: 'Please input your phone number!'
                 }
               ]
             })(
-              <Input prefix={<Icon type="user" style={{ color: colors.transparentBlack }} />} placeholder="Phone number" />
+              <Input
+                addonBefore={prefixSelector}
+                prefix={<Icon type="phone" style={{ color: colors.transparentBlack }} />}
+                placeholder="Phone number" />
             )}
           </Form.Item>
           <Form.Item>

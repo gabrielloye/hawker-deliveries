@@ -1,13 +1,22 @@
 import * as React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { Auth } from 'aws-amplify';
-import { Form, Input, Icon, Button, notification, Popover, Spin, Col, Row } from 'antd';
+import API from '../../../components/axiosapi'
+import { Select, Form, Input, Icon, Button, notification, Popover, Spin, Col, Row } from 'antd';
 
 /** Presentational */
 import FormWrapper from '../../Styled/FormWrapper';
 
 /** App theme */
 import { colors } from '../../Themes/Colors';
+
+const { Option } = Select;
+
+interface ISignUpResult {
+  user: any;
+  userConfirmed: boolean;
+  userSub: string;
+}
 
 type Props = {
   form: any;
@@ -19,6 +28,7 @@ type State = {
   loading: boolean;
   email: string;
   phoneNumber: number;
+  prefix: string
 };
 
 type UserFormData = {
@@ -27,6 +37,7 @@ type UserFormData = {
   password: string;
   email: string;
   phoneNumber: number;
+  prefix: string
 };
 
 const passwordValidator = require('password-validator');
@@ -52,7 +63,8 @@ class SignUpContainer extends React.Component<Props, State> {
     redirect: false,
     loading: false,
     email: '',
-    phoneNumber: 0
+    phoneNumber: 0,
+    prefix: "+"
   };
 
   /**
@@ -92,30 +104,40 @@ class SignUpContainer extends React.Component<Props, State> {
 
     this.props.form.validateFieldsAndScroll((err: Error, values: UserFormData) => {
       if (!err) {
-        let { fname, lname, password, email, phoneNumber } = values;
+        let { fname, lname, password, email, phoneNumber, prefix } = values;
         // show loader
         this.setState({ loading: true });
         Auth.signUp({
-          username: "+" + String(phoneNumber),
+          username: prefix + String(phoneNumber),
           password,
           attributes: {
             email,
             name: `${fname} ${lname}`,
-            phone_number: "+" + String(phoneNumber)
+            phone_number: prefix + String(phoneNumber)
           }
         })
-          .then(() => {
-            notification.success({
-              message: 'Succesfully signed up user!',
-              description: 'Account created successfully, Redirecting you in a few!',
-              placement: 'topRight',
-              duration: 3,
-              onClose: () => {
-                this.setState({ redirect: true });
-              }
-            });
-            this.setState({ email });
-            this.setState({ phoneNumber })
+          .then((result: ISignUpResult) => {
+            const body= {
+              awsId: result.userSub,
+              name: `${fname} ${lname}`,
+              phone: prefix + String(phoneNumber),
+              email: email,
+              payment: []
+            }
+            API.post("users/add", body).then(() => {
+              notification.success({
+                message: 'Succesfully signed up user!',
+                description: 'Account created successfully, Redirecting you in a few!',
+                placement: 'topRight',
+                duration: 3,
+                onClose: () => {
+                  this.setState({ redirect: true });
+                }
+              });
+              this.setState({ email });
+              this.setState({ phoneNumber });
+              this.setState({ prefix })
+            })
           })
           .catch(err => {
             console.log(err)
@@ -196,10 +218,25 @@ class SignUpContainer extends React.Component<Props, State> {
         </ul>
       </React.Fragment>
     );
+    const prefixSelector = getFieldDecorator('prefix', {
+      initialValue: '+65',
+    })(
+      <Select style={{ width: 70 }}>
+        <Option value="+65">+65</Option>
+        <Option value="+">+</Option>
+      </Select>,
+    );
+
+    const homeStyle = {
+      paddingBottom: "1em"
+    }
 
     return (
       <React.Fragment>
         <FormWrapper onSubmit={this.handleSubmit}>
+          <div style={homeStyle}>
+            <Link to="/"><Icon type="home"/> Home</Link>
+          </div>
           <Form.Item>
             {getFieldDecorator('fname', {
               rules: [
@@ -242,6 +279,7 @@ class SignUpContainer extends React.Component<Props, State> {
               ]
             })(
               <Input
+                addonBefore={prefixSelector}
                 prefix={<Icon type="phone" style={{ color: colors.transparentBlack }} /> }
                 placeholder="Phone Number"
               />
@@ -303,7 +341,7 @@ class SignUpContainer extends React.Component<Props, State> {
           <Redirect
             to={{
               pathname: '/verify-code',
-              search: `?phone=+${this.state.phoneNumber}`
+              search: `?phone=${this.state.prefix}${this.state.phoneNumber}`
             }}
           />
         )}
