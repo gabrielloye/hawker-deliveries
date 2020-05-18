@@ -4,7 +4,7 @@ import CSS from 'csstype';
 
 import "semantic-ui-css/semantic.min.css";
 
-import { Button, Container, Grid, Header, Icon, Menu, Segment, TransitionablePortal } from 'semantic-ui-react';
+import { Button, Container, Grid, Header, Icon, Menu, Segment, ButtonProps, TransitionablePortal, Popup } from 'semantic-ui-react';
 
 import { CartContext, CartItem } from './cartcontext';
 
@@ -16,6 +16,7 @@ type State = {}
 type Props = {
     item: FoodItem;
     quantity: number;
+    maxQuantity: number;
 }
 
 const pStyle: CSS.Properties = {
@@ -50,7 +51,12 @@ class ProductQuantity extends Component<Props, State> {
    */
   addQuantity = () => {
     let currQuantity = this.state.quantity + 1;
-    let isMax = currQuantity === 10;
+    let isMax = false;
+    if (this.props.maxQuantity !== -1) {
+      isMax = currQuantity === this.props.maxQuantity;
+    } else {
+      isMax = currQuantity === 100;
+    }
     this.setState({
       quantity: currQuantity,
       isMinQuantity: false,
@@ -86,15 +92,31 @@ class ProductQuantity extends Component<Props, State> {
             &#8722;
           </Button>
           <strong> {this.state.quantity}  </strong>
+          <Popup
+           content={"Sorry, the maximum quantity of the item for the day has been reached."}
+           disabled={!this.state.isMaxQuantity}
+           inverted
+           on={["hover", "click"]}
+           key={`${this.props.item.id}`}
+           trigger = {
           <Button
             icon
             basic
             toggle
             style={pStyle}
-            disabled={this.state.isMaxQuantity}           
-            onClick={ this.addQuantity }>
+            onClick={ 
+              (event: React.FormEvent<HTMLButtonElement>, data: ButtonProps) => {
+                if (this.state.isMaxQuantity) {
+                  event.preventDefault()
+                } else {
+                  this.addQuantity()
+                }
+              }
+             }>
             &#43;
           </Button>
+           }
+           />
         </div>
         <br/>
         <CartContext.Consumer>

@@ -52,7 +52,7 @@ class Main extends Component<Props, State> {
       if (isAdd && !isExists) {
         newCart.push(item);
       }
-      localStorage.setItem('cart', JSON.stringify(newCart));
+      localStorage.setItem('cart' + this.props.match.params.date, JSON.stringify(newCart));
       this.setState({
         cart: newCart
       })
@@ -67,7 +67,7 @@ class Main extends Component<Props, State> {
     //   .catch(error => {
     //     console.log(error)
     // })
-    let cartString = localStorage.getItem('cart') || '';
+    let cartString = localStorage.getItem('cart' + this.props.match.params.date) || '';
     if (cartString.length != 0) {
       this.setState({
         cart: JSON.parse(cartString)

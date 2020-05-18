@@ -10,6 +10,7 @@ export interface FoodItem {
     image: string;
     price: number;
     description: string;
+    quantity: number;
 }
 
 type Props = {
@@ -61,7 +62,7 @@ class FoodList extends React.Component<Props> {
           header={ el.name }
           meta= { `$${el.price.toFixed(2)}` }
           description={el.description}
-          extra={ <ProductQuantity item={el} quantity={0}></ProductQuantity> }
+          extra={ <ProductQuantity maxQuantity={el.quantity} item={el} quantity={0}></ProductQuantity> }
           fluid={ true }
         />
       )
