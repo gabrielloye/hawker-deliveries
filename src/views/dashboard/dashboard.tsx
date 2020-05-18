@@ -223,13 +223,14 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
                     </Divider>
                     {this.state.currentOrders.length>0?
                         this.ordersList(this.state.currentOrders):
-                        <Header as='h3'>There are no pending orders</Header>}
+                        <Header textAlign="center" as='h3'>There are no pending orders</Header>}
                     <Divider horizontal>
                         <Header as='h2'>Past Orders</Header>
                     </Divider>
                     {this.state.pastOrders.length>0?
                         this.ordersList(this.state.pastOrders):
-                        <Header as='h3'>You have no past orders</Header>}
+                        <Header textAlign="center" as='h3'>You have no past orders</Header>}
+                    <Divider hidden/>
                 </div>
             )
         } else {

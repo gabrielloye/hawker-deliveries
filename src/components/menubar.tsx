@@ -75,7 +75,7 @@ class Menubar extends Component<Props, State> {
             <Container>
               <Link to="/">
                 <Menu.Item header as="a" >
-                  Hawker Deliveries
+                  HawkerJio
                 </Menu.Item>
               </Link>
               <Link to={pathName}>
@@ -105,7 +105,7 @@ class Menubar extends Component<Props, State> {
           <Menu borderless fluid inverted size="huge">
             <Link to="/">
               <Menu.Item header as="a">
-                Hawker Deliveries
+                HawkerJio
               </Menu.Item>
             </Link>              
             <Menu.Menu position="right">

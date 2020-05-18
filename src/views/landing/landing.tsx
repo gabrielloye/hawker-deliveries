@@ -24,7 +24,7 @@ class LandingPage extends Component {
         <Segment inverted vertical textAlign="center">
           <Container as="nav">
             <Header inverted as="h1">
-              Hawker Deliveries
+              HawkerJio
             </Header>
             <Menu borderless compact inverted>
               <Menu.Item active>Home</Menu.Item>
@@ -45,8 +45,8 @@ class LandingPage extends Component {
           </Container>
           <Segment inverted vertical as="footer">
             by{" "}
-            <a href="">
-              @Hawker Deliveries
+            <a href="https://github.com/gabrielloye/hawker-deliveries">
+              @HawkerJio Team
             </a>
           </Segment>
         </Segment>

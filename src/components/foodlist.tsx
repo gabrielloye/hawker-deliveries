@@ -3,6 +3,7 @@ import { Card, Image } from 'semantic-ui-react'
 import { Tab, Label, Button, Container, Grid, Header, Icon, Menu } from "semantic-ui-react";
 import ProductQuantity from './productquantity';
 import SimpleSlider from './abouthawker'
+import './hawkerlist.css';
 
 export interface FoodItem {
     id: string;
@@ -58,13 +59,17 @@ class FoodList extends React.Component<Props> {
       const image = el.image!=="" ? el.image : "https://hawker-images.s3-ap-southeast-1.amazonaws.com/generic_images/placeholder.png"
       return (
         <Card
-          image={ image }
-          header={ el.name }
-          meta= { `$${el.price.toFixed(2)}` }
-          description={el.description}
-          extra={ <ProductQuantity maxQuantity={el.quantity} item={el} quantity={0}></ProductQuantity> }
-          fluid={ true }
-        />
+          fluid={ true }>
+          <div className="listingImage" style={{"backgroundImage":`url(${image})`}}></div>
+          <Card.Content>
+            <Card.Header>{ el.name }</Card.Header>
+            <Card.Meta>{`$${el.price.toFixed(2)}`}</Card.Meta>
+            <Card.Description>{el.description}</Card.Description>
+          </Card.Content>
+          <Card.Content extra>
+            <ProductQuantity maxQuantity={el.quantity} item={el} quantity={0}></ProductQuantity>
+          </Card.Content>
+        </Card>
       )
     });
 
