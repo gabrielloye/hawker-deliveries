@@ -31,7 +31,6 @@ class LoginContainer extends React.Component<Props, State> {
     event.preventDefault();
 
     this.props.form.validateFields((err: Error, values: { username: string; password: string, prefix: string }) => {
-      console.log(values)
       if (!err) {
         let { username, password, prefix } = values;
 
