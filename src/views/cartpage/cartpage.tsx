@@ -26,6 +26,12 @@ import { CartContext, CartItem } from '../../components/cartcontext';
 
 type Props = RouteComponentProps & {
   pathName: string;
+  match: {
+    params: {
+      date: string;
+      meal: string
+    }
+  }
 }
 
 type State = {}
@@ -79,6 +85,10 @@ class Cart extends Component<Props, State> {
   contextRef = createRef()
 
   componentDidMount() {
+    if (!moment(this.props.match.params['date'], "DDMMYYYY").isValid() || this.props.match.params['meal'].length===0) {
+      this.props.history.push('/')
+    }
+
     const checkUserAuth = validateToken(localStorage.getItem(AUTH_USER_TOKEN_KEY));
 
     if (checkUserAuth) {
