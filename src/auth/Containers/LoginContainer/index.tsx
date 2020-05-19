@@ -39,7 +39,7 @@ class LoginContainer extends React.Component<Props, State> {
         Auth.signIn(prefix + String(username), password)
           .then(user => {
             const { history, location } = this.props;
-            const from = '/'
+            const from = '/main/dashboard'
 
             localStorage.setItem(AUTH_USER_TOKEN_KEY, user.signInUserSession.accessToken.jwtToken);
 
