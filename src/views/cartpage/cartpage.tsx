@@ -35,8 +35,8 @@ interface User {
   dateJoined: string;
   email: string;
   name: string;
+  payment: Payment[];
   phone: string;
-  paymentInfo: Payment[];
 }
 
 interface Options {
@@ -64,7 +64,7 @@ let dummyUser: User = {
   email: '',
   name: '',
   phone: '',
-  paymentInfo: []
+  payment: []
 }
 
 class Cart extends Component<Props, State> {
@@ -77,6 +77,24 @@ class Cart extends Component<Props, State> {
   }
 
   contextRef = createRef()
+
+  componentDidMount() {
+    const checkUserAuth = validateToken(localStorage.getItem(AUTH_USER_TOKEN_KEY));
+
+    if (checkUserAuth) {
+      Auth.currentUserInfo().then((resp) => {
+        const res = resp['attributes']
+        this.setState({
+          user_id: res['sub']
+        })
+        API.post(`/users/${res['sub']}`).then(res => {
+          console.log(res['data'])
+          this.setState({ user: res["data"] })
+          console.log(this.state.user)
+        })
+      })
+    }
+  }
 
   totalCost = (cart: CartItem[]) => {
     let cost = 0;
@@ -114,35 +132,27 @@ class Cart extends Component<Props, State> {
 
   getOptions = () => {
     let options: Options[] = []
-    // for (let el of this.state.user.paymentInfo) {
-    //   options.push({
-    //     key: el.method,
-    //     text: el.username,
-    //     value: el.method
-    //   })
-    // }
+    for (let el of this.state.user.payment) {
+      options.push({
+        key: el.method,
+        text: el.username,
+        value: el.method
+      })
+    }
     return options
   }
 
   onPaymentSelect = (event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) => {
     let method: any = data.value;
-    let username: any = data.text;
-    this.setState({ paymentUsername: username })
+    for (let el of this.state.user.payment) {
+      if (el.method === method) {
+    this.setState({ paymentUsername: el.username })
+      }
+    }
     this.setState({ paymentMode: method })
   }
 
   renderCompleteTransaction = (cart: CartItem[], date: string, meal: string) => {
-    Auth.currentUserInfo().then((resp) => {
-      const res = resp['attributes']
-      console.log(res)
-      this.setState({
-        user_id: res['sub']
-      })
-      API.post(`/users/${res['sub']}`).then(res => {
-        this.setState({ user: res["data"] })
-      })
-    })
-    
     let transactionCart: TransactionCart[] = []
     for (let el of cart) {
       transactionCart.push({
@@ -164,9 +174,10 @@ class Cart extends Component<Props, State> {
           options={this.getOptions()}
           onChange={this.onPaymentSelect}
         />
+        <Link to={`${this.props.pathName}/dashboard`}><a style={{ marginTop: '0.2em' }}>Add Payment methods through the dashboard</a></Link>
         <Button
           floated='right'
-          disabled={this.state.paymentMode===''}
+          disabled={this.state.paymentMode === ''}
           style={{ background: "#009628", color: "white", marginTop: '0.5em' }}
           toggle
           onClick={() => {
@@ -178,8 +189,10 @@ class Cart extends Component<Props, State> {
               "paymentUsername": this.state.paymentUsername,
               "meal": meal
             }
-            API.post(`/transactions/add`, body)
-            this.props.history.push(`${this.props.pathName}/dashboard`)
+            console.log(body)
+            API.post(`/transactions/add`, body).then(res => {
+            console.log(res)
+            })
           }}>
           Finish Transaction
         </Button>

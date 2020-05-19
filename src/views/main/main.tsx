@@ -95,7 +95,6 @@ class Main extends Component<Props, State> {
             <Route exact path={`${this.props.match.path}`} render={(props) => <HawkerList {...props}/>}/>
           </Container>
           </Switch>
-          <Route path={`${this.props.match.path}/checkout`} render={(props) => <Checkout {...props}/>}/>
         </CartContext.Provider>
       </div>
     );
