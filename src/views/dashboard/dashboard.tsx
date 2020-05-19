@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, TransitionablePortal, Button, Icon, Label, Input, Modal, Container, Grid, Menu, Segment, Loader, Statistic, Divider, List, Header } from "semantic-ui-react";
+import { DropdownProps, TransitionablePortal, Button, Icon, Label, Input, Modal, Container, Grid, Menu, Segment, Loader, Statistic, Divider, List, Header, Dropdown } from "semantic-ui-react";
 import { RouteComponentProps, withRouter } from 'react-router';
 import moment, {Moment} from 'moment';
 import { AUTH_USER_TOKEN_KEY } from '../../auth/Utils/constants';
@@ -27,8 +27,23 @@ type state = {
     payment: any[],
     dateJoined: Moment,
     paymentFetched: boolean,
-    errorPortal: boolean
+    errorPortal: boolean,
+    newPaymentMethod: any,
+    newPaymentUsername: string
 }
+
+const paymentOptions = [
+    {
+        key: "PayLah!",
+        text: "PayLah!",
+        value: "PayLah!"
+    },
+    {
+        key: "PayNow",
+        text: "PayNow",
+        value: "PayNow"
+    }
+]
 
 export default class Dashboard extends Component<RouteComponentProps, state> {
     state = {
@@ -43,7 +58,9 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
         payment: [],
         dateJoined: moment(),
         paymentFetched: false,
-        errorPortal: false
+        errorPortal: false,
+        newPaymentMethod: "",
+        newPaymentUsername: ""
     }
 
     componentDidMount() {
@@ -316,7 +333,22 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
                                         }}>
                                         <Icon name={payment['disabled']?'edit':'check'} />
                                     </Button>
-                                    <Button negative icon>
+                                    <Button negative icon
+                                        onClick={()=>{
+                                            API.post('/users/payment/delete', {awsId: this.state.user_id, method: payment['method'], username: payment['username']})
+                                                .then((res:any) => {
+                                                    if ("success" in res['data']) {
+                                                        const payments = this.state.payment.filter((p: any) =>
+                                                            p['method'] !== payment['method']
+                                                        )
+                                                        this.setState({payment: payments})
+                                                    } else {
+                                                        this.setState({
+                                                            errorPortal: true
+                                                        })
+                                                    }
+                                                })
+                                        }}>
                                         <Icon name='delete' />
                                     </Button>
                                 </Button.Group>
@@ -344,9 +376,56 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
     }
 
     addPaymentMethod = () => {
-        return (
-            <Input fluid/>
-        )
+        const currentMethods: string[] = this.state.payment.map(payment=>payment['method'])
+        let options: any[] = paymentOptions.filter((option:any) => !currentMethods.includes(option['value']))
+        if (options.length>0) {
+            return (
+                <div>
+                    <Header as='h3'>Add New Payment Method</Header>
+                    <Input fluid
+                        label={
+                            <Dropdown
+                            button
+                            placeholder='Method'
+                            options={options}
+                            value={this.state.newPaymentMethod}
+                            onChange={(e, data) => this.setState({newPaymentMethod: data['value']})}/>
+                        }
+                        value={this.state.newPaymentUsername}
+                        onChange={(e, data) => this.setState({newPaymentUsername: data['value']})}
+                        action={
+                            <Button icon positive
+                                disabled={this.state.newPaymentMethod.length===0 || this.state.newPaymentUsername.length===0}
+                                onClick={(e, data) => {
+                                    API.post('/users/payment/add', {awsId:this.state.user_id, method: this.state.newPaymentMethod, username: this.state.newPaymentUsername})
+                                        .then((res: any) => {
+                                            if ("success" in res['data']) {
+                                                const payments: any[] = this.state.payment
+                                                payments.push({
+                                                    method: this.state.newPaymentMethod,
+                                                    username: this.state.newPaymentUsername,
+                                                    disabled: true,
+                                                    newUsername: this.state.newPaymentUsername
+                                                })
+                                                this.setState({
+                                                    payment:payments,
+                                                    newPaymentMethod: "",
+                                                    newPaymentUsername: ""
+                                                })
+                                            } else {
+                                                this.setState({
+                                                    errorPortal: true
+                                                })
+                                            }
+                                        })
+                                    
+                                }}>
+                                <Icon name="add"/>
+                            </Button>
+                        }/>
+                </div>
+            )
+        }
     }
 
     renderOrdersContent() {
@@ -359,6 +438,7 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
                     {this.state.paymentFetched
                         ?this.paymentMethods()
                         :<Loader active>Loading</Loader>}
+                    <Divider hidden/>
                     {this.state.paymentFetched
                         ?this.addPaymentMethod()
                         :""}
