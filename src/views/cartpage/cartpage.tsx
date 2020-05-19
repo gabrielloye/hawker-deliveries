@@ -88,9 +88,7 @@ class Cart extends Component<Props, State> {
           user_id: res['sub']
         })
         API.post(`/users/${res['sub']}`).then(res => {
-          console.log(res['data'])
           this.setState({ user: res["data"] })
-          console.log(this.state.user)
         })
       })
     }
@@ -146,7 +144,7 @@ class Cart extends Component<Props, State> {
     let method: any = data.value;
     for (let el of this.state.user.payment) {
       if (el.method === method) {
-    this.setState({ paymentUsername: el.username })
+        this.setState({ paymentUsername: el.username })
       }
     }
     this.setState({ paymentMode: method })
@@ -189,12 +187,11 @@ class Cart extends Component<Props, State> {
               "paymentUsername": this.state.paymentUsername,
               "meal": meal
             }
-            console.log(body)
-            API.post(`/transactions/add`, body).then(res => {
-            console.log(res)
-            })
+            API.post(`/transactions/add`, body).then(res =>
+              this.props.history.push(`${this.props.pathName}/dashboard`)
+            )
           }}>
-          Finish Transaction
+            Finish Transaction
         </Button>
       </React.Fragment>)
   }
