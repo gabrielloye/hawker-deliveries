@@ -148,19 +148,6 @@ class HawkerList extends React.Component<Props, State> {
   dateChange = (date: Moment) => {
     if(this.state.date===null || this.state.date.format("DDMMYYYY")!==date.format("DDMMYYYY")) {
       this.props.history.push(`/main/${date.format("DDMMYYYY")}/${this.state.meal}`)
-      // this.setState({ date })
-      // this.setState({visible: false})
-      // this.fetchListing(date).then( (res: any) => {
-      //   const data: Listing = res['data']
-      //   if (data) {
-      //     this.setState({
-      //       listing: data,
-      //       visible: true
-      //     })
-      //   } else {
-      //     this.setState({visible: true})
-      //   }
-      // })
     }
   }
 
@@ -186,8 +173,8 @@ class HawkerList extends React.Component<Props, State> {
           <p className="lead">
             These are the stalls available for
             <Dropdown
-            placeholder='Select Meals'
             compact
+            placeholder='Select Meals'
             selection
             defaultValue={this.state.meal}
             options={mealOptions}

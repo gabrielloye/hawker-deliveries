@@ -10,6 +10,7 @@ export interface FoodItem {
     name: string;
     image: string;
     price: number;
+    margin:number;
     description: string;
     quantity: number;
 }
@@ -64,7 +65,7 @@ class FoodList extends React.Component<Props> {
           <div className="listingImage" style={{"backgroundImage":`url(${image})`}}></div>
           <Card.Content>
             <Card.Header>{ el.name }</Card.Header>
-            <Card.Meta>{`$${el.price.toFixed(2)}`}</Card.Meta>
+            <Card.Meta>{`$${el.price.toFixed(2)}`} + {`$${el.margin.toFixed(2)}`} (Service Fee)</Card.Meta>
             <Card.Description>{el.description}</Card.Description>
           </Card.Content>
           <Card.Content extra>

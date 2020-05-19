@@ -29,9 +29,7 @@ class Checkout extends Component<Props> {
   async componentDidMount() {
     let queryString = this.props.location.search;
     queryString = queryString.split('&')[0];
-    console.log(queryString);
     let accessCode = queryString.split('=')[1];
-    console.log(accessCode);
     let fetchToken = {
           method: 'POST',
           body: `code=${accessCode}&grant_type=authorization_code&redirect_uri=${redirectURI}`,
@@ -42,9 +40,7 @@ class Checkout extends Component<Props> {
               'accept': 'application/json',
           }
     }
-    console.log(fetchToken)
     let response = fetch('https://www.dbs.com/sandbox/api/sg/v1/oauth/tokens', fetchToken);
-    console.log(response);
     this.setState({
         response: response
     })

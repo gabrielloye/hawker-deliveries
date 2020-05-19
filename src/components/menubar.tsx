@@ -62,12 +62,6 @@ class Menubar extends Component<Props, State> {
   render() {
     const pathName = moment(this.props.match.params.date, "DDMMYYYY").isValid() ? this.props.pathName : "/main"
     const checkUserAuth = validateToken(localStorage.getItem(AUTH_USER_TOKEN_KEY));
-    // if (checkUserAuth) {
-    //   Auth.currentAuthenticatedUser()
-    //     .then((res) => {
-    //       console.log(res)
-    //     })
-    // }
     return (
       <div>
         <Grid padded className="tablet computer only">

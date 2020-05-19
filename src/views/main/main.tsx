@@ -10,7 +10,7 @@ import './main.css';
 
 import HawkerList from '../../components/hawkerlist'
 
-import API from '../../components/axiosapi';
+import Footer from '../../components/footer'
 
 import PrivateRoute from '../../navigation/private-route'
 
@@ -78,15 +78,18 @@ class Main extends Component<Props, State> {
       <div className="App">
         <CartContext.Provider value ={this.state}>
           <Menubar pathName={`${this.props.match.url}`} {...this.props}></Menubar>
-          <Switch>
-          <PrivateRoute exact path='/main/dashboard' component={Dashboard}/>
-          <PrivateRoute exact path={`${this.props.match.path}/dashboard`} component={Dashboard} />
-          <Route exact path={`${this.props.match.path}/product/:productId`} render={(props) => <Store {...props}/>}/>
-          <Route path={`${this.props.match.path}/cart`} render={(props) => <CartPage pathName={this.props.match.url} {...props}/>}/>
-          <Container>
-            <Route exact path={`${this.props.match.path}`} render={(props) => <HawkerList {...props}/>}/>
-          </Container>
-          </Switch>
+          <div style={{"minHeight": "100vh", "padding": "1.5rem 2rem 80px 2rem"}}>
+            <Switch>
+              <PrivateRoute exact path='/main/dashboard' component={Dashboard}/>
+              <PrivateRoute exact path={`${this.props.match.path}/dashboard`} component={Dashboard} />
+              <Route exact path={`${this.props.match.path}/product/:productId`} render={(props) => <Store {...props}/>}/>
+              <Route path={`${this.props.match.path}/cart`} render={(props) => <CartPage pathName={this.props.match.url} {...props}/>}/>
+              <Container>
+                <Route exact path={`${this.props.match.path}`} render={(props) => <HawkerList {...props}/>}/>
+              </Container>
+            </Switch>
+          </div>
+          <Footer></Footer>
         </CartContext.Provider>
       </div>
     );

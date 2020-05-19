@@ -5,7 +5,7 @@ import "semantic-ui-css/semantic.min.css";
 import API from '../../components/axiosapi';
 import './store.css';
 import FoodList, { FoodItem } from "../../components/foodlist";
-import { Container, Header, Loader } from 'semantic-ui-react';
+import { Container, Header, Loader, Divider } from 'semantic-ui-react';
 
 type State = {
   name: string,
@@ -71,7 +71,13 @@ class Store extends Component<Props, State> {
       </div>
       );
     } else {
-      return <Loader active>Loading</Loader>
+      return (
+        <div className="App">
+          <Container textAlign="center" style={{"padding": "8em"}}>
+            <Header><Loader active>Loading</Loader></Header>
+          </Container>
+      </div>
+      )
     }
   }
 }

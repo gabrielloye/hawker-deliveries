@@ -66,14 +66,14 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
     componentDidMount() {
         Auth.currentUserInfo().then((resp)=>{
             const res = resp['attributes']
+            this.fetchOrders(res['sub'])
+            this.fetchUser(res['sub'])
             this.setState({
                 name: res['name'],
                 user_id: res['sub'],
                 email: res['email'],
                 phone_number: res['phone_number']
             })
-            this.fetchOrders(res['sub'])
-            this.fetchUser(res['sub'])
         })
     }
 
@@ -94,7 +94,7 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
     fetchOrders(userId: string) {
         // Fetch orders for userId and set state here
         API.post('/transactions/user', {
-            "awsId": this.state.user_id
+            "awsId": userId
         }).then(res => {
             const transactions = res['data']['transactions']
             const pastOrders = transactions.filter((transaction: any) => transaction.paid)
@@ -153,7 +153,7 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
             return (
                 <div>
                     <h2>Orders Summary</h2>
-                    <Statistic.Group size="large">
+                    <Statistic.Group widths={3}>
                         <Statistic>
                             <Statistic.Value>{getTotalItems()}</Statistic.Value>
                             <Statistic.Label>Items ordered</Statistic.Label>
@@ -166,10 +166,10 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
                             <Statistic.Value>{getUniqueHawkers()}</Statistic.Value>
                             <Statistic.Label>Hawker Stalls</Statistic.Label>
                         </Statistic>
-                        <Statistic>
+                        {/* <Statistic>
                             <Statistic.Value>0</Statistic.Value>
                             <Statistic.Label>Hawker Centers</Statistic.Label>
-                        </Statistic>
+                        </Statistic> */}
                     </Statistic.Group>
                     <Divider/>
                     <List relaxed size="large">
@@ -454,7 +454,7 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
     }
 
     renderOrdersContent() {
-        if (this.state.render) {
+        if (this.state.render && this.state.paymentFetched) {
             return (
                 <div>
                     <Divider horizontal>
