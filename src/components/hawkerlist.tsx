@@ -90,7 +90,10 @@ class HawkerList extends React.Component<Props, State> {
   renderCards = () =>{
     if (this.state.listing.stalls.length !== 0) {
       const cards = this.state.listing.stalls.map((stall: Stall) => {
-        const type: string = stall['type'][0].toLowerCase()
+        let type: string = "food"
+        if (stall['type'].length>0) {
+          type = stall['type'][0].toLowerCase()
+        }
         const imageurl = (stall.image !== "") ? stall.image : `https://hawker-images.s3-ap-southeast-1.amazonaws.com/generic_images/stall_${type}.jpg`
         
         return (
