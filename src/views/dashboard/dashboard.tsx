@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { Modal, Container, Grid, Menu, Segment, Loader, Statistic, Divider, List, Header } from "semantic-ui-react";
+import { Form, TransitionablePortal, Button, Icon, Label, Input, Modal, Container, Grid, Menu, Segment, Loader, Statistic, Divider, List, Header } from "semantic-ui-react";
 import { RouteComponentProps, withRouter } from 'react-router';
-import moment from 'moment';
+import moment, {Moment} from 'moment';
 import { AUTH_USER_TOKEN_KEY } from '../../auth/Utils/constants';
 import { Auth } from "aws-amplify";
 import { notification } from "antd";
@@ -23,7 +23,11 @@ type state = {
     email: string,
     phone_number: string,
     pastOrders: Order[],
-    currentOrders: Order[]
+    currentOrders: Order[],
+    payment: any[],
+    dateJoined: Moment,
+    paymentFetched: boolean,
+    errorPortal: boolean
 }
 
 export default class Dashboard extends Component<RouteComponentProps, state> {
@@ -35,7 +39,11 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
         email: "",
         phone_number: "",
         pastOrders: [],
-        currentOrders: []
+        currentOrders: [],
+        payment: [],
+        dateJoined: moment(),
+        paymentFetched: false,
+        errorPortal: false
     }
 
     componentDidMount() {
@@ -48,6 +56,21 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
                 phone_number: res['phone_number']
             })
             this.fetchOrders(res['sub'])
+            this.fetchUser(res['sub'])
+        })
+    }
+
+    fetchUser(userId: string) {
+        API.post('/users/'+userId).then(res => {
+            const data = res.data
+            let payments = data['payment'].map((payment:any)=>{
+                return {...payment, disabled: true, newUsername: payment['username']}
+            })
+            this.setState({
+                payment: payments,
+                dateJoined: moment(data['dateJoined']),
+                paymentFetched: true
+            })
         })
     }
 
@@ -154,6 +177,13 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
                                 {this.state.phone_number}
                             </List.Content>
                         </List.Item>
+                        <List.Item>
+                            <List.Icon name='calendar alternate'/>
+                            <List.Content>
+                                <List.Header>Join Date</List.Header>
+                                {this.state.paymentFetched?this.state.dateJoined.format("DD/MM/YYYY"):""}
+                            </List.Content>
+                        </List.Item>
                     </List>
                 </div>
             )
@@ -214,16 +244,132 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
         )
     }
 
+    toggleEditMethod(method: string) {
+        this.setState({
+            payment: this.state.payment.map((p: any) => {
+                if (p.method === method) {
+                    p['disabled'] = !p['disabled']
+                }
+                return p
+            })
+        })
+    }
+    updatePaymentMethod = (payment: any) => {
+        const body = {
+            awsId: this.state.user_id,
+            method: payment['method'],
+            username: payment['newUsername']
+        }
+        return API.post('/users/payment/update', body)
+    }
+
+    modifyMethodNewUsername = (method: string, newUsername: string) => {
+        this.setState({
+            payment: this.state.payment.map((p: any) => {
+                if (p.method === method) {
+                    p['newUsername'] = newUsername
+                }
+                return p
+            })
+        })
+    }
+    modifyMethodUsername = (method: string, username: string) => {
+        this.setState({
+            payment: this.state.payment.map((p: any) => {
+                if (p.method === method) {
+                    p['username'] = username
+                }
+                return p
+            })
+        })
+    }
+
+    paymentMethods() {
+        if (this.state.payment.length>0) {
+            return (<List>
+                {this.state.payment.map((payment: any) => {
+                    return <List.Item>
+                        <Input fluid
+                            label={
+                                <Label color="black">{payment['method']}</Label>
+                            }
+                            action={
+                                <Button.Group style={{"alignItems": "stretch"}}>
+                                    <Button style={{"borderRadius":"0"}} icon
+                                        color={payment['disabled']?"blue":"green"}
+                                        onClick={()=>{
+                                            if (!payment['disabled'] && payment['username'] !== payment['newUsername']) {
+                                                this.updatePaymentMethod(payment).then(res => {
+                                                    if ("success" in res['data']) {
+                                                        this.modifyMethodUsername(payment['method'], payment['newUsername'])
+                                                    } else {
+                                                        this.setState({
+                                                            errorPortal: true
+                                                        })
+                                                        this.modifyMethodNewUsername(payment['method'], payment['username'])
+                                                    }
+                                                    this.toggleEditMethod(payment['method'])
+                                                })
+                                            } else {
+                                                this.toggleEditMethod(payment['method'])
+                                            }
+                                        }}>
+                                        <Icon name={payment['disabled']?'edit':'check'} />
+                                    </Button>
+                                    <Button negative icon>
+                                        <Icon name='delete' />
+                                    </Button>
+                                </Button.Group>
+                            }
+                            onChange={(e, data) => {
+                                this.modifyMethodNewUsername(payment['method'], data['value'])
+                            }}
+                            style={{"opacity":"1"}}
+                            value={payment['newUsername']}
+                            disabled={payment['disabled']}/>
+                    </List.Item>
+                }
+            )}
+            <TransitionablePortal onClose={()=>{this.setState({errorPortal: false})}} open={this.state.errorPortal}>
+                <Segment
+                    style={{ left: '40%', position: 'fixed', bottom: '5%', zIndex: 1000 }}>
+                    <Header>Error</Header>
+                    <p>There is an error updating your payment information, please try again later.</p>
+                </Segment>
+            </TransitionablePortal>
+            </List>)
+        } else {
+            return <Header textAlign="center" as='h3'>You have not registered any payment methods</Header>
+        }
+    }
+
+    addPaymentMethod = () => {
+        return (
+            <Input fluid/>
+        )
+    }
+
     renderOrdersContent() {
         if (this.state.render) {
             return (
                 <div>
+                    <Divider horizontal>
+                        <Header as='h2'>Payment Methods</Header>
+                    </Divider>
+                    {this.state.paymentFetched
+                        ?this.paymentMethods()
+                        :<Loader active>Loading</Loader>}
+                    {this.state.paymentFetched
+                        ?this.addPaymentMethod()
+                        :""}
+                    <Divider hidden/>
                     <Divider horizontal>
                         <Header as='h2'>Pending Orders</Header>
                     </Divider>
                     {this.state.currentOrders.length>0?
                         this.ordersList(this.state.currentOrders):
                         <Header textAlign="center" as='h3'>There are no pending orders</Header>}
+                    <Divider hidden/>
                     <Divider horizontal>
                         <Header as='h2'>Past Orders</Header>
                     </Divider>
@@ -246,7 +392,7 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
                 <Header as='h1'>Account Dashboard</Header>
                 <Grid centered className="tablet computer only">
                     <Grid.Column width={2}>
-                        <Menu vertical fluid tabular>
+                        <Menu vertical fluid pointing>
                             <Menu.Item
                                 name="orders"
                                 active={this.state.activeItem === 'orders'}
