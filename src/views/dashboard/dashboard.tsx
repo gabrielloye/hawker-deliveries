@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { DropdownProps, TransitionablePortal, Button, Icon, Label, Input, Modal, Container, Grid, Menu, Segment, Loader, Statistic, Divider, List, Header, Dropdown } from "semantic-ui-react";
+import { DropdownProps, TransitionablePortal, Button, Icon, Label, Input, Modal, Container, Grid, Menu, Segment, Loader, Statistic, Divider, List, Header, Dropdown, Message } from "semantic-ui-react";
 import { RouteComponentProps, withRouter } from 'react-router';
 import moment, {Moment} from 'moment';
 import { AUTH_USER_TOKEN_KEY } from '../../auth/Utils/constants';
@@ -81,7 +81,7 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
         API.post('/users/'+userId).then(res => {
             const data = res.data
             let payments = data['payment'].map((payment:any)=>{
-                return {...payment, disabled: true, newUsername: payment['username']}
+                return {...payment, disabled: true, newUsername: payment['username'], warning: false}
             })
             this.setState({
                 payment: payments,
@@ -280,7 +280,7 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
         return API.post('/users/payment/update', body)
     }
 
-    modifyMethodNewUsername = (method: string, newUsername: string) => {
+    modifyMethodNewUsername = (method: string, newUsername: string, warning: boolean, username: string) => {
         this.setState({
             payment: this.state.payment.map((p: any) => {
                 if (p.method === method) {
@@ -289,6 +289,9 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
                 return p
             })
         })
+        if (username !== newUsername) {
+            this.checkMethodUsernameAvailable(method, newUsername, warning)
+        }
     }
     modifyMethodUsername = (method: string, username: string) => {
         this.setState({
@@ -301,12 +304,31 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
         })
     }
 
+    checkMethodUsernameAvailable = (method: string, newUsername: string, warning: boolean) => {
+        API.post('/users/payment/check', {awsId: this.state.user_id, method: method, username: newUsername})
+            .then(res=>{
+                if (res['data']['available'] == warning) {
+                    this.setState({
+                        payment: this.state.payment.map((p: any) => {
+                            if (p.method===method) {
+                                p['warning'] = !p['warning']
+                            }
+                            return p
+                        })
+                    })
+                }
+            })
+    }
+
     paymentMethods() {
         if (this.state.payment.length>0) {
             return (<List>
                 {this.state.payment.map((payment: any) => {
                     return <List.Item>
                         <Input fluid
+                            error = {
+                                payment['warning']
+                            }
                             label={
                                 <Label color="black">{payment['method']}</Label>
                             }
@@ -323,7 +345,7 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
                                                         this.setState({
                                                             errorPortal: true
                                                         })
-                                                        this.modifyMethodNewUsername(payment['method'], payment['username'])
+                                                        this.modifyMethodNewUsername(payment['method'], payment['username'], payment['warning'], payment['username'])
                                                     }
                                                     this.toggleEditMethod(payment['method'])
                                                 })
@@ -354,11 +376,14 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
                                 </Button.Group>
                             }
                             onChange={(e, data) => {
-                                this.modifyMethodNewUsername(payment['method'], data['value'])
+                                this.modifyMethodNewUsername(payment['method'], data['value'], payment['warning'], payment['username'])
                             }}
                             style={{"opacity":"1"}}
                             value={payment['newUsername']}
                             disabled={payment['disabled']}/>
+                        {payment.warning?<Message attached='bottom' negative>
+                            There is another user with this username as well. To avoid any conflicts, we suggest that you modify your username in your payment application!
+                        </Message>:""}
                     </List.Item>
                 }
             )}
