@@ -67,7 +67,7 @@ class Store extends Component<Props, State> {
             <p className="lead">
               #{ this.state.stallNo }
             </p>
-            <FoodList store={this.state.food}/>
+            <FoodList stallId={this.state.stallId} store={this.state.food}/>
           </Container>
       </div>
       );

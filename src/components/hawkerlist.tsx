@@ -1,6 +1,6 @@
 import 'react-dates/initialize';
 import React from "react";
-import { Dimmer, Card } from 'semantic-ui-react'
+import { Dimmer, Card, Dropdown, DropdownProps } from 'semantic-ui-react'
 import { Icon, Container, Header, Transition } from "semantic-ui-react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faIceCream, faCookieBite, faCoffee } from '@fortawesome/free-solid-svg-icons'
@@ -37,14 +37,16 @@ type State = {
   focused: boolean | null;
   date: Moment| null;
   visible: boolean;
-  listing: Listing | null
+  listing: Listing | null;
+  meal: string;
 }
 
 type Props = RouteComponentProps & {
     match: {
       url: string
       params: {
-          date: string
+          date: string;
+          meal : string;
       }
     }
 }
@@ -63,11 +65,12 @@ class HawkerList extends React.Component<Props, State> {
       name: "",
       orderAvailable: false,
       stalls: []
-    }
+    },
+    meal: this.props.match.params.meal
   }
 
   componentDidMount() {
-    if (this.state.date.isValid()){
+    if (this.state.date.isValid()) {
       this.fetchListing(this.state.date).then( (res: any) => {
         const data: Listing = res['data']
         if (data) {
@@ -138,9 +141,13 @@ class HawkerList extends React.Component<Props, State> {
     return promise
   }
 
+  onMealSelect = (event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) => {
+    this.props.history.push(`/main/${this.state.date.format("DDMMYYYY")}/${data.value}`)
+  }
+
   dateChange = (date: Moment) => {
     if(this.state.date===null || this.state.date.format("DDMMYYYY")!==date.format("DDMMYYYY")) {
-      this.props.history.push(`/main/${date.format("DDMMYYYY")}`)
+      this.props.history.push(`/main/${date.format("DDMMYYYY")}/${this.state.meal}`)
       // this.setState({ date })
       // this.setState({visible: false})
       // this.fetchListing(date).then( (res: any) => {
@@ -159,14 +166,33 @@ class HawkerList extends React.Component<Props, State> {
 
   render() {
     if (this.state.listing) {
-
+      let mealOptions = [
+        {
+          key: 'lunch',
+          text: 'Lunch',
+          value: 'lunch'
+        },
+        {
+          key: 'dinner',
+          text: 'Dinner',
+          value: 'dinner'
+        }
+      ]
 
     return (
       <div>
         <Container text textAlign="center">
           <Header size="huge">{this.state.listing.name}</Header>
           <p className="lead">
-            These are the stalls available for Lunch on: 
+            These are the stalls available for
+            <Dropdown
+            placeholder='Select Meals'
+            compact
+            selection
+            defaultValue={this.state.meal}
+            options={mealOptions}
+            onChange={this.onMealSelect}
+          /> on: 
           <SingleDatePicker
             id="2"
             orientation= "horizontal"

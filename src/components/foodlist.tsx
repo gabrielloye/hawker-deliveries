@@ -16,6 +16,7 @@ export interface FoodItem {
 
 type Props = {
     store: Array<FoodItem>;
+    stallId: string;
 }
 
 class FoodList extends React.Component<Props> {
@@ -67,7 +68,7 @@ class FoodList extends React.Component<Props> {
             <Card.Description>{el.description}</Card.Description>
           </Card.Content>
           <Card.Content extra>
-            <ProductQuantity maxQuantity={el.quantity} item={el} quantity={0}></ProductQuantity>
+            <ProductQuantity stallId={this.props.stallId} maxQuantity={el.quantity} item={el} quantity={0}></ProductQuantity>
           </Card.Content>
         </Card>
       )

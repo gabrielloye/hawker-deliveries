@@ -17,6 +17,7 @@ type Props = {
     item: FoodItem;
     quantity: number;
     maxQuantity: number;
+    stallId: string;
 }
 
 const pStyle: CSS.Properties = {
@@ -120,7 +121,7 @@ class ProductQuantity extends Component<Props, State> {
         </div>
         <br/>
         <CartContext.Consumer>
-        {({cart, modifyCart}) => (
+        {({cart, modifyCart, meal}) => (
           <TransitionablePortal
             closeOnTriggerClick
             onOpen={this.handleOpen}
@@ -131,6 +132,8 @@ class ProductQuantity extends Component<Props, State> {
                 disabled={this.state.quantity===0}
                 onClick={() => {
                   let newItem : CartItem = {
+                    id: this.props.item.id,
+                    stallId: this.props.stallId,
                     name: this.props.item.name,
                     image: this.props.item.image,
                     description: this.props.item.description,
@@ -138,7 +141,7 @@ class ProductQuantity extends Component<Props, State> {
                     price: this.props.item.price
                   }
                   this.resetQuantity();
-                  modifyCart(newItem, true);
+                  modifyCart(newItem, true, meal);
                 }}>
                 Add To Cart
               </Button>}>

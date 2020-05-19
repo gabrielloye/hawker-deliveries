@@ -28,15 +28,18 @@ type Props = {
       path: string;
       url: string;
       params: {
-          date: string
+          date: string;
+          meal: string;
       }
     }
 }
 
 class Main extends Component<Props, State> {
   state = {
+    date: this.props.match.params.date,
+    meal: this.props.match.params.meal,
     cart : new Array<CartItem>(),
-    modifyCart: (item : CartItem, isAdd : boolean) => {
+    modifyCart: (item : CartItem, isAdd : boolean, meal: string) => {
       let newCart = this.state.cart;
       let isExists = false;
       for (let i = 0; i < newCart.length; i++) {
@@ -52,9 +55,11 @@ class Main extends Component<Props, State> {
       if (isAdd && !isExists) {
         newCart.push(item);
       }
-      localStorage.setItem('cart' + this.props.match.params.date, JSON.stringify(newCart));
+      localStorage.setItem('cart' + this.props.match.params.date + meal, JSON.stringify(newCart));
       this.setState({
-        cart: newCart
+        date: this.props.match.params.date,
+        cart: newCart,
+        meal: meal
       })
     }
   };
@@ -67,9 +72,10 @@ class Main extends Component<Props, State> {
     //   .catch(error => {
     //     console.log(error)
     // })
-    let cartString = localStorage.getItem('cart' + this.props.match.params.date) || '';
+    let cartString = localStorage.getItem('cart' + this.props.match.params.date + this.state.meal) || '';
     if (cartString.length != 0) {
       this.setState({
+        date: this.props.match.params.date,
         cart: JSON.parse(cartString)
       });
     }
@@ -79,12 +85,10 @@ class Main extends Component<Props, State> {
     return (
       <div className="App">
         <CartContext.Provider value ={this.state}>
-          <Menubar pathName={this.props.match.url} {...this.props}></Menubar>
+          <Menubar pathName={`${this.props.match.url}`} {...this.props}></Menubar>
           <Switch>
           <Route exact path={`${this.props.match.path}/product/:productId`} render={(props) => <Store {...props}/>}/>
-          <Route path={`${this.props.match.path}/cart`}>
-            <CartPage pathName={this.props.match.url}/>
-          </Route>
+          <Route path={`${this.props.match.path}/cart`} render={(props) => <CartPage pathName={this.props.match.url} {...props}/>}/>
           <PrivateRoute exact path='/main/dashboard' component={Dashboard}/>
           <PrivateRoute exact path={`${this.props.match.url}/dashboard`} component={Dashboard} />
           <Container>

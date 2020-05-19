@@ -27,8 +27,8 @@ class CartList extends React.Component<Props> {
               Quantity: <strong>{ el.quantity }</strong>
             </div>
               <CartContext.Consumer>
-                {({cart, modifyCart}) => (
-                  <Button onClick={() => {modifyCart(el, false);}}>
+                {({cart, modifyCart, meal}) => (
+                  <Button onClick={() => {modifyCart(el, false, meal);}}>
                     Remove from Cart
                   </Button>
                 )}
