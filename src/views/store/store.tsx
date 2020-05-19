@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import "semantic-ui-css/semantic.min.css";
 
-import axios from 'axios';
+import API from '../../components/axiosapi';
 import './store.css';
 import FoodList, { FoodItem } from "../../components/foodlist";
 import { Container, Header, Loader } from 'semantic-ui-react';
@@ -41,10 +41,9 @@ class Store extends Component<Props, State> {
   };
 
   componentDidMount() {
-    const promise: Promise<any> = axios.get(`https://hb65mr6g85.execute-api.ap-southeast-1.amazonaws.com/dev/listings/${this.props.match.params.date}/stall/${this.props.match.params.productId}`)
+    const promise: Promise<any> = API.get(`stalls/${this.props.match.params.productId}`)
     promise.then((res) => {
       const data = res['data']
-      console.log(data)
       this.setState({
         name: data['name'],
         image: data['image'],

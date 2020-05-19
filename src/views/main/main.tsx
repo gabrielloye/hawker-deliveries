@@ -19,7 +19,6 @@ import Menubar from "../../components/menubar";
 import Store from "../store/store";
 import CartPage from "../cartpage/cartpage";
 import Dashboard from "../dashboard/dashboard";
-import Checkout from "../checkout/checkout";
 
 type State = {};
 
@@ -65,13 +64,6 @@ class Main extends Component<Props, State> {
   };
 
   componentDidMount() {
-    // axios.post('https://5ppl4eeg57.execute-api.ap-southeast-1.amazonaws.com/dev')
-    //   .then(res => {
-    //     console.log(res)
-    //   })
-    //   .catch(error => {
-    //     console.log(error)
-    // })
     let cartString = localStorage.getItem('cart' + this.props.match.params.date + this.state.meal) || '';
     if (cartString.length != 0) {
       this.setState({

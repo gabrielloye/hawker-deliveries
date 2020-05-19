@@ -1,7 +1,7 @@
 import 'react-dates/initialize';
 import React from "react";
 import { Dimmer, Card, Dropdown, DropdownProps } from 'semantic-ui-react'
-import { Icon, Container, Header, Transition } from "semantic-ui-react";
+import { Loader, Icon, Container, Header, Transition } from "semantic-ui-react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faIceCream, faCookieBite, faCoffee } from '@fortawesome/free-solid-svg-icons'
 import { Link, RouteComponentProps } from 'react-router-dom';
@@ -9,7 +9,7 @@ import moment, { Moment } from 'moment';
 import { SingleDatePicker, isInclusivelyAfterDay } from 'react-dates';
 import './hawkerlist.css';
 
-import axios from 'axios';
+import API from '../components/axiosapi';
 
 import 'react-dates/lib/css/_datepicker.css';
 
@@ -137,7 +137,7 @@ class HawkerList extends React.Component<Props, State> {
   }
 
   fetchListing = (date: Moment) => {
-    const promise: Promise<any> = axios.get("https://hb65mr6g85.execute-api.ap-southeast-1.amazonaws.com/dev/listings/"+date.format("DDMMYYYY")+"/"+this.state.meal)
+    const promise: Promise<any> = API.get("listings/"+date.format("DDMMYYYY")+"/"+this.state.meal)
     return promise
   }
 
@@ -209,12 +209,12 @@ class HawkerList extends React.Component<Props, State> {
             small={true}> 
           </SingleDatePicker>
           </p>
-          
           <Transition visible={this.state.visible} animation='scale' duration={500}>
           <div>
            {this.renderCards()}
           </div>
           </Transition>
+          {this.state.visible?"":<Loader active>Loading</Loader>}
         </Container>
       </div>
     );
