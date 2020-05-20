@@ -140,10 +140,9 @@ class SignUpContainer extends React.Component<Props, State> {
             })
           })
           .catch(err => {
-            console.log(err)
             notification.error({
               message: 'Error',
-              description: 'Error signing up user',
+              description: err['message'],
               placement: 'topRight',
               duration: 20
             });

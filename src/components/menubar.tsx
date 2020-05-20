@@ -77,6 +77,11 @@ class Menubar extends Component<Props, State> {
                   Home
                 </Menu.Item>
               </Link>
+              <Link to='/main/about'>
+                <Menu.Item as="a">
+                  About
+                </Menu.Item>
+              </Link>
               <Menu.Item position="right" as="a">
                 <Link to={checkUserAuth ? `${pathName}/dashboard` : "/login"}>
                   {checkUserAuth ? "Account" : "Login"}
@@ -97,47 +102,50 @@ class Menubar extends Component<Props, State> {
         </Grid>
         <Grid padded className="mobile only">
           <Menu borderless fluid inverted size="huge">
-            <Link to="/">
-              <Menu.Item header as="a">
-                HawkerJio
-              </Menu.Item>
-            </Link>              
-            <Menu.Menu position="right">
               <Menu.Item>
                 <Button
                   icon
                   inverted
                   basic
                   toggle
-                  onClick={this.handleToggleDropdownMenu}
-                >
+                  onClick={this.handleToggleDropdownMenu}>
                   <Icon name="content" />
                 </Button>
+                <Link to="/">
+                  <Menu.Item header as='a'>
+                    HawkerJio
+                  </Menu.Item>
+                </Link>
               </Menu.Item>
-            </Menu.Menu>
+              <Menu.Menu position='right'>
+                <Link to={`${pathName}/cart`}>
+                  <Menu.Item as="a" style={{"height": "100%"}}>
+                    <CartContext.Consumer>
+                      {({cart, modifyCart}) => ( 
+                        <p><Icon name="cart"/> ({this.cartSum(cart)})  </p>
+                      )}
+                    </CartContext.Consumer>
+                  </Menu.Item>
+                </Link>
+              </Menu.Menu>
             <Menu
               borderless
               fluid
               inverted
               vertical
-              style={this.state.dropdownMenuStyle}
-            >
+              style={this.state.dropdownMenuStyle}>
               <Link to={pathName}>
                 <Menu.Item as="a">
                   Home
                 </Menu.Item>
               </Link>
+              <Link to='/main/about'>
+                <Menu.Item as="a">
+                  About
+                </Menu.Item>
+              </Link>
               <Link to={checkUserAuth ? `${pathName}/dashboard` : "/login"}>
                 <Menu.Item as="a">{checkUserAuth ? "Account" : "Login"}</Menu.Item>        
-              </Link>
-              <Link to={`${pathName}/cart`}>
-                <Menu.Item as="a">
-                  <CartContext.Consumer>
-                    {({cart, modifyCart}) => ( 
-                      <p><Icon name="cart"/> Cart ({this.cartSum(cart)})  </p>
-                    )}
-                  </CartContext.Consumer>
-                </Menu.Item>
               </Link>
             </Menu>
           </Menu>

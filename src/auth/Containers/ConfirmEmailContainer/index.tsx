@@ -48,7 +48,6 @@ class ConfirmEmailContainer extends React.Component<RouteComponentProps, State> 
         this.handleOpenNotification('success', 'Succesfully confirmed!', 'You will be redirected to login in a few!');
       })
       .catch(err => {
-        console.log(err)
         this.handleOpenNotification('error', 'Invalid code', err.message);
         this.setState({
           loading: false
@@ -109,7 +108,6 @@ class ConfirmEmailContainer extends React.Component<RouteComponentProps, State> 
           this.handleOpenNotification('success', 'Succesfully confirmed!', 'You will be redirected to login in a few!');
         })
         .catch(err => {
-          console.log(err)
           this.handleOpenNotification('error', 'Invalid code', err.message);
           this.setState({
             loading: false

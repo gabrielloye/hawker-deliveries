@@ -18,23 +18,7 @@ const team = [
     {
         name: "Jeremy Loye",
         url: "jem"
-    },
-    {
-        name: "Placeholder",
-        url: "placeholder"
-    },
-    {
-        name: "Placeholder",
-        url: "placeholder"
-    },
-    {
-        name: "Placeholder",
-        url: "placeholder"
-    },
-    {
-        name: "Placeholder",
-        url: "placeholder"
-    },
+    }
 ]
 
 export default class AboutPage extends Component {
