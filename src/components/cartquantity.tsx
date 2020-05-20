@@ -4,17 +4,15 @@ import CSS from 'csstype';
 
 import "semantic-ui-css/semantic.min.css";
 
-import { Button, Container, Grid, Header, Icon, Menu, Segment, ButtonProps, TransitionablePortal, Popup } from 'semantic-ui-react';
+import { Button, ButtonProps, Popup } from 'semantic-ui-react';
 
 import { CartContext, CartItem } from './cartcontext';
 
 
-import { FoodItem } from './foodlist';
-
 type State = {}
 
 type Props = {
-  item: FoodItem;
+  item: CartItem;
   quantity: number;
   existingQuantity: number;
   maxQuantity: number;
@@ -25,28 +23,14 @@ const pStyle: CSS.Properties = {
   marginLeft: '0.6em'
 }
 
-class ProductQuantity extends Component<Props, State> {
+class CartQuantity extends Component<Props, State> {
   state = {
     quantity: this.props.quantity,
-    isMinQuantity: true,
-    isMaxQuantity: false,
+    isMinQuantity: this.props.quantity === 0,
+    isMaxQuantity: this.props.quantity === this.props.maxQuantity,
     open: false,
     prevQuantity: 0
   };
-
-  handleOpen = () => this.setState({ open: true })
-
-  handleClose = () => this.setState({ open: false })
-
-  resetQuantity = () => {
-    const prevQuantity = this.state.quantity
-    this.setState({
-      prevQuantity: prevQuantity,
-      quantity: 0,
-      isMinQuantity: true,
-      isMaxQuantity: false
-    })
-  }
 
   /**
    * Increment and set State Quantity by 1
@@ -55,7 +39,7 @@ class ProductQuantity extends Component<Props, State> {
     let currQuantity = this.state.quantity + 1;
     let isMax = false;
     if (this.props.maxQuantity !== -1) {
-      isMax = currQuantity === (this.props.maxQuantity - this.props.existingQuantity)
+      isMax = currQuantity === this.props.maxQuantity
     } else {
       isMax = currQuantity === 100;
     }
@@ -71,13 +55,28 @@ class ProductQuantity extends Component<Props, State> {
    */
   decQuantity = () => {
     let currQuantity = this.state.quantity - 1;
-    let isMin = currQuantity === 0;
+    let isMin = currQuantity === 1;
     this.setState({
       quantity: currQuantity,
       isMinQuantity: isMin,
       isMaxQuantity: false
     })
   };
+
+  updateCart = (modifyCart: (cart: CartItem, isAdd: boolean, meal: string) => void, isAdd: boolean, meal: string) => {
+    let newItem: CartItem = {
+      id: this.props.item.id,
+      stallId: this.props.stallId,
+      name: this.props.item.name,
+      image: this.props.item.image,
+      description: this.props.item.description,
+      maxQuantity: this.props.maxQuantity,
+      quantity: 1,
+      price: this.props.item.price,
+      margin: this.props.item.margin
+    }
+    modifyCart(newItem, isAdd, meal);
+  }
 
 
 
@@ -86,11 +85,6 @@ class ProductQuantity extends Component<Props, State> {
       <CartContext.Consumer>
         {({ cart, modifyCart, meal }) => (
           <div className="product-quantity">
-            { (this.props.existingQuantity !== 0) &&
-              <div className='lead' style={{color: 'black'}}>
-                In Cart: {this.props.existingQuantity} <br/>
-              </div>
-             }
             <div className="label">Quantity</div>
             <div className="controls">
               <Button
@@ -98,9 +92,12 @@ class ProductQuantity extends Component<Props, State> {
                 basic
                 toggle
                 disabled={this.state.isMinQuantity}
-                onClick={this.decQuantity}>
+                onClick={() => {
+                  this.decQuantity()
+                  this.updateCart(modifyCart, false, meal)
+                }}>
                 &#8722;
-          </Button>
+              </Button>
               <strong> {this.state.quantity}  </strong>
               <Popup
                 content={"Sorry, the maximum quantity of the item for the day has been reached."}
@@ -120,45 +117,15 @@ class ProductQuantity extends Component<Props, State> {
                           event.preventDefault()
                         } else {
                           this.addQuantity()
+                          this.updateCart(modifyCart, true, meal)
                         }
                       }
                     }>
                     &#43;
-          </Button>
+                  </Button>
                 }
               />
             </div>
-            <br />
-            <TransitionablePortal
-              closeOnTriggerClick
-              onOpen={this.handleOpen}
-              onClose={this.handleClose}
-              openOnTriggerClick
-              trigger={
-                <Button
-                  disabled={this.state.quantity === 0}
-                  onClick={() => {
-                    let newItem: CartItem = {
-                      id: this.props.item.id,
-                      stallId: this.props.stallId,
-                      name: this.props.item.name,
-                      image: this.props.item.image,
-                      description: this.props.item.description,
-                      maxQuantity: this.props.maxQuantity,
-                      quantity: this.state.quantity,
-                      price: this.props.item.price,
-                      margin: this.props.item.margin
-                    }
-                    this.resetQuantity();
-                    modifyCart(newItem, true, meal);
-                  }}>
-                  Add To Cart
-              </Button>}>
-              <Segment style={{ left: '40%', position: 'fixed', bottom: '5%', zIndex: 1000 }}>
-                <Header>Item has successfully been added to cart</Header>
-                <p>{this.state.prevQuantity} {this.props.item.name} has been added to cart</p>
-              </Segment>
-            </TransitionablePortal>
           </div>
         )}
       </CartContext.Consumer>
@@ -166,4 +133,4 @@ class ProductQuantity extends Component<Props, State> {
   }
 }
 
-export default ProductQuantity
+export default CartQuantity

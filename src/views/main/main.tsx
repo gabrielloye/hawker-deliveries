@@ -48,7 +48,11 @@ class Main extends Component<Props, State> {
             isExists = true;
             newCart[i].quantity += item.quantity;
           } else {
-              newCart.splice(i, 1);
+              if (item.quantity === 1 && newCart[i].quantity !== 1) {
+                newCart[i].quantity -= 1;
+              } else {
+                newCart.splice(i, 1);
+              }
           }
         }
       }

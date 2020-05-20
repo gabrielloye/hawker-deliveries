@@ -4,7 +4,7 @@ import "semantic-ui-css/semantic.min.css";
 
 import { Link, RouteComponentProps } from 'react-router-dom';
 
-import { Responsive, Button, Container, Menu, Sticky, Modal, List, Divider, Image, Grid, Dropdown, DropdownProps, Dimmer, Segment, Loader } from "semantic-ui-react";
+import { Responsive, Button, Container, Menu, Sticky, Modal, List, Divider, Image, Grid, Dropdown, DropdownProps, Dimmer, Segment, Loader, Header } from "semantic-ui-react";
 
 import moment from 'moment';
 
@@ -81,7 +81,8 @@ class Cart extends Component<Props, State> {
     paymentUsername: '',
     paymentMode: '',
     isPaymentPage: false,
-    active: false
+    active: false,
+    isSuccessful: false
   }
 
   contextRef = createRef()
@@ -194,7 +195,6 @@ class Cart extends Component<Props, State> {
           options={this.getOptions()}
           onChange={this.onPaymentSelect}
         />
-        <Link to={`${this.props.pathName}/dashboard`}><a style={{ marginTop: '0.2em' }}>Add Payment methods through the dashboard</a></Link>
         <Button
           floated='right'
           disabled={this.state.paymentMode === ''}
@@ -211,8 +211,11 @@ class Cart extends Component<Props, State> {
               "meal": meal
             }
             API.post(`/transactions/add`, body).then(res => {
-              clearCart()
-              this.props.history.push(`${this.props.pathName}/dashboard`)
+              this.setState({isSuccessful: true})
+              setTimeout(() => {
+                clearCart()
+                this.props.history.push(`${this.props.pathName}/dashboard`)
+              }, 300)
             })
           }}>
           Finish Transaction
@@ -225,18 +228,13 @@ class Cart extends Component<Props, State> {
 
     return (
       <Container text style={{ minHeight: `100vh` }} textAlign="center">
-        <CartContext.Consumer>
-          {({ cart, modifyCart }) => (
-            <CartList cartItems={cart}></CartList>
-          )}
-        </CartContext.Consumer>
-        <Sticky className="bottombar" context={this.contextRef}>
-
+        <CartList/>
+        <Container className="bottombar">
           <CartContext.Consumer>
             {({ date, cart, meal, clearCart }) => (
               <Menu borderless fluid inverted size="huge">
                 <Menu.Item>
-                  <p><strong style={{ color: 'white' }}>Total: </strong>
+                  <p style={{ color: 'white' }}><strong>Total: </strong>
                     {this.totalCost(cart).toFixed(2)} </p>
                 </Menu.Item>
 
@@ -301,14 +299,20 @@ class Cart extends Component<Props, State> {
                       this.state.isPaymentPage &&
                       <Dimmer.Dimmable as={Segment} dimmed={this.state.active}>
                           <Modal.Content>
-                            <Image centered src='https://hawker-images.s3-ap-southeast-1.amazonaws.com/qr/qr.jpg' size="large" />
+                            <Image centered src='/images/qr.jpg' size="large" />
                             <Grid>
                               <Grid.Column textAlign='center' className="priceHeader">
                                 <strong>Total Cost:</strong> ${this.totalCost(cart).toFixed(2)}
                               </Grid.Column>
                             </Grid>
                             <List>
+                              
                               <List.Item>
+                                <List.Header style={{textAlign:'center', paddingBottom: '0.2em'}}>
+                                  Please remember to add payment method&nbsp; 
+                                  <Link to={`${this.props.pathName}/dashboard`}><a style={{ marginTop: '0.2em' }}>here</a></Link>
+                                  &nbsp;before proceeding
+                                </List.Header>
                                 <List.Header>If you are on desktop:</List.Header>
                                 <List.Content>
                                   <List.List as='ol'>
@@ -330,20 +334,8 @@ class Cart extends Component<Props, State> {
                                   <List.List as='ol'>
                                     <List.Item as='li'>
                                       Download the image&nbsp;
-                                    <a href='https://hawker-images.s3-ap-southeast-1.amazonaws.com/qr/qr.jpg' download="qr.jpg"
-                                        onClick={
-                                          (event: React.MouseEvent<HTMLAnchorElement>) => {
-                                            event.preventDefault();
-                                            let element = document.createElement("a");
-                                            let file = new Blob(
-                                              ["https://hawker-images.s3-ap-southeast-1.amazonaws.com/qr/qr.jpg"],
-                                              { type: "image/*" }
-                                            );
-                                            element.href = URL.createObjectURL(file);
-                                            element.download = "image.jpg";
-                                            element.click();
-                                          }
-                                        }>
+                                    <a type="image/*" target="_blank" href='/images/qr.jpg' download="qrCode.jpg"
+                                        >
                                         here.
                                     </a>
                                     </List.Item>
@@ -368,7 +360,16 @@ class Cart extends Component<Props, State> {
                             </List>
                           </Modal.Content>
                         <Dimmer active={this.state.active}>
-                          <Loader>Processing</Loader>
+                          {
+                            !this.state.isSuccessful &&
+                            <Loader>Processing</Loader>
+                          }
+                          {
+                            this.state.isSuccessful &&
+                            <Header inverted>
+                              Transaction Completed
+                            </Header>
+                          }
                         </Dimmer>
                       </Dimmer.Dimmable>
                     }
@@ -377,7 +378,7 @@ class Cart extends Component<Props, State> {
               </Menu>
             )}
           </CartContext.Consumer>
-        </Sticky>
+        </Container>
       </Container>
     );
   }
