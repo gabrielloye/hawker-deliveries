@@ -31,8 +31,8 @@ class LandingPage extends Component {
               <Link to={checkUserAuth ? "/main/dashboard" : "/login"}>
                 <Menu.Item as="a">{checkUserAuth ? "Account" : "Login"}</Menu.Item>
               </Link>
-              <Link to="/">
-                <Menu.Item as="a">Contact</Menu.Item>
+              <Link to="/main/about">
+                <Menu.Item as="a">About</Menu.Item>
               </Link>
             </Menu>
           </Container>

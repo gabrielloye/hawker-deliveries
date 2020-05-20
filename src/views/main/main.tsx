@@ -19,6 +19,7 @@ import Menubar from "../../components/menubar";
 import Store from "../store/store";
 import CartPage from "../cartpage/cartpage";
 import Dashboard from "../dashboard/dashboard";
+import AboutPage from "../about/about";
 
 type State = {};
 
@@ -85,6 +86,7 @@ class Main extends Component<Props, State> {
           <Menubar pathName={`${this.props.match.url}`} {...this.props}></Menubar>
           <div style={{"minHeight": "100vh", "padding": "1.5rem 2rem 80px 2rem"}}>
             <Switch>
+              <Route exact path='/main/about' component={AboutPage}/>
               <PrivateRoute exact path='/main/dashboard' component={Dashboard}/>
               <PrivateRoute exact path={`${this.props.match.path}/dashboard`} component={Dashboard} />
               <Route exact path={`${this.props.match.path}/product/:productId`} render={(props) => <Store {...props}/>}/>
