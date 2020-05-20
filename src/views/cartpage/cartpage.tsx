@@ -154,7 +154,7 @@ class Cart extends Component<Props, State> {
     for (let el of this.state.user.payment) {
       options.push({
         key: el.method,
-        text: el.username,
+        text: el.method + " " + el.username,
         value: el.method
       })
     }
@@ -263,10 +263,10 @@ class Cart extends Component<Props, State> {
                             {cart.map((item) => (
                               <List.Item>
                                 <List.Content floated='right'>
-                                  ${item['price'].toFixed(2)}
+                                ${(item['price']*item['quantity']).toFixed(2)} (+${(item['margin']*item['quantity']).toFixed(2)})
                                 </List.Content>
                                 <List.Content>
-                                  {item['name']}
+                                {item['quantity']}x {item['name']}
                                 </List.Content>
                               </List.Item>
                             ))}
