@@ -34,7 +34,8 @@ class FoodList extends React.Component<Props> {
     {
       menuItem: { key: 'about', icon: 'info', content: "About" },
       render: () => <Tab.Pane>
-        <Container>
+        Currently Unavailable
+        {/* <Container>
           <SimpleSlider></SimpleSlider>
         </Container>
         <Container>
@@ -47,9 +48,9 @@ class FoodList extends React.Component<Props> {
             <li>
               "Dry" orders will still receive a packet of soup to be enjoyed at the side; but with a special sauce mix added to the 'dry' version of the noodles
           </li>
-          </ul>
-        </Container>
-
+        </ul>
+        </Container> */}
+        
       </Tab.Pane>
     },
     {

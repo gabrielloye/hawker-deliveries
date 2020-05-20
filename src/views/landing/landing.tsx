@@ -2,7 +2,7 @@ import React, { Component, useState } from "react";
 
 import { Link } from 'react-router-dom'
 
-import { Container, Header, Menu, Segment } from "semantic-ui-react";
+import { Icon, Container, Header, Menu, Segment } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 
 import Datepicker from '../../components/datepicker';
@@ -46,7 +46,7 @@ class LandingPage extends Component {
           <Segment inverted vertical as="footer">
             by{" "}
             <a href="https://github.com/gabrielloye/hawker-deliveries">
-              @HawkerJio Team
+              @HawkerJio Team <Icon name='github'></Icon>
             </a>
           </Segment>
         </Segment>

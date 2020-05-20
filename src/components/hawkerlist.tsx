@@ -121,7 +121,7 @@ class HawkerList extends React.Component<Props, State> {
                       })}
                   </Card.Meta>
                   <Card.Description>
-                    {`$${Math.min(...stall.food.map(({ price }) => price)).toFixed(2)} ~ $${Math.max(...stall.food.map(({ price }) => price)).toFixed(2)}`}
+                    {`$${Math.min(...stall.food.map(({ price, margin }) => price + margin)).toFixed(2)} ~ $${Math.max(...stall.food.map(({ price, margin }) => price + margin)).toFixed(2)}`}
                   </Card.Description>
                 </Card.Content>
                 <Dimmer active={!stall.available} inverted>
