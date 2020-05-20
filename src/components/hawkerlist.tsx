@@ -95,7 +95,6 @@ class HawkerList extends React.Component<Props, State> {
           type = stall['type'][0].toLowerCase()
         }
         const imageurl = (stall.image !== "") ? stall.image : `https://hawker-images.s3-ap-southeast-1.amazonaws.com/generic_images/stall_${type}.jpg`
-        
         return (
           
             <Card
@@ -176,6 +175,7 @@ class HawkerList extends React.Component<Props, State> {
           <p className="lead">
             These are the stalls available for
             <Dropdown
+            style={{"marginLeft": "5px"}}
             compact
             placeholder='Select Meals'
             selection

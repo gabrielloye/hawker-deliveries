@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { DropdownProps, TransitionablePortal, Button, Icon, Label, Input, Modal, Container, Grid, Menu, Segment, Loader, Statistic, Divider, List, Header, Dropdown, Message } from "semantic-ui-react";
+import { DropdownProps, TransitionablePortal, Image, Button, Icon, Label, Input, Modal, Container, Grid, Menu, Segment, Loader, Statistic, Divider, List, Header, Dropdown, Message } from "semantic-ui-react";
 import { RouteComponentProps, withRouter } from 'react-router';
 import moment, {Moment} from 'moment';
 import { AUTH_USER_TOKEN_KEY } from '../../auth/Utils/constants';
@@ -12,7 +12,11 @@ type Order = {
     date: string,
     meal: string,
     totalPrice: number,
-    cart: any[]
+    cart: any[],
+    paymentMethod: string,
+    paymentUsername: string,
+    dateTime: string,
+    paid: boolean
 }
 
 type state = {
@@ -211,7 +215,7 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
         }
     }
 
-    ordersList(orders: Order[]) {
+    ordersList(orders: Order[], current: boolean) {
         const Capitalize = (str: string) => {
             return str.charAt(0).toUpperCase() + str.slice(1);
         }
@@ -235,16 +239,35 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
                                 {order['cart'].map((item) => (
                                     <List.Item>
                                         <List.Content floated='right'>
-                                            ${item['price'].toFixed(2)}
+                                            ${(item['price']*item['quantity']).toFixed(2)} (+${(item['margin']*item['quantity']).toFixed(2)})
                                         </List.Content>
                                         <List.Content>
-                                            {item['name']}
+                                        {item['quantity']}x {item['name']}
                                         </List.Content>
                                     </List.Item>
                                 ))}
                             </List>
                             <Divider/>
                             <List>
+                                <List.Item>
+                                <List.Content floated="right">
+                                    ${order['cart'].map((item) => item['price']*item['quantity'])
+                                        .reduce((a,b) => a+b, 0).toFixed(2)}
+                                </List.Content>
+                                <List.Content>
+                                    Food Cost:
+                                    </List.Content>
+                                </List.Item>
+                                <List.Item>
+                                <List.Content floated="right">
+                                    ${order['cart'].map((item) => item['margin']*item['quantity'])
+                                        .reduce((a,b) => a+b, 0).toFixed(2)}
+                                </List.Content>
+                                <List.Content>
+                                    Service Fee:
+                                    </List.Content>
+                                </List.Item>
+                                <Divider />
                                 <List.Item>
                                     <List.Content floated="right">
                                         ${order['totalPrice'].toFixed(2)}
@@ -254,6 +277,82 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
                                     </List.Content>
                                 </List.Item>
                             </List>
+                            <Header as='h4'>Payment Method:</Header>
+                            <List horizontal>
+                                <List.Item>
+                                    <List.Header>Method</List.Header>
+                                    {order['paymentMethod']}
+                                </List.Item>
+                                <List.Item>
+                                    <List.Header>Username</List.Header>
+                                    {order['paymentUsername']}
+                                </List.Item>
+                            </List>
+                            {current ?
+                            <div>
+                            <Divider hidden/>
+                            <Image centered src='https://hawker-images.s3-ap-southeast-1.amazonaws.com/qr/qr.jpg' size="large" />
+                            <Grid>
+                                <Grid.Column textAlign='center' className="priceHeader">
+                                <strong>Total Cost:</strong> ${order['totalPrice'].toFixed(2)}
+                                </Grid.Column>
+                            </Grid>
+                            <List>
+                                <List.Item>
+                                    <List.Header>If you are on desktop:</List.Header>
+                                    <List.Content>
+                                        <List.List as='ol'>
+                                        <List.Item as='li'>
+                                            Open your PayLah!/PayNow Application and access the Scan and Pay feature.
+                                        </List.Item>
+                                        <List.Item as='li'>
+                                            Scan the QR code on the screen and pay the total amount stated.
+                                        </List.Item>
+                                        <List.Item as='li'>
+                                            After you have paid, indicate whether you used PayLah! or PayNow and click "Complete Order".
+                                        </List.Item>
+                                        </List.List>
+                                    </List.Content>
+                                </List.Item>
+                                <List.Item>
+                              <List.Header>If you are on mobile:</List.Header>
+                              <List.Content>
+                                <List.List as='ol'>
+                                  <List.Item as='li'>
+                                    Download the image&nbsp;
+                                    <a href='https://hawker-images.s3-ap-southeast-1.amazonaws.com/qr/qr.jpg' download="qr.jpg"
+                                      onClick={
+                                        (event: React.MouseEvent<HTMLAnchorElement>) => {
+                                          event.preventDefault();
+                                          let element = document.createElement("a");
+                                          let file = new Blob(
+                                            ["https://hawker-images.s3-ap-southeast-1.amazonaws.com/qr/qr.jpg"],
+                                            { type: "image/*" }
+                                          );
+                                          element.href = URL.createObjectURL(file);
+                                          element.download = "image.jpg";
+                                          element.click();
+                                        }
+                                      }>
+                                      here.
+                                    </a>
+                                </List.Item>
+                                <List.Item as='li'>
+                                        Open your PayLah!/PayNow Application and access the Scan and Pay feature.
+                                    </List.Item>
+                                    <List.Item as='li'>
+                                        Choose the "PHOTO LIBRARY" (PayNow) or "Album" (PayLah!) option and locate the downloaded QR code.
+                                    </List.Item>
+                                    <List.Item as='li'>
+                                        Scan and pay the total amount and return to this page after paying.
+                                    </List.Item>
+                                    <List.Item as='li'>
+                                        After you have paid, indicate whether you used PayLah! or PayNow and click "Complete Order".
+                                    </List.Item>
+                                </List.List>
+                            </List.Content>
+                            </List.Item>
+                            </List></div> : "" }
                         </Modal.Content>
                     </Modal>
                 ))}
@@ -472,14 +571,14 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
                         <Header as='h2'>Pending Orders</Header>
                     </Divider>
                     {this.state.currentOrders.length>0?
-                        this.ordersList(this.state.currentOrders):
+                        this.ordersList(this.state.currentOrders, true):
                         <Header textAlign="center" as='h3'>There are no pending orders</Header>}
                     <Divider hidden/>
                     <Divider horizontal>
                         <Header as='h2'>Past Orders</Header>
                     </Divider>
                     {this.state.pastOrders.length>0?
-                        this.ordersList(this.state.pastOrders):
+                        this.ordersList(this.state.pastOrders, false):
                         <Header textAlign="center" as='h3'>You have no past orders</Header>}
                     <Divider hidden/>
                 </div>
