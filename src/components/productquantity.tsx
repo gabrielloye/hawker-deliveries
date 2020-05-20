@@ -138,7 +138,8 @@ class ProductQuantity extends Component<Props, State> {
                     image: this.props.item.image,
                     description: this.props.item.description,
                     quantity: this.state.quantity,
-                    price: this.props.item.price
+                    price: this.props.item.price,
+                    margin: this.props.item.margin
                   }
                   this.resetQuantity();
                   modifyCart(newItem, true, meal);

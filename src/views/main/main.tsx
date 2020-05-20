@@ -60,8 +60,13 @@ class Main extends Component<Props, State> {
         cart: newCart,
         meal: meal
       })
+    },
+    clearCart: () => {
+      let newCart = new Array<CartItem>()
+      localStorage.setItem('cart'+ this.state.date + this.state.meal, JSON.stringify(newCart))
+      this.setState({ cart: newCart })
     }
-  };
+  }
 
   componentDidMount() {
     let cartString = localStorage.getItem('cart' + this.props.match.params.date + this.state.meal) || '';

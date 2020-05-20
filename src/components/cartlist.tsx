@@ -20,7 +20,7 @@ class CartList extends React.Component<Props> {
           <div className="listingImage" style={{"backgroundImage":`url(${image})`}}></div>
           <Card.Content>
             <Card.Header>{ el.name }</Card.Header>
-            <Card.Meta>{`$${el.price.toFixed(2)}`}</Card.Meta>
+            <Card.Meta>{`$${el.price.toFixed(2)}`} + {`$${el.margin.toFixed(2)}`}</Card.Meta>
           </Card.Content>
           <Card.Content extra>
             <div className="label">

@@ -4,7 +4,7 @@ import "semantic-ui-css/semantic.min.css";
 
 import { Link, RouteComponentProps } from 'react-router-dom';
 
-import { Responsive, Button, Container, Menu, Sticky, Modal, List, Divider, Image, Grid, Dropdown, DropdownProps } from "semantic-ui-react";
+import { Responsive, Button, Container, Menu, Sticky, Modal, List, Divider, Image, Grid, Dropdown, DropdownProps, Dimmer, Segment, Loader } from "semantic-ui-react";
 
 import moment from 'moment';
 
@@ -61,6 +61,7 @@ interface TransactionCart {
   stallId: string;
   name: string;
   price: number;
+  margin: number;
   quantity: number;
 }
 
@@ -79,13 +80,14 @@ class Cart extends Component<Props, State> {
     user: dummyUser,
     paymentUsername: '',
     paymentMode: '',
-    isPaymentPage: false
+    isPaymentPage: false,
+    active: false
   }
 
   contextRef = createRef()
 
   componentDidMount() {
-    if (!moment(this.props.match.params['date'], "DDMMYYYY").isValid() || this.props.match.params['meal'].length===0) {
+    if (!moment(this.props.match.params['date'], "DDMMYYYY").isValid() || this.props.match.params['meal'].length === 0) {
       this.props.history.push('/')
     }
 
@@ -104,11 +106,20 @@ class Cart extends Component<Props, State> {
     }
   }
 
+  marginTotal = (cart: CartItem[]) => {
+    let cost = 0;
+    let el;
+    for (el of cart) {
+      cost += el.margin * el.quantity;
+    }
+    return cost;
+  }
+
   totalCost = (cart: CartItem[]) => {
     let cost = 0;
     let el;
     for (el of cart) {
-      cost += el.price * el.quantity;
+      cost += (el.price + el.margin) * el.quantity;
     }
     return cost;
   }
@@ -160,7 +171,7 @@ class Cart extends Component<Props, State> {
     this.setState({ paymentMode: method })
   }
 
-  renderCompleteTransaction = (cart: CartItem[], date: string, meal: string) => {
+  renderCompleteTransaction = (cart: CartItem[], date: string, meal: string, clearCart: () => void) => {
     let transactionCart: TransactionCart[] = []
     for (let el of cart) {
       transactionCart.push({
@@ -168,6 +179,7 @@ class Cart extends Component<Props, State> {
         stallId: el.stallId,
         name: el.name,
         price: el.price,
+        margin: el.margin,
         quantity: el.quantity
       })
     }
@@ -189,6 +201,7 @@ class Cart extends Component<Props, State> {
           style={{ background: "#009628", color: "white", marginTop: '0.5em' }}
           toggle
           onClick={() => {
+            this.setState({ active: true })
             const body = {
               "awsId": this.state.user_id,
               "date": date,
@@ -197,11 +210,12 @@ class Cart extends Component<Props, State> {
               "paymentUsername": this.state.paymentUsername,
               "meal": meal
             }
-            API.post(`/transactions/add`, body).then(res =>
+            API.post(`/transactions/add`, body).then(res => {
+              clearCart()
               this.props.history.push(`${this.props.pathName}/dashboard`)
-            )
+            })
           }}>
-            Finish Transaction
+          Finish Transaction
         </Button>
       </React.Fragment>)
   }
@@ -219,7 +233,7 @@ class Cart extends Component<Props, State> {
         <Sticky className="bottombar" context={this.contextRef}>
 
           <CartContext.Consumer>
-            {({ date, cart, meal }) => (
+            {({ date, cart, meal, clearCart }) => (
               <Menu borderless fluid inverted size="huge">
                 <Menu.Item>
                   <p><strong style={{ color: 'white' }}>Total: </strong>
@@ -241,11 +255,10 @@ class Cart extends Component<Props, State> {
                       Checkout
                   </Button>
                   }>
+                    <Modal.Header>Order on {moment(date, "DDMMYYYY").format("DD-MM-YYYY")}</Modal.Header>
                     {!this.state.isPaymentPage &&
                       <React.Fragment>
-                        <Modal.Header>Order on {moment(date, "DDMMYYYY").format("DD-MM-YYYY")}</Modal.Header>
                         <Modal.Content>
-
                           <List ordered>
                             {cart.map((item) => (
                               <List.Item>
@@ -260,6 +273,15 @@ class Cart extends Component<Props, State> {
                           </List>
                           <Divider />
                           <List>
+                            <List.Item>
+                              <List.Content floated="right">
+                                ${this.marginTotal(cart).toFixed(2)}
+                              </List.Content>
+                              <List.Content>
+                                Service Fee:
+                                </List.Content>
+                            </List.Item>
+                            <Divider />
                             <List.Item>
                               <List.Content floated="right">
                                 ${this.totalCost(cart).toFixed(2)}
@@ -277,77 +299,78 @@ class Cart extends Component<Props, State> {
                     }
                     {
                       this.state.isPaymentPage &&
-                      <React.Fragment>
-                        <Modal.Header>Order on {moment(date, "DDMMYYYY").format("DD-MM-YYYY")}</Modal.Header>
-                        <Modal.Content>
-                          <Image centered src='https://hawker-images.s3-ap-southeast-1.amazonaws.com/qr/qr.jpg' size="large" />
-                          <Grid>
-                            <Grid.Column textAlign='center' className="priceHeader">
-                              <strong>Total Cost:</strong> ${this.totalCost(cart).toFixed(2)}
-                            </Grid.Column>
-                          </Grid>
-                          <List>
-                            <List.Item>
-                              <List.Header>If you are on desktop:</List.Header>
-                              <List.Content>
-                                <List.List as='ol'>
-                                  <List.Item as='li'>
-                                    Open your PayLah!/PayNow Application and access the Scan and Pay feature.
+                      <Dimmer.Dimmable as={Segment} dimmed={this.state.active}>
+                          <Modal.Content>
+                            <Image centered src='https://hawker-images.s3-ap-southeast-1.amazonaws.com/qr/qr.jpg' size="large" />
+                            <Grid>
+                              <Grid.Column textAlign='center' className="priceHeader">
+                                <strong>Total Cost:</strong> ${this.totalCost(cart).toFixed(2)}
+                              </Grid.Column>
+                            </Grid>
+                            <List>
+                              <List.Item>
+                                <List.Header>If you are on desktop:</List.Header>
+                                <List.Content>
+                                  <List.List as='ol'>
+                                    <List.Item as='li'>
+                                      Open your PayLah!/PayNow Application and access the Scan and Pay feature.
                                   </List.Item>
-                                  <List.Item as='li'>
-                                    Scan the QR code on the screen and pay the total amount stated.
+                                    <List.Item as='li'>
+                                      Scan the QR code on the screen and pay the total amount stated.
                                   </List.Item>
-                                  <List.Item as='li'>
-                                    After you have paid, indicate whether you used PayLah! or PayNow and click "Complete Order".
+                                    <List.Item as='li'>
+                                      After you have paid, indicate whether you used PayLah! or PayNow and click "Complete Order".
                                   </List.Item>
-                                </List.List>
-                              </List.Content>
-                            </List.Item>
-
-                            <List.Item>
-                              <List.Header>If you are on mobile:</List.Header>
-                              <List.Content>
-                                <List.List as='ol'>
-                                  <List.Item as='li'>
-                                    Download the image&nbsp;
+                                  </List.List>
+                                </List.Content>
+                              </List.Item>
+                              <List.Item>
+                                <List.Header>If you are on mobile:</List.Header>
+                                <List.Content>
+                                  <List.List as='ol'>
+                                    <List.Item as='li'>
+                                      Download the image&nbsp;
                                     <a href='https://hawker-images.s3-ap-southeast-1.amazonaws.com/qr/qr.jpg' download="qr.jpg"
-                                      onClick={
-                                        (event: React.MouseEvent<HTMLAnchorElement>) => {
-                                          event.preventDefault();
-                                          let element = document.createElement("a");
-                                          let file = new Blob(
-                                            ["https://hawker-images.s3-ap-southeast-1.amazonaws.com/qr/qr.jpg"],
-                                            { type: "image/*" }
-                                          );
-                                          element.href = URL.createObjectURL(file);
-                                          element.download = "image.jpg";
-                                          element.click();
-                                        }
-                                      }>
-                                      here.
+                                        onClick={
+                                          (event: React.MouseEvent<HTMLAnchorElement>) => {
+                                            event.preventDefault();
+                                            let element = document.createElement("a");
+                                            let file = new Blob(
+                                              ["https://hawker-images.s3-ap-southeast-1.amazonaws.com/qr/qr.jpg"],
+                                              { type: "image/*" }
+                                            );
+                                            element.href = URL.createObjectURL(file);
+                                            element.download = "image.jpg";
+                                            element.click();
+                                          }
+                                        }>
+                                        here.
                                     </a>
+                                    </List.Item>
+                                    <List.Item as='li'>
+                                      Open your PayLah!/PayNow Application and access the Scan and Pay feature.
                                   </List.Item>
-                                  <List.Item as='li'>
-                                    Open your PayLah!/PayNow Application and access the Scan and Pay feature.
+                                    <List.Item as='li'>
+                                      Choose the "PHOTO LIBRARY" (PayNow) or "Album" (PayLah!) option and locate the downloaded QR code.
                                   </List.Item>
-                                  <List.Item as='li'>
-                                    Choose the "PHOTO LIBRARY" (PayNow) or "Album" (PayLah!) option and locate the downloaded QR code.
+                                    <List.Item as='li'>
+                                      Scan and pay the total amount and return to this page after paying.
                                   </List.Item>
-                                  <List.Item as='li'>
-                                    Scan and pay the total amount and return to this page after paying.
+                                    <List.Item as='li'>
+                                      After you have paid, indicate whether you used PayLah! or PayNow and click "Complete Order".
                                   </List.Item>
-                                  <List.Item as='li'>
-                                    After you have paid, indicate whether you used PayLah! or PayNow and click "Complete Order".
-                                  </List.Item>
-                                </List.List>
-                              </List.Content>
-                            </List.Item>
-                            <List.Item>
-                              {this.renderCompleteTransaction(cart, date, meal)}
-                            </List.Item>
-                          </List>
-                        </Modal.Content>
-                      </React.Fragment>
+                                  </List.List>
+                                </List.Content>
+                              </List.Item>
+                              <List.Item>
+                                {this.renderCompleteTransaction(cart, date, meal, clearCart)}
+                              </List.Item>
+                            </List>
+                          </Modal.Content>
+                        <Dimmer active={this.state.active}>
+                          <Loader>Processing</Loader>
+                        </Dimmer>
+                      </Dimmer.Dimmable>
                     }
                   </Modal>
                 </Menu.Item>
