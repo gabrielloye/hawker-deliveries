@@ -58,8 +58,10 @@ class LoginContainer extends React.Component<Props, State> {
               description: err.message,
               placement: 'topRight'
             });
-
-            console.log(err);
+            const { history, location } = this.props;
+            if (err['code'] === "UserNotConfirmedException") {
+              history.push(`/verify-code?phone=${prefix}${username}`)
+            }
 
             this.setState({ loading: false });
           });

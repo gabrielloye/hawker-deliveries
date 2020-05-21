@@ -483,7 +483,7 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
             </TransitionablePortal>
             </List>)
         } else {
-            return <Header textAlign="center" as='h3'>You have not registered any payment methods</Header>
+            return <Header textAlign="center" as='h3'>You have not registered any payment methods. <br/>Please add a payment method in order to place an order.</Header>
         }
     }
 
@@ -495,6 +495,7 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
                 <div>
                     <Header as='h3'>Add New Payment Method</Header>
                     <Input fluid
+                        placeholder="Username"
                         label={
                             <Dropdown
                             button
@@ -535,6 +536,15 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
                                 <Icon name="add"/>
                             </Button>
                         }/>
+                    <List>
+                        <List.Item>
+                            <strong>PayNow:</strong> Full Name as on NRIC
+                        </List.Item>
+                        <List.Item>
+                            <strong>PayLah!:</strong> PayLah username as shown on your PayLah app profile page
+                        </List.Item>
+                    </List>
+                    <i>Note: These payment information is collected to faciliate the payment verification on our end before placing orders. Please ensure that your information is accurate and payments are made timely.</i>
                 </div>
             )
         }
