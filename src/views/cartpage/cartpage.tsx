@@ -172,7 +172,7 @@ class Cart extends Component<Props, State> {
     this.setState({ paymentMode: method })
   }
 
-  renderCompleteTransaction = (cart: CartItem[], date: string, meal: string, clearCart: () => void) => {
+  renderCompleteTransaction = (cart: CartItem[], date: string, meal: string, clearCart: () => void, zone: string) => {
     let transactionCart: TransactionCart[] = []
     for (let el of cart) {
       transactionCart.push({
@@ -209,6 +209,7 @@ class Cart extends Component<Props, State> {
               "awsId": this.state.user_id,
               "date": date,
               "cart": transactionCart,
+              "zone": zone,
               "paymentMethod": this.state.paymentMode,
               "paymentUsername": this.state.paymentUsername,
               "meal": meal
@@ -234,7 +235,7 @@ class Cart extends Component<Props, State> {
         <CartList/>
         <Container className="bottombar">
           <CartContext.Consumer>
-            {({ date, cart, meal, clearCart }) => (
+            {({ date, cart, meal, clearCart, zone }) => (
               <Menu borderless fluid inverted size="huge">
                 <Menu.Item>
                   <p style={{ color: 'white' }}><strong>Total: </strong>
@@ -358,7 +359,7 @@ class Cart extends Component<Props, State> {
                                 </List.Content>
                               </List.Item>
                               <List.Item>
-                                {this.renderCompleteTransaction(cart, date, meal, clearCart)}
+                                {this.renderCompleteTransaction(cart, date, meal, clearCart, zone)}
                               </List.Item>
                             </List>
                           </Modal.Content>

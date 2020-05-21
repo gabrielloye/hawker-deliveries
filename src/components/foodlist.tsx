@@ -82,7 +82,7 @@ class FoodList extends React.Component<Props> {
           </Card.Content>
           <Card.Content extra>
             <CartContext.Consumer>
-              {({ cart, modifyCart, meal }) => (
+              {({ cart }) => (
                 <ProductQuantity existingQuantity={this.getExistingQuantity(cart, el.name)} 
                 stallId={this.props.stallId} maxQuantity={el.quantity} item={el} quantity={0}></ProductQuantity>
               )}

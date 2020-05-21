@@ -30,6 +30,7 @@ type Props = {
       params: {
           date: string;
           meal: string;
+          zone: string;
       }
     }
 }
@@ -38,8 +39,9 @@ class Main extends Component<Props, State> {
   state = {
     date: this.props.match.params.date,
     meal: this.props.match.params.meal,
+    zone: this.props.match.params.zone,
     cart : new Array<CartItem>(),
-    modifyCart: (item : CartItem, isAdd : boolean, meal: string) => {
+    modifyCart: (item : CartItem, isAdd : boolean, meal: string, zone: string) => {
       let newCart = this.state.cart;
       let isExists = false;
       for (let i = 0; i < newCart.length; i++) {
@@ -59,22 +61,23 @@ class Main extends Component<Props, State> {
       if (isAdd && !isExists) {
         newCart.push(item);
       }
-      localStorage.setItem('cart' + this.props.match.params.date + meal, JSON.stringify(newCart));
+      localStorage.setItem('cart' + this.props.match.params.date + meal + zone, JSON.stringify(newCart));
       this.setState({
         date: this.props.match.params.date,
         cart: newCart,
-        meal: meal
+        meal: meal,
+        zone: zone
       })
     },
     clearCart: () => {
       let newCart = new Array<CartItem>()
-      localStorage.setItem('cart'+ this.state.date + this.state.meal, JSON.stringify(newCart))
+      localStorage.setItem('cart'+ this.state.date + this.state.meal + this.state.zone, JSON.stringify(newCart))
       this.setState({ cart: newCart })
     }
   }
 
   componentDidMount() {
-    let cartString = localStorage.getItem('cart' + this.props.match.params.date + this.state.meal) || '';
+    let cartString = localStorage.getItem('cart' + this.props.match.params.date + this.state.meal + this.state.zone) || '';
     if (cartString.length != 0) {
       this.setState({
         date: this.props.match.params.date,

@@ -31,11 +31,11 @@ class CartList extends React.Component {
           </Card.Content>
           <Card.Content extra>
             <CartContext.Consumer>
-              {({ cart, modifyCart, meal }) => (
+              {({ cart, modifyCart, meal, zone }) => (
                 <React.Fragment>
                 <CartQuantity  item={el} quantity={el.quantity} existingQuantity={this.getExistingQuantity(cart, el.name)} 
                 maxQuantity={el.maxQuantity} stallId={el.stallId}/>
-                <Button onClick={() => { modifyCart(el, false, meal); }}>
+                <Button onClick={() => { modifyCart(el, false, meal, zone); }}>
                   Remove from Cart
                 </Button>
                 </React.Fragment>
@@ -46,7 +46,7 @@ class CartList extends React.Component {
       )
     });
 
-  renderCartList = (cart: CartItem[], modifyCart: (cart: CartItem, isAdd: boolean, meal: string) => void, date: string) => {
+  renderCartList = (cart: CartItem[], date: string) => {
     if (cart.length > 0) {
       return (
         <React.Fragment>
@@ -66,9 +66,9 @@ class CartList extends React.Component {
   render() {
     return (
       <CartContext.Consumer>
-        {({ cart, date, modifyCart }) => (
+        {({ cart, date }) => (
           <React.Fragment>
-            {this.renderCartList(cart, modifyCart, date)}
+            {this.renderCartList(cart, date)}
           </React.Fragment>
         )}
       </CartContext.Consumer>

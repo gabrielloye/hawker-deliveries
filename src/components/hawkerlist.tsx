@@ -47,6 +47,7 @@ type Props = RouteComponentProps & {
       params: {
           date: string;
           meal : string;
+          zone: string;
       }
     }
 }
@@ -66,7 +67,8 @@ class HawkerList extends React.Component<Props, State> {
       orderAvailable: false,
       stalls: []
     },
-    meal: this.props.match.params.meal
+    meal: this.props.match.params.meal,
+    zone: this.props.match.params.zone
   }
 
   componentDidMount() {
@@ -139,17 +141,21 @@ class HawkerList extends React.Component<Props, State> {
   }
 
   fetchListing = (date: Moment) => {
-    const promise: Promise<any> = API.get("listings/"+date.format("DDMMYYYY")+"/"+this.state.meal)
+    const promise: Promise<any> = API.get("listings/get/"+date.format("DDMMYYYY")+"/"+this.state.meal + "/" + this.state.zone)
     return promise
   }
 
   onMealSelect = (event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) => {
-    this.props.history.push(`/main/${this.state.date.format("DDMMYYYY")}/${data.value}`)
+    this.props.history.push(`/main/${this.state.date.format("DDMMYYYY")}/${data.value}/${this.state.zone}`)
+  }
+
+  onZoneSelect = (event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) => {
+    this.props.history.push(`/main/${this.state.date.format("DDMMYYYY")}/${this.state.meal}/${data.value}`)
   }
 
   dateChange = (date: Moment) => {
     if(this.state.date===null || this.state.date.format("DDMMYYYY")!==date.format("DDMMYYYY")) {
-      this.props.history.push(`/main/${date.format("DDMMYYYY")}/${this.state.meal}`)
+      this.props.history.push(`/main/${date.format("DDMMYYYY")}/${this.state.meal}/${this.state.zone}`)
     }
   }
 
@@ -165,6 +171,19 @@ class HawkerList extends React.Component<Props, State> {
           key: 'dinner',
           text: 'Dinner',
           value: 'dinner'
+        }
+      ]
+
+      let zoneOptions = [
+        {
+          key: 'Tembusu',
+          text: 'Tembusu',
+          value: 'Tembusu'
+        },
+        {
+          key: 'Cinammon',
+          text: 'Cinammon',
+          value: 'Cinammon'
         }
       ]
 
@@ -198,6 +217,16 @@ class HawkerList extends React.Component<Props, State> {
             displayFormat="DD/MM/YYYY"
             small={true}> 
           </SingleDatePicker>
+          &nbsp;at
+          <Dropdown
+            style={{"marginTop": "0.2em"}}
+            fluid
+            placeholder='Select Zone'
+            selection
+            defaultValue={this.state.zone}
+            options={zoneOptions}
+            onChange={this.onZoneSelect}
+          />
           </p>
           <Transition visible={this.state.visible} animation='scale' duration={500}>
           <div>

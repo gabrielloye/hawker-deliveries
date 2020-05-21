@@ -63,7 +63,7 @@ class CartQuantity extends Component<Props, State> {
     })
   };
 
-  updateCart = (modifyCart: (cart: CartItem, isAdd: boolean, meal: string) => void, isAdd: boolean, meal: string) => {
+  updateCart = (modifyCart: (cart: CartItem, isAdd: boolean, meal: string, zone: string) => void, isAdd: boolean, meal: string, zone: string) => {
     let newItem: CartItem = {
       id: this.props.item.id,
       stallId: this.props.stallId,
@@ -75,7 +75,7 @@ class CartQuantity extends Component<Props, State> {
       price: this.props.item.price,
       margin: this.props.item.margin
     }
-    modifyCart(newItem, isAdd, meal);
+    modifyCart(newItem, isAdd, meal, zone);
   }
 
 
@@ -83,7 +83,7 @@ class CartQuantity extends Component<Props, State> {
   render() {
     return (
       <CartContext.Consumer>
-        {({ cart, modifyCart, meal }) => (
+        {({ cart, modifyCart, meal, zone }) => (
           <div className="product-quantity">
             <div className="label">Quantity</div>
             <div className="controls">
@@ -94,7 +94,7 @@ class CartQuantity extends Component<Props, State> {
                 disabled={this.state.isMinQuantity}
                 onClick={() => {
                   this.decQuantity()
-                  this.updateCart(modifyCart, false, meal)
+                  this.updateCart(modifyCart, false, meal, zone)
                 }}>
                 &#8722;
               </Button>
@@ -117,7 +117,7 @@ class CartQuantity extends Component<Props, State> {
                           event.preventDefault()
                         } else {
                           this.addQuantity()
-                          this.updateCart(modifyCart, true, meal)
+                          this.updateCart(modifyCart, true, meal, zone)
                         }
                       }
                     }>

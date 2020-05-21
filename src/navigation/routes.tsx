@@ -36,7 +36,7 @@ const AnimatedSwitch = withRouter(({ location}) => (
         <section className="route-section">
           <Switch location={location}>
             <Route exact={true} path="/" component={LandingPage} />
-            <Route path="/main/:date/:meal" render={(props) => <Main {...props}/>}/>
+            <Route path="/main/:date/:meal/:zone" render={(props) => <Main {...props}/>}/>
             <Route path="/main" render={(props) => <Main {...props}/>}/>
 
             <LoggedinRoute exact={true} path="/login" component={LoginContainer} />

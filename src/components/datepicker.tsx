@@ -47,7 +47,7 @@ class Datepicker extends Component {
           selection
           options={this.options}
           defaultValue={this.options[0].value}/>
-        <Link to={`/main/${moment(this.state.date).format('DDMMYYYY')}/lunch`}>
+        <Link to={`/main/${moment(this.state.date).format('DDMMYYYY')}/lunch/Tembusu`}>
           <Button size="huge">Make Your Order</Button>
         </Link>
       </div>

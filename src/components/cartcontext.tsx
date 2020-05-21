@@ -17,7 +17,8 @@ const cart : Array<CartItem> = [];
 export const CartContext = React.createContext({
     date: '',
     meal: '',
+    zone: '',
     cart: cart,
-    modifyCart: (item : CartItem, isAdd: boolean, meal: string) => {},
+    modifyCart: (item : CartItem, isAdd: boolean, meal: string, zone: string) => {},
     clearCart: () => {}
 });

@@ -84,7 +84,7 @@ class ProductQuantity extends Component<Props, State> {
   render() {
     return (
       <CartContext.Consumer>
-        {({ cart, modifyCart, meal }) => (
+        {({ cart, modifyCart, meal, zone }) => (
           <div className="product-quantity">
             { (this.props.existingQuantity !== 0) &&
               <div className='lead' style={{color: 'black'}}>
@@ -150,7 +150,7 @@ class ProductQuantity extends Component<Props, State> {
                       margin: this.props.item.margin
                     }
                     this.resetQuantity();
-                    modifyCart(newItem, true, meal);
+                    modifyCart(newItem, true, meal, zone);
                   }}>
                   Add To Cart
               </Button>}>
