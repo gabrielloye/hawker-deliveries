@@ -383,6 +383,16 @@ class Cart extends Component<Props, State> {
                                       After you have paid, indicate whether you used PayLah! or PayNow and click "Complete Order".
                                   </List.Item>
                                 </List.List>
+                                {this.props.match.params.zone==="Cinnamon"?
+                                <List.Item>
+                                  <List.Header>
+                                    Join the Telegram Channel
+                                  </List.Header>
+                                  <List.Content>
+                                    You can join the Telegram channel <a href="https://t.me/joinchat/AAAAAExr30H7-5Pca7zfUA">here</a> for updates on delivery times and pickup!
+                                  </List.Content>
+                                </List.Item>
+                                :null}
                               <List.Item>
                                 {this.renderCompleteTransaction(cart, date, meal, clearCart, zone)}
                               </List.Item>

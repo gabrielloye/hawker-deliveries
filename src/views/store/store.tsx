@@ -5,7 +5,7 @@ import "semantic-ui-css/semantic.min.css";
 import API from '../../components/axiosapi';
 import './store.css';
 import FoodList from "../../components/foodlist";
-import { Button, Container, Header, Loader, Icon, Grid, Divider } from 'semantic-ui-react';
+import { Button, Container, Header, Loader, Icon, Grid, Divider, Message } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 type State = {
@@ -40,7 +40,9 @@ class Store extends Component<Props, State> {
     type: [],
     food: [],
     contact: {},
-    about: {}
+    about: {
+      description: ""
+    }
   };
 
   componentDidMount() {
@@ -80,6 +82,10 @@ class Store extends Component<Props, State> {
             <p className="lead">
               #{ this.state.stallNo }
             </p>
+            {this.state.about['description'].length>0?
+            <Message warning>
+              {this.state.about['description']}
+            </Message>:null}
             <FoodList stallId={this.state.stallId} store={this.state.food}/>
             <Divider hidden/>
             <Button color='black' as={Link} to={`/main/${this.props.match.params.date}/${this.props.match.params.meal}/${this.props.match.params.zone}`} icon labelPosition='left' floated="left">
