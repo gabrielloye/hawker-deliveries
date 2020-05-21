@@ -331,7 +331,7 @@ class Cart extends Component<Props, State> {
                       this.state.isPaymentPage &&
                       <Dimmer.Dimmable as={Segment} dimmed={this.state.active}>
                           <Modal.Content>
-                            <Image centered src='/images/qr.jpg' size="large" />
+                            <Image centered src={`/images/qr_${this.props.match.params.zone}.jpg`} size="large" />
                             <Grid>
                               <Grid.Column textAlign='center' className="priceHeader">
                                 <strong>Total Cost:</strong> ${this.totalCost(cart).toFixed(2)}
@@ -365,7 +365,7 @@ class Cart extends Component<Props, State> {
                                 <List.List as='ol'>
                                   <List.Item as='li'>
                                     Download the image&nbsp;
-                                  <a type="image/*" target="_blank" href='/images/qr.jpg' download="qrCode.jpg"
+                                  <a type="image/*" target="_blank" href={`/images/qr_${this.props.match.params.zone}.jpg`} download="qrCode.jpg"
                                       >
                                       here.
                                   </a>

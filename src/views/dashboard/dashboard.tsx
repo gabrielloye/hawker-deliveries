@@ -238,7 +238,6 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
                         <Header style={{color: '#8c8c8c'}} as='h4'>{order['zone']} ({Capitalize(order['meal'])})</Header>
                         </Modal.Header>
                         <Modal.Content>
-                            
                             <List ordered>
                                 {order['cart'].map((item) => (
                                     <List.Item>
@@ -295,7 +294,7 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
                             {current ?
                             <div>
                             <Divider hidden/>
-                            <Image centered src='/images/qr.jpg' size="large" />
+                            <Image centered src={`/images/qr_${order['zone']}.jpg`} size="large" />
                             <Grid>
                                 <Grid.Column textAlign='center' className="priceHeader">
                                 <strong>Total Cost:</strong> ${order['totalPrice'].toFixed(2)}
@@ -324,8 +323,7 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
                                 <List.List as='ol'>
                                   <List.Item as='li'>
                                     Download the image&nbsp;
-                                    <a type="image/*" target="_blank" href='/images/qr.jpg' download="qrCode.jpg"
-                                        >
+                                    <a type="image/*" target="_blank" href={`/images/qr_${order['zone']}.jpg`} download="qrCode.jpg">
                                         here.
                                     </a>
                                 </List.Item>
@@ -487,7 +485,11 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
             </TransitionablePortal>
             </List>)
         } else {
-            return <Header textAlign="center" as='h3'>You have not registered any payment methods. <br/>Please add a payment method in order to place an order.</Header>
+            return (
+            <Message negative>
+                <Header textAlign="center" as='h3'>You have not registered any payment methods. <br/>Please add a payment method in order to place an order.</Header>
+            </Message>
+            )
         }
     }
 
@@ -548,7 +550,7 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
                             <strong>PayLah!:</strong> PayLah username as shown on your PayLah app profile page
                         </List.Item>
                     </List>
-                    <i>Note: These payment information is collected to faciliate the payment verification on our end before placing orders. Please ensure that your information is accurate and payments are made timely.</i>
+                    <i>Note: Payment information is collected to faciliate the payment verification on our end before placing orders. Please ensure that your information is accurate and payment is made immediately after ordering.</i>
                 </div>
             )
         }

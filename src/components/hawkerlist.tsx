@@ -181,9 +181,9 @@ class HawkerList extends React.Component<Props, State> {
           value: 'Tembusu'
         },
         {
-          key: 'Cinammon',
-          text: 'Cinammon',
-          value: 'Cinammon'
+          key: 'Cinnamon',
+          text: 'Cinnamon',
+          value: 'Cinnamon'
         }
       ]
 

@@ -23,9 +23,9 @@ class Datepicker extends Component {
     },
     
     {
-      key: "Cinammon",
-      text: "Cinammon",
-      value: "Cinammon"
+      key: "Cinnamon",
+      text: "Cinnamon",
+      value: "Cinnamon"
     }
   ]
 
