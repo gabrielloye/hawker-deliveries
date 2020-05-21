@@ -195,6 +195,9 @@ class Cart extends Component<Props, State> {
           options={this.getOptions()}
           onChange={this.onPaymentSelect}
         />
+        <Link to={`${this.props.pathName}/dashboard`}><a style={{ marginTop: '0.2em' }}>
+          Add payment methods through the dashboard
+        </a></Link>
         <Button
           floated='right'
           disabled={this.state.paymentMode === ''}

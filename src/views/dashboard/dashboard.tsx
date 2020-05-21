@@ -320,21 +320,9 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
                                 <List.List as='ol'>
                                   <List.Item as='li'>
                                     Download the image&nbsp;
-                                    <a href='https://hawker-images.s3-ap-southeast-1.amazonaws.com/qr/qr.jpg' download="qr.jpg"
-                                      onClick={
-                                        (event: React.MouseEvent<HTMLAnchorElement>) => {
-                                          event.preventDefault();
-                                          let element = document.createElement("a");
-                                          let file = new Blob(
-                                            ["https://hawker-images.s3-ap-southeast-1.amazonaws.com/qr/qr.jpg"],
-                                            { type: "image/*" }
-                                          );
-                                          element.href = URL.createObjectURL(file);
-                                          element.download = "image.jpg";
-                                          element.click();
-                                        }
-                                      }>
-                                      here.
+                                    <a type="image/*" target="_blank" href='/images/qr.jpg' download="qrCode.jpg"
+                                        >
+                                        here.
                                     </a>
                                 </List.Item>
                                 <List.Item as='li'>
