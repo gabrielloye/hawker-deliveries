@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Image } from 'semantic-ui-react'
+import { Card, Image, Divider } from 'semantic-ui-react'
 import { Button, Header } from "semantic-ui-react";
 
 import moment from 'moment';
@@ -35,6 +35,7 @@ class CartList extends React.Component {
                 <React.Fragment>
                 <CartQuantity  item={el} quantity={el.quantity} existingQuantity={this.getExistingQuantity(cart, el.name)} 
                 maxQuantity={el.maxQuantity} stallId={el.stallId}/>
+                <Divider hidden/>
                 <Button onClick={() => { modifyCart(el, false, meal); }}>
                   Remove from Cart
                 </Button>
@@ -52,7 +53,10 @@ class CartList extends React.Component {
         <React.Fragment>
           <Header size="huge" style={{ paddingBottom: '2vh' }}>Cart
           </Header>
-          <p className="lead">{moment(date, "DDMMYYYY").format("DD-MM-YYYY")}</p>
+          <Divider horizontal>
+            <Header as='h3'>{moment(date, "DDMMYYYY").format("DD-MM-YYYY")}</Header>
+          </Divider>
+          <Divider hidden/>
           <Card.Group itemsPerRow="2" stackable style={{ paddingBottom: '15%' }}>
             {this.displayListPosts(cart)}
           </Card.Group>

@@ -19,7 +19,7 @@ const LoggedinRoute = ({ component: Component, ...rest }: any & { component: any
         ) : (
           <Redirect
             to={{
-              pathname: '/'
+              pathname: '/main/dashboard'
             }}
           />
         );

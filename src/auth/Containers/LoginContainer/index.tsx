@@ -49,7 +49,6 @@ class LoginContainer extends React.Component<Props, State> {
               placement: 'topRight',
               duration: 1.5
             });
-
             history.push(from);
           })
           .catch(err => {

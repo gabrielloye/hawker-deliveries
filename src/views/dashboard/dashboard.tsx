@@ -7,6 +7,7 @@ import { Auth } from "aws-amplify";
 import { notification } from "antd";
 import API from '../../components/axiosapi';
 import "semantic-ui-css/semantic.min.css";
+import "./dashboard.css"
 
 type Order = {
     date: string,
@@ -255,16 +256,16 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
                                         .reduce((a,b) => a+b, 0).toFixed(2)}
                                 </List.Content>
                                 <List.Content>
-                                    Food Cost:
+                                    Total Food Cost:
                                     </List.Content>
                                 </List.Item>
                                 <List.Item>
-                                <List.Content floated="right">
-                                    ${order['cart'].map((item) => item['margin']*item['quantity'])
-                                        .reduce((a,b) => a+b, 0).toFixed(2)}
-                                </List.Content>
-                                <List.Content>
-                                    Service Fee:
+                                    <List.Content floated="right">
+                                        ${order['cart'].map((item) => item['margin']*item['quantity'])
+                                            .reduce((a,b) => a+b, 0).toFixed(2)}
+                                    </List.Content>
+                                    <List.Content>
+                                        Service Fee:
                                     </List.Content>
                                 </List.Item>
                                 <Divider />
@@ -291,7 +292,7 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
                             {current ?
                             <div>
                             <Divider hidden/>
-                            <Image centered src='https://hawker-images.s3-ap-southeast-1.amazonaws.com/qr/qr.jpg' size="large" />
+                            <Image centered src='/images/qr.jpg' size="large" />
                             <Grid>
                                 <Grid.Column textAlign='center' className="priceHeader">
                                 <strong>Total Cost:</strong> ${order['totalPrice'].toFixed(2)}
@@ -320,21 +321,9 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
                                 <List.List as='ol'>
                                   <List.Item as='li'>
                                     Download the image&nbsp;
-                                    <a href='https://hawker-images.s3-ap-southeast-1.amazonaws.com/qr/qr.jpg' download="qr.jpg"
-                                      onClick={
-                                        (event: React.MouseEvent<HTMLAnchorElement>) => {
-                                          event.preventDefault();
-                                          let element = document.createElement("a");
-                                          let file = new Blob(
-                                            ["https://hawker-images.s3-ap-southeast-1.amazonaws.com/qr/qr.jpg"],
-                                            { type: "image/*" }
-                                          );
-                                          element.href = URL.createObjectURL(file);
-                                          element.download = "image.jpg";
-                                          element.click();
-                                        }
-                                      }>
-                                      here.
+                                    <a type="image/*" target="_blank" href='/images/qr.jpg' download="qrCode.jpg"
+                                        >
+                                        here.
                                     </a>
                                 </List.Item>
                                 <List.Item as='li'>
@@ -595,7 +584,9 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
             )
         } else {
             return (
-                <Loader active>Loading</Loader>
+                <Container style={{"padding": "5em"}}>
+                    <Loader active>Loading</Loader>
+                </Container>
             )
         }
     }
