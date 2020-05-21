@@ -1,6 +1,6 @@
 import 'react-dates/initialize';
 import React from "react";
-import { Dimmer, Card, Dropdown, DropdownProps } from 'semantic-ui-react'
+import { Dimmer, Card, Dropdown, DropdownProps, Divider } from 'semantic-ui-react'
 import { Loader, Icon, Container, Header, Transition } from "semantic-ui-react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faIceCream, faCookieBite, faCoffee } from '@fortawesome/free-solid-svg-icons'
@@ -203,7 +203,7 @@ class HawkerList extends React.Component<Props, State> {
             onChange={this.onMealSelect}
           /> at
           <Dropdown
-            style={{"marginLeft": "5px"}}
+            style={{"marginLeft": "5px", "marginBottom": "0.3em"}}
             compact
             placeholder='Select Zone'
             selection

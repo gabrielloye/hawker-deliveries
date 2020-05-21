@@ -1,7 +1,7 @@
 import 'react-dates/initialize';
 import React, {Component} from "react";
 import moment, {Moment} from 'moment';
-import { Button, Dropdown, Container } from "semantic-ui-react";
+import { Button, Dropdown, Container, DropdownProps } from "semantic-ui-react";
 import { Link } from 'react-router-dom';
 import { SingleDatePicker, isInclusivelyAfterDay } from 'react-dates';
 
@@ -11,16 +11,28 @@ import "semantic-ui-css/semantic.min.css";
 class Datepicker extends Component {
   state = {
     date: moment(),
+    zone: 'Tembusu',
     focused: false
   };
 
   options = [
     {
-      key: "Temubusu/Cinnamon",
-      text: "Tembusu/Cinnamon",
-      value: "Tembusu/Cinnamon"
+      key: "Temubusu",
+      text: "Tembusu",
+      value: "Tembusu"
+    },
+    
+    {
+      key: "Cinammon",
+      text: "Cinammon",
+      value: "Cinammon"
     }
   ]
+
+  
+  onZoneSelect = (event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) => {
+    this.setState({ zone: data.value })
+  }
   
 
   render() {
@@ -46,8 +58,9 @@ class Datepicker extends Component {
           className="huge"
           selection
           options={this.options}
+          onChange={this.onZoneSelect}
           defaultValue={this.options[0].value}/>
-        <Link to={`/main/${moment(this.state.date).format('DDMMYYYY')}/lunch/Tembusu`}>
+        <Link to={`/main/${moment(this.state.date).format('DDMMYYYY')}/lunch/${this.state.zone}`}>
           <Button size="huge">Make Your Order</Button>
         </Link>
       </div>
