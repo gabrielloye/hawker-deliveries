@@ -4,8 +4,9 @@ import "semantic-ui-css/semantic.min.css";
 
 import API from '../../components/axiosapi';
 import './store.css';
-import FoodList, { FoodItem } from "../../components/foodlist";
-import { Container, Header, Loader, Divider } from 'semantic-ui-react';
+import FoodList from "../../components/foodlist";
+import { Button, Container, Header, Loader, Icon, Grid, Divider } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
 type State = {
   name: string,
@@ -22,7 +23,9 @@ type Props = {
   match: {
     params: {
         productId: number,
-        date: string
+        date: string,
+        meal: string,
+        zone: string
     }
   }
 }
@@ -41,7 +44,9 @@ class Store extends Component<Props, State> {
   };
 
   componentDidMount() {
-    const promise: Promise<any> = API.get(`stalls/${this.props.match.params.productId}`)
+    const promise: Promise<any> = API.get(
+      `listings/${this.props.match.params.date}/${this.props.match.params.meal}/${this.props.match.params.zone}/stall/${this.props.match.params.productId}`
+    )
     promise.then((res) => {
       const data = res['data']
       this.setState({
@@ -62,11 +67,27 @@ class Store extends Component<Props, State> {
       return (
         <div className="App">
           <Container text textAlign="center">
+            <Grid>
+              <Grid.Row columns={1}>
+                <Button color='black' as={Link} to={`/main/${this.props.match.params.date}/${this.props.match.params.meal}/${this.props.match.params.zone}`} icon labelPosition='left' floated="left">
+                  <Icon name='arrow left'/>
+                  Back to Stalls
+                </Button>
+              </Grid.Row>
+            </Grid>
+
             <Header size="huge">{this.state.name}</Header>
             <p className="lead">
               #{ this.state.stallNo }
             </p>
             <FoodList stallId={this.state.stallId} store={this.state.food}/>
+            <Divider hidden/>
+            <Button color='black' as={Link} to={`/main/${this.props.match.params.date}/${this.props.match.params.meal}/${this.props.match.params.zone}`} icon labelPosition='left' floated="left">
+              <Icon name='arrow left'/>
+              Back to Stalls
+            </Button>
+            <Divider hidden/>
+            <Divider hidden/>
           </Container>
       </div>
       );

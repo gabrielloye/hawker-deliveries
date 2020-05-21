@@ -4,7 +4,7 @@ import "semantic-ui-css/semantic.min.css";
 
 import { Link, RouteComponentProps } from 'react-router-dom';
 
-import { Responsive, Button, Container, Menu, Sticky, Modal, List, Divider, Image, Grid, Dropdown, DropdownProps, Dimmer, Segment, Loader, Header } from "semantic-ui-react";
+import { Button, Container, Menu, Icon, Modal, List, Divider, Image, Grid, Dropdown, DropdownProps, Dimmer, Segment, Loader, Header, Message } from "semantic-ui-react";
 
 import moment from 'moment';
 
@@ -23,13 +23,15 @@ import './cartpage.css';
 import CartList from "../../components/cartlist";
 
 import { CartContext, CartItem } from '../../components/cartcontext';
+import { Card } from "antd";
 
 type Props = RouteComponentProps & {
   pathName: string;
   match: {
     params: {
       date: string;
-      meal: string
+      meal: string;
+      zone: string;
     }
   }
 }
@@ -193,11 +195,18 @@ class Cart extends Component<Props, State> {
           className="huge"
           selection
           options={this.getOptions()}
-          onChange={this.onPaymentSelect}
-        />
-        <Link to={`${this.props.pathName}/dashboard`}><a style={{ marginTop: '0.2em' }}>
-          Add payment methods through the dashboard
-        </a></Link>
+          onChange={this.onPaymentSelect}/>
+          {this.state.user.payment.length<1?<Message
+            negative
+            attached='bottom'>
+            Please remember to add a payment method on your 
+            <Link to={`${this.props.pathName}/dashboard`}><a style={{ marginTop: '0.2em' }}> dashboard </a></Link>
+            to proceed with checkout
+          </Message>:
+          <p>Please remember to add a payment method on your 
+          <Link to={`${this.props.pathName}/dashboard`}><a style={{ marginTop: '0.2em' }}> dashboard </a></Link>
+          to proceed with checkout</p>}
+          
         <Button
           floated='right'
           disabled={this.state.paymentMode === ''}
@@ -232,7 +241,15 @@ class Cart extends Component<Props, State> {
 
     return (
       <Container text style={{ minHeight: `100vh` }} textAlign="center">
-        <CartList/>
+        <Grid>
+          <Grid.Row columns={1}>
+            <Button color='black' as={Link} to={`/main/${this.props.match.params.date}/${this.props.match.params.meal}/${this.props.match.params.zone}`} icon labelPosition='left' floated="left">
+                <Icon name='arrow left'/>
+              Back to Stalls
+            </Button>
+          </Grid.Row>
+        </Grid>
+        <CartList meal={this.props.match.params.meal} zone={this.props.match.params.zone} />
         <Container className="bottombar">
           <CartContext.Consumer>
             {({ date, cart, meal, clearCart, zone }) => (
@@ -257,7 +274,9 @@ class Cart extends Component<Props, State> {
                       Checkout
                   </Button>
                   }>
-                    <Modal.Header>Order on {moment(date, "DDMMYYYY").format("DD-MM-YYYY")}</Modal.Header>
+                    <Modal.Header>Order on {moment(date, "DDMMYYYY").format("DD-MM-YYYY")} 
+                      <Header style={{color: '#8c8c8c'}} as='h4'>{this.props.match.params.zone} ({this.props.match.params.meal})</Header>
+                    </Modal.Header>
                     {!this.state.isPaymentPage &&
                       <React.Fragment>
                         <Modal.Content>
@@ -275,6 +294,15 @@ class Cart extends Component<Props, State> {
                           </List>
                           <Divider />
                           <List>
+                            <List.Item>
+                              <List.Content floated="right">
+                                ${cart.map((item) =>item['price']*item['quantity'])
+                                  .reduce((a,b) => a+b, 0).toFixed(2)}
+                              </List.Content>
+                              <List.Content>
+                                Total Food Cost
+                              </List.Content>
+                            </List.Item>
                             <List.Item>
                               <List.Content floated="right">
                                 ${this.marginTotal(cart).toFixed(2)}
@@ -309,42 +337,41 @@ class Cart extends Component<Props, State> {
                                 <strong>Total Cost:</strong> ${this.totalCost(cart).toFixed(2)}
                               </Grid.Column>
                             </Grid>
-                            <List>
-                              
+                            <List relaxed>
                               <List.Item>
                                 <List.Header style={{textAlign:'center', paddingBottom: '0.2em'}}>
                                   Please remember to add payment method&nbsp; 
                                   <Link to={`${this.props.pathName}/dashboard`}><a style={{ marginTop: '0.2em' }}>here</a></Link>
                                   &nbsp;before proceeding
                                 </List.Header>
-                                <List.Header>If you are on desktop:</List.Header>
-                                <List.Content>
-                                  <List.List as='ol'>
-                                    <List.Item as='li'>
-                                      Open your PayLah!/PayNow Application and access the Scan and Pay feature.
-                                  </List.Item>
-                                    <List.Item as='li'>
-                                      Scan the QR code on the screen and pay the total amount stated.
-                                  </List.Item>
-                                    <List.Item as='li'>
-                                      After you have paid, indicate whether you used PayLah! or PayNow and click "Complete Order".
-                                  </List.Item>
-                                  </List.List>
-                                </List.Content>
                               </List.Item>
                               <List.Item>
+                                <List.Header>If you are on desktop:</List.Header>
+                              </List.Item>
+                              <List.List as='ol' relaxed>
+                                <List.Item as='li'>
+                                    Open your PayLah!/PayNow Application and access the Scan and Pay feature.
+                                </List.Item>
+                                  <List.Item as='li'>
+                                    Scan the QR code on the screen and pay the total amount stated.
+                                </List.Item>
+                                  <List.Item as='li'>
+                                    After you have paid, indicate whether you used PayLah! or PayNow and click "Complete Order".
+                                </List.Item>
+                              </List.List>
+                              <List.Item>
                                 <List.Header>If you are on mobile:</List.Header>
-                                <List.Content>
-                                  <List.List as='ol'>
-                                    <List.Item as='li'>
-                                      Download the image&nbsp;
-                                    <a type="image/*" target="_blank" href='/images/qr.jpg' download="qrCode.jpg"
-                                        >
-                                        here.
-                                    </a>
-                                    </List.Item>
-                                    <List.Item as='li'>
-                                      Open your PayLah!/PayNow Application and access the Scan and Pay feature.
+                              </List.Item>
+                                <List.List as='ol'>
+                                  <List.Item as='li'>
+                                    Download the image&nbsp;
+                                  <a type="image/*" target="_blank" href='/images/qr.jpg' download="qrCode.jpg"
+                                      >
+                                      here.
+                                  </a>
+                                  </List.Item>
+                                  <List.Item as='li'>
+                                    Open your PayLah!/PayNow Application and access the Scan and Pay feature.
                                   </List.Item>
                                     <List.Item as='li'>
                                       Choose the "PHOTO LIBRARY" (PayNow) or "Album" (PayLah!) option and locate the downloaded QR code.
@@ -355,9 +382,7 @@ class Cart extends Component<Props, State> {
                                     <List.Item as='li'>
                                       After you have paid, indicate whether you used PayLah! or PayNow and click "Complete Order".
                                   </List.Item>
-                                  </List.List>
-                                </List.Content>
-                              </List.Item>
+                                </List.List>
                               <List.Item>
                                 {this.renderCompleteTransaction(cart, date, meal, clearCart, zone)}
                               </List.Item>

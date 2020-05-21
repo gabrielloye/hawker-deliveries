@@ -7,10 +7,12 @@ import { Auth } from "aws-amplify";
 import { notification } from "antd";
 import API from '../../components/axiosapi';
 import "semantic-ui-css/semantic.min.css";
+import "./dashboard.css"
 
 type Order = {
     date: string,
     meal: string,
+    zone: string,
     totalPrice: number,
     cart: any[],
     paymentMethod: string,
@@ -229,10 +231,12 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
                         </List.Content>
                         <List.Content>
                             <List.Header>{moment(order['date'], "DDMMYYYY").format("DD-MM-YYYY")}</List.Header>
-                            {Capitalize(order['meal'])}
+                            {order['zone']} ({Capitalize(order['meal'])})
                         </List.Content>
                     </List.Item>} closeIcon>
-                        <Modal.Header>Order on {moment(order['date'], "DDMMYYYY").format("DD-MM-YYYY")}</Modal.Header>
+                        <Modal.Header>Order on {moment(order['date'], "DDMMYYYY").format("DD-MM-YYYY")}
+                        <Header style={{color: '#8c8c8c'}} as='h4'>{order['zone']} ({Capitalize(order['meal'])})</Header>
+                        </Modal.Header>
                         <Modal.Content>
                             
                             <List ordered>
@@ -255,16 +259,16 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
                                         .reduce((a,b) => a+b, 0).toFixed(2)}
                                 </List.Content>
                                 <List.Content>
-                                    Food Cost:
+                                    Total Food Cost:
                                     </List.Content>
                                 </List.Item>
                                 <List.Item>
-                                <List.Content floated="right">
-                                    ${order['cart'].map((item) => item['margin']*item['quantity'])
-                                        .reduce((a,b) => a+b, 0).toFixed(2)}
-                                </List.Content>
-                                <List.Content>
-                                    Service Fee:
+                                    <List.Content floated="right">
+                                        ${order['cart'].map((item) => item['margin']*item['quantity'])
+                                            .reduce((a,b) => a+b, 0).toFixed(2)}
+                                    </List.Content>
+                                    <List.Content>
+                                        Service Fee:
                                     </List.Content>
                                 </List.Item>
                                 <Divider />
@@ -291,7 +295,7 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
                             {current ?
                             <div>
                             <Divider hidden/>
-                            <Image centered src='https://hawker-images.s3-ap-southeast-1.amazonaws.com/qr/qr.jpg' size="large" />
+                            <Image centered src='/images/qr.jpg' size="large" />
                             <Grid>
                                 <Grid.Column textAlign='center' className="priceHeader">
                                 <strong>Total Cost:</strong> ${order['totalPrice'].toFixed(2)}
@@ -583,7 +587,9 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
             )
         } else {
             return (
-                <Loader active>Loading</Loader>
+                <Container style={{"padding": "5em"}}>
+                    <Loader active>Loading</Loader>
+                </Container>
             )
         }
     }

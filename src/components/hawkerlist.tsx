@@ -201,7 +201,16 @@ class HawkerList extends React.Component<Props, State> {
             defaultValue={this.state.meal}
             options={mealOptions}
             onChange={this.onMealSelect}
-          /> on: 
+          /> at
+          <Dropdown
+            style={{"marginLeft": "5px"}}
+            compact
+            placeholder='Select Zone'
+            selection
+            defaultValue={this.state.zone}
+            options={zoneOptions}
+            onChange={this.onZoneSelect}
+          /> on:
           <SingleDatePicker
             id="2"
             orientation= "horizontal"
@@ -217,16 +226,6 @@ class HawkerList extends React.Component<Props, State> {
             displayFormat="DD/MM/YYYY"
             small={true}> 
           </SingleDatePicker>
-          &nbsp;at
-          <Dropdown
-            style={{"marginTop": "0.2em"}}
-            fluid
-            placeholder='Select Zone'
-            selection
-            defaultValue={this.state.zone}
-            options={zoneOptions}
-            onChange={this.onZoneSelect}
-          />
           </p>
           <Transition visible={this.state.visible} animation='scale' duration={500}>
           <div>

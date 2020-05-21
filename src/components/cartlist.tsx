@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Image } from 'semantic-ui-react'
+import { Card, Image, Divider } from 'semantic-ui-react'
 import { Button, Header } from "semantic-ui-react";
 
 import moment from 'moment';
@@ -7,7 +7,12 @@ import { CartContext, CartItem } from "./cartcontext";
 import './hawkerlist.css';
 import CartQuantity from "./cartquantity";
 
-class CartList extends React.Component {
+type Props = {
+  meal: string;
+  zone: string;
+}
+
+class CartList extends React.Component<Props> {
   getExistingQuantity = (cart: CartItem[], itemName: string) => {
     for (let el of cart) {
       if (el.name === itemName) {
@@ -35,6 +40,7 @@ class CartList extends React.Component {
                 <React.Fragment>
                 <CartQuantity  item={el} quantity={el.quantity} existingQuantity={this.getExistingQuantity(cart, el.name)} 
                 maxQuantity={el.maxQuantity} stallId={el.stallId}/>
+                <Divider hidden/>
                 <Button onClick={() => { modifyCart(el, false, meal, zone); }}>
                   Remove from Cart
                 </Button>
@@ -50,9 +56,14 @@ class CartList extends React.Component {
     if (cart.length > 0) {
       return (
         <React.Fragment>
-          <Header size="huge" style={{ paddingBottom: '2vh' }}>Cart
+          <Header size="huge" >Cart
           </Header>
-          <p className="lead">{moment(date, "DDMMYYYY").format("DD-MM-YYYY")}</p>
+          <Divider hidden/>
+          <Divider horizontal>
+            <Header as='h3'>{moment(date, "DDMMYYYY").format("DD-MM-YYYY")}</Header>
+          </Divider>
+          <Header style={{color: '#8c8c8c'}} as='h3'>{this.props.zone} ({this.props.meal})</Header>
+          <Divider hidden/>
           <Card.Group itemsPerRow="2" stackable style={{ paddingBottom: '15%' }}>
             {this.displayListPosts(cart)}
           </Card.Group>

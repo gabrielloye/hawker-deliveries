@@ -39,3 +39,18 @@ body {
   .ui.inverted.menu .active.item {
     background-color: #080808;
   }
+  
+  .SingleDatePicker {
+    margin-top: 0.3em;
+  }
+
+  @media only screen and (min-width: 650px) {
+    
+  .SingleDatePicker {
+    width: 30%;
+  }
+
+  .SingleDatePickerInput {
+    width: 100%;
+  }
+  }
