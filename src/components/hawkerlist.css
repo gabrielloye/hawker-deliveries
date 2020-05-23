@@ -5,3 +5,7 @@ div.listingImage {
   background-position: center !important;
   background-repeat: no-repeat !important;
 }
+
+.SingleDatePicker_picker {
+  z-index: 20
+}

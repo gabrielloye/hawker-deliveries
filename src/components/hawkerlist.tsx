@@ -1,6 +1,6 @@
 import 'react-dates/initialize';
-import React from "react";
-import { Dimmer, Card, Dropdown, DropdownProps, Divider, Progress } from 'semantic-ui-react'
+import React, { NewLifecycle } from "react";
+import { Dimmer, Card, Dropdown, DropdownProps, Divider, Progress, Modal, Grid, Label, Button } from 'semantic-ui-react'
 import { Loader, Icon, Container, Header, Transition } from "semantic-ui-react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faIceCream, faCookieBite, faCoffee } from '@fortawesome/free-solid-svg-icons'
@@ -31,7 +31,10 @@ interface Stall {
   name: string;
   stallId: string;
   type: string[];
-  minOrder: number;
+  minQty: number;
+  minPrice: number;
+  currentQty: number;
+  currentPrice: number;
 }
 
 type State = {
@@ -94,10 +97,10 @@ class HawkerList extends React.Component<Props, State> {
     if (this.state.listing.stalls.length !== 0) {
       const cards = this.state.listing.stalls.map((stall: Stall) => {
         //TEMP
-        let minOrder = 0
+        let minQty = 0
         let minPrice = 0
-        if ("minOrder" in stall) {
-          minOrder = stall['minOrder']
+        if ("minQty" in stall) {
+          minQty = stall['minQty']
         }
         if ("minPrice" in stall) {
           minPrice = stall['minPrice']
@@ -109,8 +112,9 @@ class HawkerList extends React.Component<Props, State> {
         }
         const imageurl = (stall.image !== "") ? stall.image : `https://hawker-images.s3-ap-southeast-1.amazonaws.com/generic_images/stall_${type}.jpg`
         return (
-          
+          <Grid.Column>
             <Card
+              style={{"height": "90%", "marginBottom": 0}}
               as={Link}
               to={`${this.props.match.url}/product/${stall.stallId}`}
               disabled = {!stall.available}
@@ -137,31 +141,51 @@ class HawkerList extends React.Component<Props, State> {
                     {`$${Math.min(...stall.food.map(({ price, margin }) => price + margin)).toFixed(2)} ~ $${Math.max(...stall.food.map(({ price, margin }) => price + margin)).toFixed(2)}`}
                   </Card.Description>
                 </Card.Content>
-                {stall['minOrder']>0?
+                {minQty>0?
                 <Card.Content extra>
-                  <Header as='h5' style={{"textAlign": 'left'}}>
-                    Minimum Total Orders
-                  </Header>
                   <Progress
+                    label={`Total quantity required: ${minQty}`}
                     indicating
-                    value='17'
-                    total={stall['minOrder']}
+                    value={stall['currentQty']}
+                    total={minQty}
                     progress='ratio' />
-                </Card.Content>:
+                </Card.Content>:null}
+                {minPrice>0?
                 <Card.Content extra>
+                  <Progress
+                    label={`Total spend required: ${minPrice.toFixed(2)}`}
+                    indicating
+                    value={stall['currentPrice']}
+                    total={minPrice}
+                    progress='ratio' />
+                </Card.Content>:null}
+                {/* <Card.Content extra>
                   <Header as='h5'>
                     No minimum total orders required
                   </Header>  
-                </Card.Content>}
+                </Card.Content> */}
                 <Dimmer active={!stall.available} inverted>
                   <Header as='h2' style={{"color":"black"}}>This stall is unavailable today</Header>
                 </Dimmer>
             </Card>
-            
+            {minQty>0 || minPrice>0?
+            <Modal centered closeIcon size="tiny" trigger={
+              <Label pointing as={Button}>What is this?</Label>
+            }>
+              <Modal.Header>What is this total quantity/amount required?</Modal.Header>
+              <Modal.Content>
+                <Modal.Description textAlign="justified">
+                  Some of our stalls/hawkers require a minimum order quantity or value before we can make an order from them!
+                  Therefore, you'll be able to see how many people have ordered so far and the total orders required.
+                  If the minimum is not met, dont' worry! You'll definitely be refunded!
+                </Modal.Description>
+              </Modal.Content>
+            </Modal>:null}
+          </Grid.Column>
           
           
       )})
-      return <Card.Group itemsPerRow="2" stackable>{cards}</Card.Group>
+      return <Grid columns="2" stackable>{cards}</Grid>
     } else {
       return <p>Orders are not available for this date</p>
     }
