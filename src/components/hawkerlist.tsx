@@ -31,7 +31,7 @@ interface Stall {
   name: string;
   stallId: string;
   type: string[];
-  minOrder: number | null;
+  minOrder: number;
 }
 
 type State = {
@@ -94,11 +94,13 @@ class HawkerList extends React.Component<Props, State> {
     if (this.state.listing.stalls.length !== 0) {
       const cards = this.state.listing.stalls.map((stall: Stall) => {
         //TEMP
-        console.log(stall['name'])
-        if (stall['name'] === "Gong Cha") {
-          stall['minOrder'] = 30
-        } else {
-          stall['minOrder'] = -1
+        let minOrder = 0
+        let minPrice = 0
+        if ("minOrder" in stall) {
+          minOrder = stall['minOrder']
+        }
+        if ("minPrice" in stall) {
+          minPrice = stall['minPrice']
         }
         //
         let type: string = "food"
