@@ -138,7 +138,7 @@ class HawkerList extends React.Component<Props, State> {
                 {stall['minOrder']>0?
                 <Card.Content extra>
                   <Header as='h5' style={{"textAlign": 'left'}}>
-                    Minimum Orders
+                    Minimum Total Orders
                   </Header>
                   <Progress
                     indicating
@@ -148,7 +148,7 @@ class HawkerList extends React.Component<Props, State> {
                 </Card.Content>:
                 <Card.Content extra>
                   <Header as='h5'>
-                      No Minimum orders required
+                    No minimum total orders required
                   </Header>  
                 </Card.Content>}
                 <Dimmer active={!stall.available} inverted>
