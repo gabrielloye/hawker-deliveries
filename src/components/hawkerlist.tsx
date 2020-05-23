@@ -1,6 +1,6 @@
 import 'react-dates/initialize';
 import React from "react";
-import { Dimmer, Card, Dropdown, DropdownProps, Divider } from 'semantic-ui-react'
+import { Dimmer, Card, Dropdown, DropdownProps, Divider, Progress } from 'semantic-ui-react'
 import { Loader, Icon, Container, Header, Transition } from "semantic-ui-react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faIceCream, faCookieBite, faCoffee } from '@fortawesome/free-solid-svg-icons'
@@ -31,6 +31,7 @@ interface Stall {
   name: string;
   stallId: string;
   type: string[];
+  minOrder: number | null;
 }
 
 type State = {
@@ -92,6 +93,14 @@ class HawkerList extends React.Component<Props, State> {
   renderCards = () =>{
     if (this.state.listing.stalls.length !== 0) {
       const cards = this.state.listing.stalls.map((stall: Stall) => {
+        //TEMP
+        console.log(stall['name'])
+        if (stall['name'] === "Gong Cha") {
+          stall['minOrder'] = 30
+        } else {
+          stall['minOrder'] = -1
+        }
+        //
         let type: string = "food"
         if (stall['type'].length>0) {
           type = stall['type'][0].toLowerCase()
@@ -126,6 +135,22 @@ class HawkerList extends React.Component<Props, State> {
                     {`$${Math.min(...stall.food.map(({ price, margin }) => price + margin)).toFixed(2)} ~ $${Math.max(...stall.food.map(({ price, margin }) => price + margin)).toFixed(2)}`}
                   </Card.Description>
                 </Card.Content>
+                {stall['minOrder']>0?
+                <Card.Content extra>
+                  <Header as='h5' style={{"textAlign": 'left'}}>
+                    Minimum Orders
+                  </Header>
+                  <Progress
+                    indicating
+                    value='17'
+                    total={stall['minOrder']}
+                    progress='ratio' />
+                </Card.Content>:
+                <Card.Content extra>
+                  <Header as='h5'>
+                      No Minimum orders required
+                  </Header>  
+                </Card.Content>}
                 <Dimmer active={!stall.available} inverted>
                   <Header as='h2' style={{"color":"black"}}>This stall is unavailable today</Header>
                 </Dimmer>
