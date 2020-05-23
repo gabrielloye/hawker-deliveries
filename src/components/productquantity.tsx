@@ -4,7 +4,7 @@ import CSS from 'csstype';
 
 import "semantic-ui-css/semantic.min.css";
 
-import { Button, Container, Grid, Header, Icon, Menu, Segment, ButtonProps, TransitionablePortal, Popup } from 'semantic-ui-react';
+import { Button, Header, Segment, ButtonProps, TransitionablePortal, Popup } from 'semantic-ui-react';
 
 import { CartContext, CartItem } from './cartcontext';
 

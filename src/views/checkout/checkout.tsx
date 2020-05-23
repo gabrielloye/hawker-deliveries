@@ -1,13 +1,8 @@
-import React, { Component, createRef } from "react";
+import React, { Component } from "react";
 
 import "semantic-ui-css/semantic.min.css";
 
-import { Link } from 'react-router-dom';
-
-import { Responsive, Button, Container, Menu, Sticky } from "semantic-ui-react";
-
 import './checkout.css';
-
 
 import { authCode, redirectURI } from '../../components/sandboxoauth';
 

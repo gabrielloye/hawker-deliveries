@@ -1,7 +1,7 @@
 import 'react-dates/initialize';
 import React, {Component} from "react";
-import moment, {Moment} from 'moment';
-import { Button, Dropdown, Container, DropdownProps } from "semantic-ui-react";
+import moment from 'moment';
+import { Button, Dropdown, DropdownProps } from "semantic-ui-react";
 import { Link } from 'react-router-dom';
 import { SingleDatePicker, isInclusivelyAfterDay } from 'react-dates';
 

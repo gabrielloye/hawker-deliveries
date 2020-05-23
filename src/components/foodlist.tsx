@@ -1,8 +1,7 @@
 import React from 'react';
-import { Card, Image } from 'semantic-ui-react'
-import { Tab, Label, Button, Container, Grid, Header, Icon, Menu } from "semantic-ui-react";
+import { Card } from 'semantic-ui-react'
+import { Tab } from "semantic-ui-react";
 import ProductQuantity from './productquantity';
-import SimpleSlider from './abouthawker'
 
 import { CartContext, CartItem } from './cartcontext';
 import './hawkerlist.css';

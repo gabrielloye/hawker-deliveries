@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { DropdownProps, TransitionablePortal, Image, Button, Icon, Label, Input, Modal, Container, Grid, Menu, Segment, Loader, Statistic, Divider, List, Header, Dropdown, Message } from "semantic-ui-react";
-import { RouteComponentProps, withRouter } from 'react-router';
+import { TransitionablePortal, Image, Button, Icon, Label, Input, Modal, Container, Grid, Menu, Segment, Loader, Statistic, Divider, List, Header, Dropdown, Message } from "semantic-ui-react";
+import { RouteComponentProps } from 'react-router';
 import moment, {Moment} from 'moment';
 import { AUTH_USER_TOKEN_KEY } from '../../auth/Utils/constants';
 import { Auth } from "aws-amplify";

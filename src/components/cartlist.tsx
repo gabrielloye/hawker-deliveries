@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Image, Divider } from 'semantic-ui-react'
+import { Card, Divider } from 'semantic-ui-react'
 import { Button, Header } from "semantic-ui-react";
 
 import moment from 'moment';

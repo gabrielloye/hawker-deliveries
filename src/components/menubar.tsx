@@ -18,8 +18,6 @@ import { validateToken } from '../auth/Utils/Helpers';
 /** Constants */
 import { AUTH_USER_TOKEN_KEY } from '../auth/Utils/constants';
 
-import { Auth } from 'aws-amplify';
-
 type State = {};
 
 type Props = {

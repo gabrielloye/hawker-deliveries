@@ -1,6 +1,6 @@
 import 'react-dates/initialize';
-import React, { NewLifecycle } from "react";
-import { Dimmer, Card, Dropdown, DropdownProps, Divider, Progress, Modal, Grid, Label, Button } from 'semantic-ui-react'
+import React from "react";
+import { Dimmer, Card, Dropdown, DropdownProps, Progress, Modal, Grid, Label, Button } from 'semantic-ui-react'
 import { Loader, Icon, Container, Header, Transition } from "semantic-ui-react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faIceCream, faCookieBite, faCoffee } from '@fortawesome/free-solid-svg-icons'
@@ -153,7 +153,7 @@ class HawkerList extends React.Component<Props, State> {
                 {minPrice>0?
                 <Card.Content extra>
                   <Progress
-                    label={`Total spend required: ${minPrice.toFixed(2)}`}
+                    label={`Total spend required: $${minPrice.toFixed(2)}`}
                     indicating
                     value={stall['currentPrice']}
                     total={minPrice}

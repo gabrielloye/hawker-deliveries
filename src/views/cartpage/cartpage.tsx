@@ -23,7 +23,6 @@ import './cartpage.css';
 import CartList from "../../components/cartlist";
 
 import { CartContext, CartItem } from '../../components/cartcontext';
-import { Card } from "antd";
 
 type Props = RouteComponentProps & {
   pathName: string;
