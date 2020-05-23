@@ -14,7 +14,7 @@ function Footer () {
                                 </Item.Header>
                                 <Item.Meta>
                                     WhatsApp: +65 9034 2673<br/>
-                                    Telegram: @hawkerjio
+                                    Telegram: @hawkerjio_bot
                                 </Item.Meta>
                             </Item.Content>
                         </Item>
