@@ -269,7 +269,7 @@ class HawkerList extends React.Component<Props, State> {
             date={this.state.date}
             onDateChange={(date)=>{if(date){this.dateChange(date)}}}
             focused={this.state.focused}
-            onFocusChange={({ focused }) => this.setState({ focused })}
+            onFocusChange={({ focused }) => {console.log("focus");this.setState({ focused })}}
             numberOfMonths={1}
             isOutsideRange={day =>
             !isInclusivelyAfterDay(day, moment()) ||

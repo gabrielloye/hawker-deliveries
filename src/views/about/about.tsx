@@ -44,13 +44,22 @@ export default class AboutPage extends Component {
                                     <Header as='h2'>Our Story</Header>
                                 </Divider>
                                 <p>
-                                    This idea germinated during a discussion about the ‘circuit breaker’ in early April, about how students living on campus would be encouraged to minimise non-essential travel, and the potential impact on our hawker community with dining-in no longer permitted. With some friends whose parents were hawkers themselves, that personal story and emotional connection, egged us on to do our bit, no matter how small it may be. 
+                                    We are a group of students from the College of Alice & Peter Tan (CAPT) hoping to do our bit for our local hawkers during this challenging period.
                                     <br/>
                                     <br/>
-                                    With lunch not catered for in UTown, this project could be said to be born out of necessity as we, students ourselves, preferred not to be limited to just lunch options within UTown in the subsequent month.
+                                    This idea germinated in early April when we realised that us students, who are now ‘stuck’ in UTown, nevertheless crave for hawker food (& are looking for alternatives to UTown food options!) Yet, many of our local hawkers have also seen reduced foot traffic due to SG’s safe management measures.
                                     <br/>
                                     <br/>
-                                    So essentially, what we did was to link up the hawkers, have them prepare for a bulk order collated within our residential community, and then have it delivered to the students. In the process, we partnered PHV drivers as well, whose incomes have also fallen with increased telecommuting. This way, not only do we fulfil the lunch needs of students, and further reduce non-essential movement, this initiative supplements the income of our hawker partners and drivers, all without taking a commission from them.
+                                    We have friends whose parents/grandparents are hawkers too. Hearing their personal stories  and challenges egged us on to bridge the gap, no matter how small our efforts may be. Hence, with lunch not catered for in UTown (during the semester), this project could be said to be born out of necessity as we ourselves, preferred not to be limited to just options within NUS itself.
+                                    <br/>
+                                    <br/>
+                                    So essentially, what we have done was to build a relationship with the hawkers around NUS, collate orders within our residential community in CAPT, and have the food delivered to our College via our Private-Hire Vehicle (PHV) driver partners - who have their incomes affected too.
+                                    <br/>
+                                    <br/>
+                                    Since then, our platform has evolved, and we aim to now offer this service to other residential communities in NUS and beyond.
+                                    <br/>
+                                    <br/>
+                                    Again, with no commissions taken, we’re hoping to take care of your meals while supporting our hawker and driver partners during this uncertain period. Let’s all do our part and support our local heroes!
                                 </p>
                                 <Divider hidden/>
                                 <Divider horizontal>

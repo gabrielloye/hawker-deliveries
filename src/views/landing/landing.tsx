@@ -37,16 +37,16 @@ class LandingPage extends Component {
             </Menu>
           </Container>
           <Container className="content">
-            <Header inverted as="h2">
+            <Header inverted as="h1">
               Select Order Date
             </Header>
             <Datepicker></Datepicker>
             <Segment inverted style={{"marginTop": 0, "backgroundColor": "transparent", "textAlign": "justify"}}>
-              While many food outlets are able to capitalise on online food delivery applications, some hawker stalls have not done so, possibly due to technological barriers and high commission fees.
-              
-              The drop in business during this period for these hawkers is concerning as social distancing measures will continue to be enforced.
-              <br/>
-              Therefore, in support of our local hawkers, HawkerJio aims to pool orders for these stalls at an extremely affordable fee! Make your order today!
+            Over this challenging period, many hawkers have faced a considerable drop in business; Furthermore, some of them are unable to make use of the food delivery applications due to the technological barriers or high fees/commissions. 
+            <br/>
+            Hence, in support of our local hawkers, ‘HawkerJio’ aims to pool orders from each Hawker Centre - all without taking commissions from our hawker & delivery partners.
+            <br/>
+            Do support our SG hawkers by making your order soon! More about us & our story can be found on the “About” tab too!
             </Segment>
           </Container>
           <Segment inverted vertical as="footer">
