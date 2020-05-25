@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { Auth } from 'aws-amplify';
-import { Form, Icon, Spin, Input, Button, notification, Row, Col } from 'antd';
+import { Select, Form, Icon, Spin, Input, Button, notification, Row, Col } from 'antd';
 
 /** Presentational */
 import FormWrapper from '../../Styled/FormWrapper';
@@ -9,12 +9,15 @@ import FormWrapper from '../../Styled/FormWrapper';
 /** App theme */
 import { colors } from '../../Themes/Colors';
 
+const { Option } = Select;
+
 type Props = {
   form: any;
 };
 
 type State = {
   username: string;
+  prefix: string;
   redirect: boolean;
   loading: boolean;
 };
@@ -22,6 +25,7 @@ type State = {
 class ForgotPasswordContainer extends React.Component<Props, State> {
   state = {
     username: '',
+    prefix: '+65',
     redirect: false,
     loading: false
   };
@@ -29,16 +33,17 @@ class ForgotPasswordContainer extends React.Component<Props, State> {
   handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    this.props.form.validateFields((err: { message: string }, values: { username: string }) => {
+    this.props.form.validateFields((err: { message: string }, values: { username: string, prefix: string }) => {
       if (!err) {
-        let { username } = values;
+        let { username, prefix } = values;
 
         this.setState({
           loading: true,
-          username
+          username,
+          prefix
         });
 
-        Auth.forgotPassword(username)
+        Auth.forgotPassword(prefix + String(username))
           .then(data => {
             notification.success({
               message: 'Redirecting you in a few!',
@@ -65,7 +70,16 @@ class ForgotPasswordContainer extends React.Component<Props, State> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { loading, redirect, username } = this.state;
+    const { loading, redirect, username, prefix } = this.state;
+
+    const prefixSelector = getFieldDecorator('prefix', {
+      initialValue: '+65',
+    })(
+      <Select style={{ width: 70 }}>
+        <Option value="+65">+65</Option>
+        <Option value="+">+</Option>
+      </Select>,
+    );
 
     return (
       <React.Fragment>
@@ -75,11 +89,14 @@ class ForgotPasswordContainer extends React.Component<Props, State> {
               rules: [
                 {
                   required: true,
-                  message: 'Please input your username!'
+                  message: 'Please input your phone number!'
                 }
               ]
             })(
-              <Input prefix={<Icon type="user" style={{ color: colors.transparentBlack }} />} placeholder="Username" />
+              <Input
+                addonBefore={prefixSelector}
+                prefix={<Icon type="phone" style={{ color: colors.transparentBlack }} />}
+                placeholder="Phone number" />
             )}
           </Form.Item>
           <Form.Item className="text-center">
@@ -103,7 +120,7 @@ class ForgotPasswordContainer extends React.Component<Props, State> {
           <Redirect
             to={{
               pathname: '/reset-password',
-              search: `?username=${username}`
+              search: `?username=${prefix}${username}`
             }}
           />
         )}

@@ -245,14 +245,14 @@ class HawkerList extends React.Component<Props, State> {
 
       let zoneOptions = [
         {
-          key: 'Tembusu',
-          text: 'Tembusu',
-          value: 'Tembusu'
-        },
-        {
           key: 'Cinnamon',
           text: 'Cinnamon',
           value: 'Cinnamon'
+        },
+        {
+          key: 'Tembusu',
+          text: 'Tembusu',
+          value: 'Tembusu'
         }
       ]
 

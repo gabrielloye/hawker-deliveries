@@ -8,26 +8,25 @@ import { SingleDatePicker, isInclusivelyAfterDay } from 'react-dates';
 import 'react-dates/lib/css/_datepicker.css';
 import "semantic-ui-css/semantic.min.css";
 
+const options = [
+  {
+    key: "Cinnamon",
+    text: "Cinnamon",
+    value: "Cinnamon"
+  },
+  {
+    key: "Temubusu",
+    text: "Tembusu",
+    value: "Tembusu"
+  }
+]
+
 class Datepicker extends Component {
   state = {
     date: moment(),
-    zone: 'Tembusu',
+    zone: options[0]['value'],
     focused: false
   };
-
-  options = [
-    {
-      key: "Temubusu",
-      text: "Tembusu",
-      value: "Tembusu"
-    },
-    
-    {
-      key: "Cinnamon",
-      text: "Cinnamon",
-      value: "Cinnamon"
-    }
-  ]
 
   
   onZoneSelect = (event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) => {
@@ -61,9 +60,9 @@ class Datepicker extends Component {
               button
               fluid
               selection
-              options={this.options}
+              options={options}
               onChange={this.onZoneSelect}
-              defaultValue={this.options[0].value}/>
+              value={this.state.zone}/>
           </Grid.Column>
           <Grid.Column tablet={5} computer={5} mobile={12}>
             <Link to={`/main/${moment(this.state.date).format('DDMMYYYY')}/lunch/${this.state.zone}`}>
