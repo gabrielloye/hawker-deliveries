@@ -1,6 +1,6 @@
 import 'react-dates/initialize';
 import React from "react";
-import { Dimmer, Card, Dropdown, DropdownProps, Progress, Modal, Grid, Label, Button } from 'semantic-ui-react'
+import { Dimmer, Card, Dropdown, DropdownProps, Progress, Modal, Grid, Label, Button, Message } from 'semantic-ui-react'
 import { Loader, Icon, Container, Header, Transition } from "semantic-ui-react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faIceCream, faCookieBite, faCoffee } from '@fortawesome/free-solid-svg-icons'
@@ -8,7 +8,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import moment, { Moment } from 'moment';
 import { SingleDatePicker, isInclusivelyAfterDay } from 'react-dates';
 import './hawkerlist.css';
-
+import Parser from 'html-react-parser'
 import API from '../components/axiosapi';
 
 import 'react-dates/lib/css/_datepicker.css';
@@ -21,7 +21,8 @@ interface Listing {
   meal: string;
   name: string;
   orderAvailable: boolean;
-  stalls: Stall[]
+  stalls: Stall[],
+  message: string
 }
 
 interface Stall {
@@ -69,7 +70,8 @@ class HawkerList extends React.Component<Props, State> {
       meal: "",
       name: "",
       orderAvailable: false,
-      stalls: []
+      stalls: [],
+      message: ""
     },
     meal: this.props.match.params.meal,
     zone: this.props.match.params.zone
@@ -185,7 +187,18 @@ class HawkerList extends React.Component<Props, State> {
           
           
       )})
-      return <Grid columns="2" stackable>{cards}</Grid>
+      return (
+        <Grid columns="2" stackable>
+          {this.state.listing.message.length>1?
+          <Grid.Row columns={1}>
+            <Grid.Column>
+            <Message warning fluid>
+              {Parser(this.state.listing.message)}
+            </Message>
+            </Grid.Column>
+          </Grid.Row>:null}
+          {cards}
+        </Grid>)
     } else {
       return <p>Orders are not available for this date</p>
     }
@@ -222,6 +235,11 @@ class HawkerList extends React.Component<Props, State> {
           key: 'dinner',
           text: 'Dinner',
           value: 'dinner'
+        },
+        {
+          key: 'others',
+          text: 'Others',
+          value: 'others'
         }
       ]
 

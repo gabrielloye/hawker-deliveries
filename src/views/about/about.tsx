@@ -18,6 +18,10 @@ const team = [
     {
         name: "Jeremy Loye",
         url: "jem"
+    },
+    {
+        name: "Angelica Ang",
+        url: "angelica"
     }
 ]
 
