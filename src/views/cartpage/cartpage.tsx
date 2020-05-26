@@ -354,8 +354,14 @@ class Cart extends Component<Props, State> {
                                   <List.Item as='li'>
                                     Scan the QR code on the screen and pay the total amount stated.
                                 </List.Item>
-                                  <List.Item as='li'>
-                                    After you have paid, indicate whether you used PayLah! or PayNow and click "Complete Order".
+                                <List.Item as='li'>
+                                  After you have paid, indicate whether you used PayLah! or PayNow in the options below.
+                                </List.Item>
+                                <List.Item as='li'>
+                                  <strong>Important: </strong>Remember to press the <strong>"Finish Transaction"</strong> button below to record your order!
+                                </List.Item>
+                                <List.Item as='li'>
+                                  Please check if your order is reflected under "Pending Orders" in the account dashboard.
                                 </List.Item>
                               </List.List>
                               <List.Item>
@@ -379,8 +385,14 @@ class Cart extends Component<Props, State> {
                                       Scan and pay the total amount and return to this page after paying.
                                   </List.Item>
                                     <List.Item as='li'>
-                                      After you have paid, indicate whether you used PayLah! or PayNow and click "Complete Order".
-                                  </List.Item>
+                                      After you have paid, indicate whether you used PayLah! or PayNow in the options below.
+                                    </List.Item>
+                                    <List.Item as='li'>
+                                      <strong>Important: </strong>Remember to press the <strong>"Finish Transaction"</strong> button below to record your order!
+                                    </List.Item>
+                                    <List.Item as='li'>
+                                    Please check if your order is reflected under "Pending Orders" in the account dashboard.
+                                    </List.Item>
                                 </List.List>
                                 {this.props.match.params.zone==="Cinnamon"?
                                 <List.Item>

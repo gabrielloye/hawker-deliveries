@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card } from 'semantic-ui-react'
+import { Card, Dimmer, Header } from 'semantic-ui-react'
 import { Tab } from "semantic-ui-react";
 import ProductQuantity from './productquantity';
 
@@ -67,8 +67,8 @@ class FoodList extends React.Component<Props> {
     return  0
   }
 
-  displayListPosts = () =>
-    this.props.store.map((el: FoodItem) => {
+  displayListPosts = () => {
+    return this.props.store.map((el: FoodItem) => {
       const image = el.image !== "" ? el.image : "https://hawker-images.s3-ap-southeast-1.amazonaws.com/generic_images/placeholder.png"
       return (
         <Card
@@ -87,9 +87,12 @@ class FoodList extends React.Component<Props> {
               )}
             </CartContext.Consumer>
           </Card.Content>
+          <Dimmer active={el['quantity']===0} inverted>
+            <Header as='h2' style={{"color":"black"}}>This food item is unavailable today</Header>
+          </Dimmer>
         </Card>
       )
-    });
+    })};
 
   render() {
     return (

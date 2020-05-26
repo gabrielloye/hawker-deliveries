@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import { Link } from 'react-router-dom'
 
-import { Icon, Container, Header, Menu, Segment } from "semantic-ui-react";
+import { Icon, Container, Header, Menu, Segment, Image } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 
 import Datepicker from '../../components/datepicker';
@@ -23,7 +23,8 @@ class LandingPage extends Component {
       <div className="App">
         <Segment inverted vertical textAlign="center">
           <Container as="nav">
-            <Header inverted as="h1">
+            <Header inverted as="h1" verticalAlign='middle'>
+              <Image style={{"height": "auto"}} src={"/images/logo512.png"}/>
               HawkerJio
             </Header>
             <Menu borderless compact inverted>
