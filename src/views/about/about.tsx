@@ -22,6 +22,10 @@ const team = [
     {
         name: "Angelica Ang",
         url: "angelica"
+    },
+    {
+        name: "Arnold Teo",
+        url: "arnold"
     }
 ]
 
@@ -40,36 +44,40 @@ export default class AboutPage extends Component {
         const {activeIndex} = this.state
         return (
             <Container text fluid textAlign="center">
+                <Segment>
                 <Grid>
                     <Grid.Row columns={1}>
                         <Grid.Column textAlign='justified' stretched>
-                            <Segment>
-                                <Divider horizontal>
-                                    <Header as='h2'>Our Story</Header>
-                                </Divider>
-                                <p>
-                                    We are a group of students from the College of Alice & Peter Tan (CAPT) hoping to do our bit for our local hawkers during this challenging period.
-                                    <br/>
-                                    <br/>
-                                    This idea germinated in early April when we realised that us students, who are now ‘stuck’ in UTown, nevertheless crave for hawker food (& are looking for alternatives to UTown food options!) Yet, many of our local hawkers have also seen reduced foot traffic due to SG’s safe management measures.
-                                    <br/>
-                                    <br/>
-                                    We have friends whose parents/grandparents are hawkers too. Hearing their personal stories  and challenges egged us on to bridge the gap, no matter how small our efforts may be. Hence, with lunch not catered for in UTown (during the semester), this project could be said to be born out of necessity as we ourselves, preferred not to be limited to just options within NUS itself.
-                                    <br/>
-                                    <br/>
-                                    So essentially, what we have done was to build a relationship with the hawkers around NUS, collate orders within our residential community in CAPT, and have the food delivered to our College via our Private-Hire Vehicle (PHV) driver partners - who have their incomes affected too.
-                                    <br/>
-                                    <br/>
-                                    Since then, our platform has evolved, and we aim to now offer this service to other residential communities in NUS and beyond.
-                                    <br/>
-                                    <br/>
-                                    Again, with no commissions taken, we’re hoping to take care of your meals while supporting our hawker and driver partners during this uncertain period. Let’s all do our part and support our local heroes!
-                                </p>
-                                <Divider hidden/>
-                                <Divider horizontal>
-                                    <Header as='h2'>Core Team</Header>
-                                </Divider>
-                                <Card.Group itemsPerRow={4} stackable>
+                            
+                            <Divider horizontal>
+                                <Header as='h2'>Our Story</Header>
+                            </Divider>
+                            <p>
+                                We are a group of students from the College of Alice & Peter Tan (CAPT) hoping to do our bit for our local hawkers during this challenging period.
+                                <br/>
+                                <br/>
+                                This idea germinated in early April when we realised that us students, who are now ‘stuck’ in UTown, nevertheless crave for hawker food (& are looking for alternatives to UTown food options!) Yet, many of our local hawkers have also seen reduced foot traffic due to SG’s safe management measures.
+                                <br/>
+                                <br/>
+                                We have friends whose parents/grandparents are hawkers too. Hearing their personal stories  and challenges egged us on to bridge the gap, no matter how small our efforts may be. Hence, with lunch not catered for in UTown (during the semester), this project could be said to be born out of necessity as we ourselves, preferred not to be limited to just options within NUS itself.
+                                <br/>
+                                <br/>
+                                So essentially, what we have done was to build a relationship with the hawkers around NUS, collate orders within our residential community in CAPT, and have the food delivered to our College via our Private-Hire Vehicle (PHV) driver partners - who have their incomes affected too.
+                                <br/>
+                                <br/>
+                                Since then, our platform has evolved, and we aim to now offer this service to other residential communities in NUS and beyond.
+                                <br/>
+                                <br/>
+                                Again, with no commissions taken, we’re hoping to take care of your meals while supporting our hawker and driver partners during this uncertain period. Let’s all do our part and support our local heroes!
+                            </p>
+                        </Grid.Column>
+                        </Grid.Row>
+                        <Divider horizontal>
+                            <Header as='h2'>Our Team</Header>
+                        </Divider>
+                        <Grid.Row centered>
+                            <Grid.Column width={14}>
+                                <Card.Group itemsPerRow={3} stackable>
                                     {team.map(member=>{
                                         return (
                                             <Card
@@ -84,7 +92,10 @@ export default class AboutPage extends Component {
                                         )
                                     })}
                                 </Card.Group>
-                                <Divider hidden/>
+                            </Grid.Column>
+                        </Grid.Row>
+                        <Grid.Row>
+                            <Grid.Column textAlign='justified' stretched>
                                 <Divider horizontal>
                                     <Header as='h2'>FAQ</Header>
                                 </Divider>
@@ -131,18 +142,18 @@ export default class AboutPage extends Component {
                                             The main challenge was to establish a high level of trust and understanding between us and the community stakeholders (hawkers and drivers). This process of earning their trust has been an exercise in communication, relationship-building, empathy, and having the humility to admit that “We don’t know all the answers”. To then collectively problem-solve, the ability to speak in Mandarin, some Dialects and even a little Bahasa was particularly effective, as our perspectives can only be informed by as much as our partners are willing to share. Hence, language as a common denominator, becomes the bridge in our relationship, facilitating the building of trust between us and the stakeholders. 
                                             <br/>
                                             <br/>
-                                            Within our team, another challenge we faced was to have the team work remotely since we were unable to meet up due to the COVID-19 pandemic. This inconvenienced our team as arranging for a discussion required us to consider the various time zones and locations we were in. Given our diverse perspective on the issues and differing ways to tackle them, we worked towards finding avenues to build upon each other’s strengths rather than pick on our limitations. It was this approach that allowed us to work more synergistically, which was helpful in overcoming the challenges this geographical barrier has posed to us.                                            <br/>
+                                            Within our team, another challenge we faced was to have the team work remotely since we were unable to meet up due to the COVID-19 pandemic. This inconvenienced our team as arranging for a discussion required us to consider the various time zones and locations we were in. Given our diverse perspective on the issues and differing ways to tackle them, we worked towards finding avenues to build upon each other’s strengths rather than pick on our limitations. It was this approach that allowed us to work more synergistically, which was helpful in overcoming the challenges this geographical barrier has posed to us.
                                             <br/>
                                             <br/>
-                                            Furthermore, as multiple stakeholders are involved, coordination and logistics would be key to operationalising this idea. Thus, the strong support from the residents and Fellows of CAPT have been really heartening, with our Master, A/P Gary Tan, even giving the College a treat for one of the lunches. From being so encouraging and understanding during our initial days, to being so forthcoming with their help and advice, even to the extent of volunteering to assist with the technical and logistical challenges, these CAPTains have been instrumental to the success of this project. We are hence, always grateful!                                            <br/>
+                                            Furthermore, as multiple stakeholders are involved, coordination and logistics would be key to operationalising this idea. Thus, the strong support from the residents and Fellows of CAPT have been really heartening, with our Master, A/P Gary Tan, even giving the College a treat for one of the lunches. From being so encouraging and understanding during our initial days, to being so forthcoming with their help and advice, even to the extent of volunteering to assist with the technical and logistical challenges, these CAPTains have been instrumental to the success of this project. We are hence, always grateful!
                                         </p>
                                     </Accordion.Content>
                                 </Accordion>
-                            </Segment>
+                            
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
-                
+                </Segment>
             </Container>
         )
     }
