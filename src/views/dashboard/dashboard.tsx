@@ -340,16 +340,14 @@ export default class Dashboard extends Component<RouteComponentProps, state> {
                                         After you have paid, indicate whether you used PayLah! or PayNow and click "Complete Order".
                                     </List.Item>
                                 </List.List>
-                                {order['zone']==="Cinnamon"?
-                                    <List.Item>
+                                <List.Item>
                                     <List.Header>
                                         Join the Telegram Channel
                                     </List.Header>
                                     <List.Content>
                                         You can join the Telegram channel <a href="https://t.me/joinchat/AAAAAExr30H7-5Pca7zfUA">here</a> for updates on delivery times and pickup!
                                     </List.Content>
-                                    </List.Item>
-                                    :null}
+                                </List.Item>
                             </List.Content>
                             </List.Item>
                             </List></div> : "" }

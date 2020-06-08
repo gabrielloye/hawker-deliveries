@@ -15,7 +15,7 @@ const options = [
     value: "Cinnamon"
   },
   {
-    key: "Temubusu",
+    key: "Tembusu",
     text: "Tembusu",
     value: "Tembusu"
   }
