@@ -20,7 +20,7 @@
     "@types/styled-components": "^5.1.0",
     "antd": "^3.25.2",
     "aws-amplify": "^3.0.10",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "html-react-parser": "^0.10.3",
     "jwt-decode": "^2.2.0",
     "moment": "^2.25.3",
